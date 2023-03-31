@@ -21,12 +21,12 @@ public class ProvidersService {
     @Autowired
     ProvidersRepository providersRepository;
 
-    ObjectMapper mapper = new ObjectMapper();
+
 
     public List<ProvidersDTO> getAll(){
         List<Providers> listProviders = providersRepository.findAll();
         List<ProvidersDTO> listProvidersDTO = new ArrayList<>();
-
+        ObjectMapper mapper = new ObjectMapper();
         for (Providers providers : listProviders) {
             ProvidersDTO providersDTO = mapper.convertValue(providers, ProvidersDTO.class);
             listProvidersDTO.add(providersDTO);
@@ -35,53 +35,48 @@ public class ProvidersService {
         return listProvidersDTO;
     }
 
-    public ResponseEntity save(ProvidersDTO providersDTO){
-        try {
-            Providers providers = mapper.convertValue(providersDTO, Providers.class);
+    public ResponseEntity saveProvider(Providers providers){
             providers.setRegistrationDate(Timestamp.from(Instant.now()));
             providers.setModifiedDate(null);
-            Providers providersSalvo = providersRepository.save(providers);
+            Providers providersSalvo = providersRepository.saveAndFlush(providers);
             return new ResponseEntity(providersSalvo, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity("Erro ao cadastrar prestador", HttpStatus.BAD_REQUEST);
-        }
     }
 
-    public ResponseEntity del(String cpf){
+    public ResponseEntity delProvider(String cpf){
         Optional<Providers> providersDB= providersRepository.findByCpf(cpf);
-        providersRepository.deleteById(providersDB.get().get_id());
+        providersRepository.deleteById(providersDB.get().getId());
         return new ResponseEntity("O prestador " + providersDB.get().getName() + " foi excluido com sucesso !", HttpStatus.OK);
     }
 
-    public ResponseEntity edit(ProvidersDTO providersDTO){
-        Optional<Providers> providersDB = providersRepository.findByCpf(providersDTO.getCpf());
-        Providers provider = mapper.convertValue(providersDB, Providers.class);
+    public ResponseEntity editProvider(Providers providers){
+        Optional<Providers> providersDB = providersRepository.findByCpf(providers.getCpf());
+        Providers provider = providersDB.get();
         if (provider.getImage() != null || !provider.getImage().isEmpty()) {
-            provider.setImage(providersDTO.getImage());
+            provider.setImage(providers.getImage());
         }
         if (provider.getName() != null || !provider.getName().isEmpty()) {
-            provider.setName(providersDTO.getName());
+            provider.setName(providers.getName());
         }
         if (provider.getSurname() != null || !provider.getSurname().isEmpty()) {
-            provider.setSurname(providersDTO.getSurname());
+            provider.setSurname(providers.getSurname());
         }
         if (provider.getFatherName() != null || !provider.getFatherName().isEmpty()) {
-            provider.setFatherName(providersDTO.getFatherName());
+            provider.setFatherName(providers.getFatherName());
         }
         if (provider.getMotherName() != null || !provider.getMotherName().isEmpty()) {
-            provider.setMotherName(providersDTO.getMotherName());
+            provider.setMotherName(providers.getMotherName());
         }
         if (provider.getBirthday() != null) {
-            provider.setBirthday(providersDTO.getBirthday());
+            provider.setBirthday(providers.getBirthday());
         }
         if (provider.getCpf() != null || !provider.getCpf().isEmpty()) {
-            provider.setCpf(providersDTO.getCpf());
+            provider.setCpf(providers.getCpf());
         }
         if (provider.getRg() != null || !provider.getRg().isEmpty()) {
-            provider.setRg(providersDTO.getRg());
+            provider.setRg(providers.getRg());
         }
         if (provider.getNaturalness() != null || !provider.getNaturalness().isEmpty()) {
-            provider.setNaturalness(providersDTO.getNaturalness());
+            provider.setNaturalness(providers.getNaturalness());
         }
         provider.setModifiedDate(Timestamp.from(Instant.now()));
 
