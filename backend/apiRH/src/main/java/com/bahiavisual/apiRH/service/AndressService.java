@@ -32,6 +32,11 @@ public class AndressService {
     }
 
     public ResponseEntity saveAndress(Andress andress){
+        //priveiro verifica se já está cadastrado para não duplicar.
+       /*  Optional<Andress> andressDb = repository.findByzipCode(andress.getZipCode());
+        if (andressDb != null) {
+            return new ResponseEntity("O cep já foi cadastrado.", HttpStatus.BAD_REQUEST);
+        } */
         if (andress == null){
             return new ResponseEntity("Endereço não pode ser nulo ou vaziu.", HttpStatus.BAD_REQUEST);
         }
@@ -40,7 +45,7 @@ public class AndressService {
     }
 
     public ResponseEntity delAndress(String zipCode){
-        Optional<Andress> andressDB = repository.findByCep(zipCode);
+        Optional<Andress> andressDB = repository.findByzipCode(zipCode);
         if (andressDB.isEmpty()){
             return new ResponseEntity("Endereço não encontrado no banco de dados", HttpStatus.BAD_REQUEST);
         }
@@ -49,7 +54,7 @@ public class AndressService {
     }
 
     public ResponseEntity editAndress(Andress andress){
-        Optional<Andress> andressDB = repository.findByCep(andress.getZipCode());
+        Optional<Andress> andressDB = repository.findByzipCode(andress.getZipCode());
         Andress andress1 = andressDB.get();
 
         if (andressDB.isEmpty() || andress1 == null){

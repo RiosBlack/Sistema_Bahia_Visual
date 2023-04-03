@@ -24,7 +24,6 @@ public class Andress {
     @NotBlank
     private String road;
 
-    @NotBlank
     private int number;
 
     @NotBlank
