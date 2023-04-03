@@ -44,6 +44,10 @@ public class ProvidersService {
 
     public ResponseEntity delProvider(String cpf){
         Optional<Providers> providersDB= providersRepository.findByCpf(cpf);
+        if (providersDB.isEmpty()){
+            return new ResponseEntity("O prestador não foi encontrado no banco de dados",HttpStatus.BAD_REQUEST);
+        }
+        System.out.println(providersDB);
         providersRepository.deleteById(providersDB.get().getId());
         return new ResponseEntity("O prestador " + providersDB.get().getName() + " foi excluido com sucesso !", HttpStatus.OK);
     }
@@ -51,6 +55,9 @@ public class ProvidersService {
     public ResponseEntity editProvider(Providers providers){
         Optional<Providers> providersDB = providersRepository.findByCpf(providers.getCpf());
         Providers provider = providersDB.get();
+        if (providersDB.isEmpty() || provider == null){
+            return new ResponseEntity("Prestador não existe no banco de dados", HttpStatus.BAD_REQUEST);
+        }
         if (provider.getImage() != null || !provider.getImage().isEmpty()) {
             provider.setImage(providers.getImage());
         }

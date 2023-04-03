@@ -11,9 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -34,10 +31,11 @@ public class ProvidersController {
     @PostMapping()
     public ResponseEntity addProviders(@RequestBody @Valid ProvidersDTO providersDTO) {
         Providers providers = mapper.convertValue(providersDTO, Providers.class);
-        Boolean respInput = validator.validInputs(providers);
-        Boolean respDate = validator.validDate(providers.getBirthday());
+        Providers ProveidersSemSpaces = validator.spacesRemove(providers);
+        Boolean respInput = validator.validInputs(ProveidersSemSpaces);
+        Boolean respDate = validator.validDate(ProveidersSemSpaces.getBirthday());
         if (respInput == true && respDate == true){
-            return providersService.saveProvider(providers);
+            return providersService.saveProvider(ProveidersSemSpaces);
         }
         return new ResponseEntity("Erro ao salvar o prestador", HttpStatus.BAD_REQUEST);
     };
@@ -45,11 +43,17 @@ public class ProvidersController {
     @PutMapping()
     public ResponseEntity editProvider(@RequestBody @Valid ProvidersDTO providersDTO){
         Providers providers = mapper.convertValue(providersDTO, Providers.class);
-        return providersService.editProvider(providers);
+        Providers ProveidersSemSpaces = validator.spacesRemove(providers);
+        Boolean respInput = validator.validInputs(ProveidersSemSpaces);
+        Boolean respDate = validator.validDate(ProveidersSemSpaces.getBirthday());
+        if (respInput == true && respDate == true){
+            return providersService.editProvider(providers);
+        }
+        return new ResponseEntity("Erro ao editar prestador", HttpStatus.BAD_REQUEST);
     };
 
-    @DeleteMapping()
-    public ResponseEntity delProvider(@RequestParam("cpf") String cpf){
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity delProvider(@PathVariable("cpf") String cpf){
       return providersService.delProvider(cpf);
     };
 

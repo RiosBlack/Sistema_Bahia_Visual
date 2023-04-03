@@ -6,11 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -19,6 +14,34 @@ public class ProvidersValidator {
     @Autowired
     Providers providers;
 
+
+    public Providers spacesRemove(Providers providers){
+        String providersName = providers.getName().trim();
+        providers.setName(providersName);
+
+        String providersSurname = providers.getSurname().trim();
+        providers.setSurname(providersSurname);
+
+        String providersCpf =  providers.getCpf().trim();
+        providers.setCpf(providersCpf);
+
+        String providersNaturalness = providers.getNaturalness().trim();
+        providers.setNaturalness(providersNaturalness);
+
+        String providersRg = providers.getRg().trim();
+        providers.setRg(providersRg);
+
+        String providersMother = providers.getMotherName().trim();
+        providers.setMotherName(providersMother);
+
+        String providersFather = providers.getFatherName().trim();
+        providers.setFatherName(providersFather);
+
+        String providersImage = providers.getImage().trim();
+        providers.setImage(providersImage);
+
+        return providers;
+    };
 
     public Boolean validInputs(Providers providers){
         if (providers.getName().isEmpty() || providers.getName() == null){
@@ -45,20 +68,6 @@ public class ProvidersValidator {
         return true;
     }
 
-    public Boolean convertDate(String strDate){
-        String dateFormat = "uuuu/MM/dd";
-
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
-                .ofPattern(dateFormat)
-                .withResolverStyle(ResolverStyle.STRICT);
-        try {
-            LocalDate date = LocalDate.parse(strDate, dateTimeFormatter);
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-    }
-
     public static int calculaIdade(java.util.Date dataNasc){
         Calendar dateOfBirth = new GregorianCalendar();
         dateOfBirth.setTime(dataNasc);
@@ -75,17 +84,12 @@ public class ProvidersValidator {
     }
 
     public Boolean validDate(Date date){
-        Boolean respConvert = convertDate(String.valueOf(date));
-        if (respConvert == false){
-            new ResponseEntity("Data invalida!", HttpStatus.BAD_REQUEST);
-            return false;
-        }
         int resCalcu = calculaIdade(date);
         if (resCalcu > 18){
-            new ResponseEntity("Data não pode ser menor de idade.", HttpStatus.BAD_REQUEST);
-            return false;
+            new ResponseEntity("Datas validadas com sucesso!",HttpStatus.OK);
+            return true;
         }
-        new ResponseEntity("Datas validadas com sucesso!",HttpStatus.OK);
-        return true;
+        new ResponseEntity("Data não pode ser menor de idade.", HttpStatus.BAD_REQUEST);
+        return false;
     }
 }
