@@ -17,28 +17,28 @@ public class ProvidersValidator {
 
     public Providers spacesRemove(Providers providers){
         String providersName = providers.getName().trim();
-        providers.setName(providersName);
+        providers.setName(providersName.toUpperCase());
 
         String providersSurname = providers.getSurname().trim();
-        providers.setSurname(providersSurname);
+        providers.setSurname(providersSurname.toUpperCase());
 
         String providersCpf =  providers.getCpf().trim();
-        providers.setCpf(providersCpf);
+        providers.setCpf(providersCpf.toUpperCase());
 
         String providersNaturalness = providers.getNaturalness().trim();
-        providers.setNaturalness(providersNaturalness);
+        providers.setNaturalness(providersNaturalness.toUpperCase());
 
         String providersRg = providers.getRg().trim();
-        providers.setRg(providersRg);
+        providers.setRg(providersRg.toUpperCase());
 
         String providersMother = providers.getMotherName().trim();
-        providers.setMotherName(providersMother);
+        providers.setMotherName(providersMother.toUpperCase());
 
         String providersFather = providers.getFatherName().trim();
-        providers.setFatherName(providersFather);
+        providers.setFatherName(providersFather.toUpperCase());
 
         String providersImage = providers.getImage().trim();
-        providers.setImage(providersImage);
+        providers.setImage(providersImage.toUpperCase());
 
         return providers;
     };

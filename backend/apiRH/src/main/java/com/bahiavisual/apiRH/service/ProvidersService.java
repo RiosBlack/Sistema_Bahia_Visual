@@ -47,7 +47,6 @@ public class ProvidersService {
         if (providersDB.isEmpty()){
             return new ResponseEntity("O prestador não foi encontrado no banco de dados",HttpStatus.BAD_REQUEST);
         }
-        System.out.println(providersDB);
         providersRepository.deleteById(providersDB.get().getId());
         return new ResponseEntity("O prestador " + providersDB.get().getName() + " foi excluido com sucesso !", HttpStatus.OK);
     }

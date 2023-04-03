@@ -31,6 +31,7 @@ public class ProvidersController {
     @PostMapping()
     public ResponseEntity addProviders(@RequestBody @Valid ProvidersDTO providersDTO) {
         Providers providers = mapper.convertValue(providersDTO, Providers.class);
+        //validando campos e datas
         Providers ProveidersSemSpaces = validator.spacesRemove(providers);
         Boolean respInput = validator.validInputs(ProveidersSemSpaces);
         Boolean respDate = validator.validDate(ProveidersSemSpaces.getBirthday());
