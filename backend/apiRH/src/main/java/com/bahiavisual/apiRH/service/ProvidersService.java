@@ -44,7 +44,8 @@ public class ProvidersService {
 
     public ResponseEntity delProvider(String cpf){
         Optional<Providers> providersDB= providersRepository.findByCpf(cpf);
-        if (providersDB.isEmpty()){
+        Providers providers = providersDB.get();
+        if (providers == null || providers.getCpf() == null){
             return new ResponseEntity("O prestador não foi encontrado no banco de dados",HttpStatus.BAD_REQUEST);
         }
         providersRepository.deleteById(providersDB.get().getId());

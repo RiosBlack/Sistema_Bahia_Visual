@@ -49,6 +49,6 @@ public class AndressController {
         return new ResponseEntity("Erro ao editar endereço.", HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("/zipCode")
+    @DeleteMapping("/{zipCode}")
     public ResponseEntity delAndress(@PathVariable("zipCode") String zipCode) { return andressService.delAndress(zipCode); }
 }

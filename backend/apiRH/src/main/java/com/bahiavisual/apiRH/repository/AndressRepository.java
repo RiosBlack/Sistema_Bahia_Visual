@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 public interface AndressRepository extends JpaRepository<Andress, Long> {
-    Optional<Andress> findByzipCode(String zipCode);
+    Optional<Andress> findByZipCode(String zipCode);
 }
