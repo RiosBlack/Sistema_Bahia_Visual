@@ -33,4 +33,8 @@ public class ProvidersDTO {
 
     private String naturalness;
 
+    private String numberPhone1;
+
+    private String numberPhone2;
+
 }

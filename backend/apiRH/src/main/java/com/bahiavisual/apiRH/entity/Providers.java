@@ -44,7 +44,16 @@ public class Providers {
 
     private String naturalness;
 
+    @NotBlank
+    private String numberPhone1;
+
+    private String numberPhone2;
+
     private Timestamp registrationDate;
 
     private Timestamp modifiedDate;
+
+    @OneToMany
+    @JoinColumn(name="ID_ANDRESS)")
+    private Andress andress;
 }

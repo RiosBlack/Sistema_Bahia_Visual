@@ -37,4 +37,7 @@ public class Andress {
 
     @NotBlank
     private String state;
+
+    @NotBlank
+    private Boolean isPrincipal;
 }
