@@ -2,6 +2,7 @@ package com.bahiavisual.apiRH.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -33,6 +34,7 @@ public class Providers {
     @NotBlank
     private String motherName;
 
+    @NotEmpty
     private Date birthday;
 
     @NotBlank
@@ -49,6 +51,7 @@ public class Providers {
 
     private String numberPhone2;
 
+    @NotEmpty
     private Timestamp registrationDate;
 
     private Timestamp modifiedDate;
