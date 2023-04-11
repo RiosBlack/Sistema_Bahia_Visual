@@ -1,6 +1,6 @@
 package com.bahiavisual.apiRH.service;
 
-import com.bahiavisual.apiRH.entity.Providers;
+
 import com.bahiavisual.apiRH.entity.TimeSheet;
 import com.bahiavisual.apiRH.entity.dto.TimeSheetDTO;
 import com.bahiavisual.apiRH.repository.TimeSheetRepository;
@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class TimeSheetService {
@@ -32,48 +34,30 @@ public class TimeSheetService {
         return listTimeSheetDTO;
     }
 
-    public ResponseEntity saveProvider(TimeSheet timeSheet){
+    public ResponseEntity saveTimeSheet(TimeSheet timeSheet){
+        timeSheet.setDate(Timestamp.from(Instant.now()));
         TimeSheet timeSalvo = repository.saveAndFlush(timeSheet);
         return new ResponseEntity(timeSalvo, HttpStatus.OK);
     }
-}
-/*
-    public ResponseEntity editProvider(TimeSheet timeSheet){
-        Optional<Providers> timeDB = repository.findByCpf(timeSheet.getProviders().getCpf());
-        TimeSheet timeSheet1 = timeDB.get();
-        if (providersDB.isEmpty() || provider == null){
-            return new ResponseEntity("Prestador não existe no banco de dados", HttpStatus.BAD_REQUEST);
-        }
-        if (provider.getImage() != null || !provider.getImage().isEmpty()) {
-            provider.setImage(providers.getImage());
-        }
-        if (provider.getName() != null || !provider.getName().isEmpty()) {
-            provider.setName(providers.getName());
-        }
-        if (provider.getSurname() != null || !provider.getSurname().isEmpty()) {
-            provider.setSurname(providers.getSurname());
-        }
-        if (provider.getFatherName() != null || !provider.getFatherName().isEmpty()) {
-            provider.setFatherName(providers.getFatherName());
-        }
-        if (provider.getMotherName() != null || !provider.getMotherName().isEmpty()) {
-            provider.setMotherName(providers.getMotherName());
-        }
-        if (provider.getBirthday() != null) {
-            provider.setBirthday(providers.getBirthday());
-        }
-        if (provider.getCpf() != null || !provider.getCpf().isEmpty()) {
-            provider.setCpf(providers.getCpf());
-        }
-        if (provider.getRg() != null || !provider.getRg().isEmpty()) {
-            provider.setRg(providers.getRg());
-        }
-        if (provider.getNaturalness() != null || !provider.getNaturalness().isEmpty()) {
-            provider.setNaturalness(providers.getNaturalness());
-        }
-        provider.setModifiedDate(Timestamp.from(Instant.now()));
 
-        providersRepository.save(provider);
-        return new ResponseEntity(provider, HttpStatus.OK);
-    }/*
+    public ResponseEntity editTimeService(TimeSheet timeSheet){
+       Optional<TimeSheet> timeSheets = repository.findById(timeSheet.getId());
+       TimeSheet timeSheetDB = timeSheets.get();
+
+       if (timeSheets.isEmpty() || timeSheetDB == null){
+           return new ResponseEntity("A ficha não pode ser vazia", HttpStatus.BAD_REQUEST);
+       }
+       //para manter a data do banco
+       timeSheetDB.setDate(timeSheetDB.getDate());
+       timeSheetDB.setEntradaTurnoDia(timeSheet.getEntradaTurnoDia());
+       timeSheetDB.setIntervaloTurnoDia(timeSheet.getIntervaloTurnoDia());
+       timeSheetDB.setRetornoTurnoDia(timeSheet.getRetornoTurnoDia());
+       timeSheetDB.setSaidaTurnoDia(timeSheet.getSaidaTurnoDia());
+       timeSheetDB.setEntradaTurnoNoite(timeSheet.getEntradaTurnoNoite());
+       timeSheetDB.setIntervaloTurnoNoite(timeSheet.getIntervaloTurnoNoite());
+       timeSheetDB.setRetornoTurnoNoite(timeSheet.getRetornoTurnoNoite());
+       timeSheetDB.setSaidaTurnoNoite(timeSheet.getSaidaTurnoNoite());
+       TimeSheet timeSheetSalvo = repository.saveAndFlush(timeSheet);
+        return new ResponseEntity(timeSheetSalvo, HttpStatus.OK);
+    }
 }

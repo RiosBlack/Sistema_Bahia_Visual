@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,7 +35,6 @@ public class Providers {
     @NotBlank
     private String motherName;
 
-    @NotEmpty
     private Date birthday;
 
     @NotBlank
@@ -51,12 +51,11 @@ public class Providers {
 
     private String numberPhone2;
 
-    @NotEmpty
     private Timestamp registrationDate;
 
     private Timestamp modifiedDate;
 
+    @JoinColumn(name="ID_PROVIDERS)")
     @OneToMany
-    @JoinColumn(name="ID_ANDRESS)")
-    private Andress andress;
+    private List<Andress> andress;
 }

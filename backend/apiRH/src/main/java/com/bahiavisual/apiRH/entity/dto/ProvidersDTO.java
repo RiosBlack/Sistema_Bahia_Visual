@@ -1,5 +1,6 @@
 package com.bahiavisual.apiRH.entity.dto;
 
+import com.bahiavisual.apiRH.entity.Andress;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -36,5 +38,7 @@ public class ProvidersDTO {
     private String numberPhone1;
 
     private String numberPhone2;
+
+    private List<Andress> andress;
 
 }

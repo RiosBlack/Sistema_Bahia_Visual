@@ -57,4 +57,5 @@ public class TimeSheet {
     @NotEmpty
     private Time saidaTurnoNoite;
 
+    private Timestamp modifiedDate;
 }
