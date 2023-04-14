@@ -1,9 +1,9 @@
-import React from 'react';
+import Layout from '../../layout/index';
 
 export default function RhPage() {
     return (
-        <>
-            <div>aqui é a pagina de rh</div>
-        </>
+        <Layout>
+            <div>aqui é a tela de rh</div>
+        </Layout>
     );
 }
