@@ -17,7 +17,7 @@ export default function LoginFromComponent() {
     const [password, setPassword] = useState('');
 
     return (
-        <div className="p-2">
+        <div className="p-2 bg-white shadow-md rounded-xl">
             <h1 className="flex justify-center text-lg font-bold text-bvAzul">
                 Login
             </h1>
@@ -31,7 +31,7 @@ export default function LoginFromComponent() {
                     placeholder="Digite seu email"
                 />
                 <FormLabel className="text-bv-Escuro">Senha</FormLabel>
-                <InputGroup size="md">
+                <InputGroup size="lg">
                     <Input
                         pr="4.5rem"
                         type={maskPassword ? 'text' : 'password'}
@@ -45,7 +45,7 @@ export default function LoginFromComponent() {
                             h="1.75rem"
                             size="sm"
                             onClick={() => setMaskPassword(!maskPassword)}
-                            className='mr-2 p-1'
+                            className="mr-2 p-1"
                         >
                             {maskPassword ? 'Ocultar' : 'Visualizar'}
                         </Button>
@@ -54,7 +54,7 @@ export default function LoginFromComponent() {
                 <Button
                     isLoading //depois fazer condicional para só rodar depois do submit
                     loadingText="Loading"
-                    colorScheme="teal"
+                    colorScheme="whatsapp"
                     variant="outline"
                     spinnerPlacement="start"
                 >

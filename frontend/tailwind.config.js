@@ -9,7 +9,11 @@ module.exports = {
         './src/**/*.{js,ts,jsx,tsx,mdx}',
     ],
     theme: {
-        extend: {},
+        extend: {
+            backgroundImage: {
+                natal: "url('https://img.freepik.com/vetores-gratis/cartao-de-feliz-natal-com-itens-decorativos_1017-28943.jpg')",
+            },
+        },
     },
     plugins: [],
 };
