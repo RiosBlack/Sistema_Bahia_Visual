@@ -3,7 +3,7 @@ import Blocks from './blocks';
 
 export default function DashboardRH() {
     return (
-        <div className='w-full grid p-5 space-y-2'>
+        <div className='grid mt-5 p-5 space-y-4'>
             <Blocks />
             <BlocksProviders />
         </div>

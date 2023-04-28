@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function FormProfile() {
-    const formStyle = 'bg-[#F2F9FC] rounded-lg p-1 w-full';
+    const formStyle = 'bg-[#F2F9FC] rounded-lg p-1 w-full hover:text-[#1FABCE]';
 
     return (
         <div className="w-full grid bg-[#17112A] font-sans">
@@ -12,9 +12,7 @@ export default function FormProfile() {
                 </div>
             </div>
             <div className="grid px-5 pb-5 space-y-2">
-                <div className="font-bold text-[#F3773B]">
-                    Dados de registro
-                </div>
+                <p className="font-bold text-[#F3773B]">Dados de registro</p>
                 <div className={formStyle}>Nome: </div>
                 <div className={formStyle}>Sobrenome: </div>
                 <div className={formStyle}>Nome do Pai: </div>
@@ -25,7 +23,19 @@ export default function FormProfile() {
                     <div className={formStyle}>Rg: </div>
                 </div>
                 <div className={formStyle}>Naturalidade: </div>
-                <div className={formStyle}>Endereço: </div>
+                <p className="font-bold text-[#F3773B]">Endereço</p>
+                <div className={formStyle}>Rua: </div>
+                <div className="flex space-x-2">
+                    <div className={formStyle}>Cep: </div>
+                    <div className={formStyle}>Numero: </div>
+                    <div className={formStyle}>Bairro: </div>
+                </div>
+                <div className={formStyle}>Complemento: </div>
+                <div className="flex space-x-2">
+                    <div className={formStyle}>Cidade: </div>
+                    <div className={formStyle}>Estado: </div>
+                </div>
+                <p className="font-bold text-[#F3773B]">Telefones</p>
                 <div className="flex space-x-2">
                     <div className={formStyle}>Telefone Principal: </div>
                     <div className={formStyle}>Telefone Reserva: </div>

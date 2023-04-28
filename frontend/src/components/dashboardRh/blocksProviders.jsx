@@ -8,7 +8,7 @@ export default function blocksProviders() {
     const [prestador, setPrestador] = useState('joão');
 
     return (
-        <div className="drop-shadow-lg border-2 border-[#17112A] h-60 rounded-xl p-2 font-sans font-medium text-lg overflow-auto">
+        <div className="drop-shadow-lg border-2 border-[#17112A] h-80 rounded-xl p-2 font-sans font-medium text-lg overflow-auto">
             <div className="flex justify-between items-center bg-[#17112A] text-slate-100 font-sans rounded-lg p-2 mb-2">
                 <div className="flex space-x-7 items-center">
                     <Image

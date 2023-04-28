@@ -3,10 +3,10 @@ import { useState } from "react";
 export default function Blocks() {
     const [mesAtual, setMesAtual] = useState('janeiro')
     const styleBlocks =
-        'drop-shadow-lg border-2 border-[#17112A] w-1/3 h-44 rounded-xl p-2';
+        'drop-shadow-lg border-2 border-[#17112A] w-1/3 h-48 rounded-xl p-2';
 
     return (
-        <div className="flex w-full space-x-2">
+        <div className="flex w-full space-x-4">
             <div className={styleBlocks}>
                 <div>
                     <h1>Quantidade de prestadores no banco de dados:</h1>
