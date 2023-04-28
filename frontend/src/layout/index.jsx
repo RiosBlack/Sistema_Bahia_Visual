@@ -9,26 +9,31 @@ export default function Layout({ children }) {
 
     return (
         <>
-            <header className="flex">
+            <header className="flex justify-between p-4">
                 <Image
                     src={logo}
-                    width={100}
-                    height={100}
+                    width={120}
+                    height={120}
                     quality={100}
                     alt={'Logo da empresa Bahia Visual'}
-                    className="pt-5"
                 />
-                <h2>Sejá bem vindo {nome}!</h2>
-                {nome ? (
-                    <Button>
-                        <BiExit className="pr-2" /> Sair
-                    </Button>
-                ) : (
-                    ''
-                )}
+                <div className="flex space-x-4 justify-center items-center">
+                    <h2 className="text-lg font-sans">
+                        Sejá bem vindo {nome}!
+                    </h2>
+                    {nome ? (
+                        <Button>
+                            <BiExit className="mr-2 font-bold text-lg" /> Sair
+                        </Button>
+                    ) : (
+                        ''
+                    )}
+                </div>
             </header>
             <div>{children}</div>
-            <footer>Todos os diretos reservados</footer>
+            <footer className="text-sm flex justify-center items-center font-sans">
+                Todos os diretos reservados
+            </footer>
         </>
     );
 }

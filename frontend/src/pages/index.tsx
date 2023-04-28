@@ -29,7 +29,7 @@ export default function Home() {
                         <h1 className="text-xl font-bold font-sans text-[#D7334E] mt-5 mb-1">
                             Bem vindo ao sistema da Bahia Visual
                         </h1>
-                        <h2 className="text-sm text-gray-600 text-center">
+                        <h2 className="text-sm text-gray-600 text-center font-sans">
                             Você pode acessar o sistema ao lado com seu email e
                             senha cadastrado.
                         </h2>
