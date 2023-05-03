@@ -9,7 +9,7 @@ export default function Layout({ children }) {
     return (
         <>
             <div className="flex ">
-                <Sidebar />
+                <Sidebar/>
                 <header className="flex justify-end p-4 font-sans h-11 w-full absolute z-0 bg-[#F3773B] text-[#F2F9FC]">
                     <div className="flex space-x-4 justify-center items-center">
                         <h2>Sejá bem vindo {nome}!</h2>
@@ -22,9 +22,7 @@ export default function Layout({ children }) {
                         )}
                     </div>
                 </header>
-                
-                    <main className="mt-8 w-full ">{children}</main>
-                
+                <main className="mt-8 w-full h-[95vh] overflow-auto">{children}</main>
             </div>
         </>
     );

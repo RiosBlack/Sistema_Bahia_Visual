@@ -4,7 +4,7 @@ import ProvidersProfileDetails from '../../components/providersProfile/providers
 export default function PrestadoresPage() {
     return (
         <Layout>
-            <main className="flex">
+            <main className="flex p-5">
                 <ProvidersProfileDetails />
             </main>
         </Layout>

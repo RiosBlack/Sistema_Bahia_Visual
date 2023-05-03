@@ -1,28 +1,42 @@
-import { useState } from 'react';
 import {
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
     TableCaption,
     TableContainer,
+    Stack,
+    Input,
+    InputGroup,
+    InputLeftElement,
 } from '@chakra-ui/react';
 import Image from 'next/image';
 import perfil from '../../assets/perfil.jpg';
 import { FaUser } from 'react-icons/fa';
+import { GoSearch } from 'react-icons/go';
 import Link from 'next/link';
 
 export default function ProvidersProfile() {
-    const [prestador, setPrestador] = useState('joão');
-
     return (
         <div className="w-full p-5">
-            <div>barra de pesquisa</div>
+            <Stack className="mb-4 flex">
+                <InputGroup>
+                    <InputLeftElement children={<GoSearch />} />
+                    <Input
+                        placeholder="Digite o nome do prestador"
+                        focusBorderColor="#17112A"
+                        size="md"
+                        inputMode="search"
+                    />
+                </InputGroup>
+            </Stack>
             <div className="drop-shadow-lg border-2 border-[#17112A] rounded-xl p-2 font-sans font-medium text-lg">
-                <TableContainer overflowY={'auto'} className="font-sans h-96">
+                <TableContainer
+                    overflowY={'auto'}
+                    className="font-sans h-[470px]"
+                >
                     <Table variant="striped" colorScheme="orange">
                         <TableCaption>
                             Imperial to metric conversion factors

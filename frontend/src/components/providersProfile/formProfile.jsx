@@ -4,7 +4,7 @@ export default function FormProfile() {
     const formStyle = 'bg-[#F2F9FC] rounded-lg p-1 w-full hover:text-[#1FABCE]';
 
     return (
-        <div className="w-full grid bg-[#17112A] font-sans">
+        <div className="w-full grid bg-[#17112A] font-sans rounded-b-lg">
             <div className="flex justify-center items-center space-x-5 p-5">
                 <div className={formStyle}>Data de registro: </div>
                 <div className={formStyle}>

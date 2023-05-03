@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import perfil from '../../assets/perfil.jpg';
+import { useState, useEffect } from 'react';
 
 export default function ImageProfile() {
     return (
-        <>
-            <div className="w-52 h-52 rounded-full bg-[#F3773B] flex justify-center items-center absolute">
+        <div className="w-full flex justify-center bg-[#17112A] rounded-t-lg">
+            <div className="w-52 h-52 my-2 rounded-full bg-[#F3773B] flex justify-center items-center">
                 <Image
                     src={perfil}
                     alt="Picture of the author"
@@ -12,8 +13,6 @@ export default function ImageProfile() {
                     className="w-48 h-48 rounded-full"
                 />
             </div>
-            <div className='h-24'></div>
-            <div className=" bg-[#17112A] rounded-t-lg w-full h-32"></div>
-        </>
+        </div>
     );
 }
