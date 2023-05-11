@@ -5,7 +5,7 @@ import { TbClockPause, TbClockPlay } from 'react-icons/tb';
 
 export default function Turno1() {
     return (
-        <div className="border border-[#17112A] p-1 rounded-lg p-2 grid justify-items-center content-center">
+        <div className="border border-[#17112A] rounded-lg p-2 grid justify-items-center content-center w-1/2">
             <div className="flex items-center justify-center space-x-2 mb-2">
                 <FiSun />
                 <h1>Turno 1</h1>

@@ -39,6 +39,6 @@ public class ProvidersDTO {
 
     private String numberPhone2;
 
-    private List<Andress> andress;
+    private Andress andress;
 
 }

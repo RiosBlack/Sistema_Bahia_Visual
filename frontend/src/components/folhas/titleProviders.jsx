@@ -1,12 +1,13 @@
-import dayjs from 'dayjs';
 import { useState } from 'react';
 
 export default function TitleProviders() {
     const [prestador, setPrestador] = useState('Teste');
     const [cpf, setCpf] = useState('000.000.000-00');
-    const mes = dayjs().month()
-    const ano = dayjs().year()
-    const dia = dayjs().date()  
+
+    const dia = new Date().getMonth();
+    const mes = new Date().getMonth();
+    const ano = new Date().getFullYear();
+    const myDate = new Date(Date.now()).toLocaleString().split(',')[0];
 
     return (
         <div className="flex w-full justify-around items-center border border-[#17112A] p-1 rounded-lg">
@@ -17,7 +18,7 @@ export default function TitleProviders() {
                 </div>
                 <div className="flex space-x-1">
                     <h2 className="font-bold">Cpf:</h2>
-                    <p>{cpf}</p>
+                    <p>{myDate}</p>
                 </div>
             </div>
             <div>

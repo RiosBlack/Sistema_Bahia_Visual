@@ -55,7 +55,7 @@ public class Providers {
 
     private Timestamp modifiedDate;
 
-    @JoinColumn(name="ID_PROVIDERS)")
-    @OneToMany
-    private List<Andress> andress;
+    @JoinColumn(name="ID_PROVIDERS)", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    private Andress andress;
 }
