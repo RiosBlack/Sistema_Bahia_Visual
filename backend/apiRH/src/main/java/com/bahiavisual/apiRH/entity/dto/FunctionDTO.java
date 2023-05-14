@@ -12,5 +12,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FunctionDTO {
-    private String function;
+    private String functionProvideres;
 }

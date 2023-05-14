@@ -1,14 +1,14 @@
 package com.bahiavisual.apiRH.validator;
 
-import com.bahiavisual.apiRH.entity.Functions;
+import com.bahiavisual.apiRH.entity.FunctionsProviders;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class FunctionValidator {
 
     @Autowired
-    Functions functions;
+    FunctionsProviders functions;
 
-    public Functions spaceRemove(Functions functions){
+    public FunctionsProviders spaceRemove(FunctionsProviders functions){
         String functionsName = functions.getFunction().trim();
         functions.setFunction(functionsName.toUpperCase());
         return functions;

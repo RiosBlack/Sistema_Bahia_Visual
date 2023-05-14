@@ -28,7 +28,7 @@ public class TimeSheet {
 
     @OneToOne
     @JoinColumn(name = "FUNCTIONS_ID")
-    private Functions functions;
+    private FunctionsProviders functions;
 
     @NotEmpty
     private Timestamp date;

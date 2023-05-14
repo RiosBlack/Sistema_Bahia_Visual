@@ -40,5 +40,5 @@ public class ContratacaoDemissao {
     @NotBlank
     @OneToOne
     @JoinColumn(name = "FUNCTIONS_ID")
-    private  Functions functions;
+    private  FunctionsProviders functions;
 }

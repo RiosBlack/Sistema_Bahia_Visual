@@ -12,13 +12,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "FUNCTIONS")
-public class Functions {
+@Table(name = "FUNCTIONS_PROVIDERS")
+public class FunctionsProviders {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank
     @Column(nullable = false, unique = true)
-    private String function;
+    private String functionProvideres;
 }

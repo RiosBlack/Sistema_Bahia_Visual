@@ -1,6 +1,6 @@
 package com.bahiavisual.apiRH.controller;
 
-import com.bahiavisual.apiRH.entity.Functions;
+import com.bahiavisual.apiRH.entity.FunctionsProviders;
 import com.bahiavisual.apiRH.entity.dto.FunctionDTO;
 import com.bahiavisual.apiRH.service.FunctionsService;
 import com.bahiavisual.apiRH.validator.FunctionValidator;
@@ -28,8 +28,8 @@ public class FunctionsController {
 
     @PostMapping()
     public ResponseEntity addFunction(@RequestBody @Valid FunctionDTO functionDTO){
-        Functions functions = mapper.convertValue(functionDTO, Functions.class);
-        Functions functionsDB = validator.spaceRemove(functions);
+        FunctionsProviders functions = mapper.convertValue(functionDTO, FunctionsProviders.class);
+        FunctionsProviders functionsDB = validator.spaceRemove(functions);
         if (functionsDB != null){
             service.saveFunction(functionsDB);
             return new ResponseEntity(functionsDB, HttpStatus.OK);
@@ -38,5 +38,5 @@ public class FunctionsController {
     }
 
     @DeleteMapping("/{function}")
-    public ResponseEntity dellFunction(@PathVariable("function") String function){ return service.delFunction(function); }
+    public ResponseEntity dellFunction(@PathVariable("function") String functionProvideres){ return service.delFunction(functionProvideres); }
 }
