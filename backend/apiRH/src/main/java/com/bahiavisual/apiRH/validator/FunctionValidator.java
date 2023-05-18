@@ -9,8 +9,8 @@ public class FunctionValidator {
     FunctionsProviders functions;
 
     public FunctionsProviders spaceRemove(FunctionsProviders functions){
-        String functionsName = functions.getFunction().trim();
-        functions.setFunction(functionsName.toUpperCase());
+        String functionsName = functions.getFunctionProvideres().trim();
+        functions.setFunctionProvideres(functionsName.toUpperCase());
         return functions;
     }
 }
