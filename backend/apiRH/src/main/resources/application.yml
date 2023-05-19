@@ -1,0 +1,42 @@
+#arquivo de configuracoes local/default
+
+#port config
+server:
+  port: 8090
+
+spring:
+  application:
+    name: "rhBv"
+
+  #database config
+  datasource:
+    url: jdbc:mysql://localhost:3306/bvRH
+    username: "admin"
+    password: "admin"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    spring.jpa.show-sql: true
+    hikari:
+      schema: public
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  #flyway config
+  #flyway:
+  #  locations: "db/migration"
+  #  baseline-on-migrate: false
+
+  #devtools config
+  devtools:
+    restart:
+      enabled: true
+
+#swagger config
+#springdoc:
+ # swagger-ui:
+  #  path: "/contactbook/swagger-ui.html"
+
