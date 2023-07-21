@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'bvRH'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_ROOT_PASSWORD: 'admin123'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - '*/docker/db/data:/var/lib/mysql'
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - "16543:80"
+    depends_on:
+      - db
+    networks:
+      - docker-network
+
+networks:
+  docker-network:
+    driver: bridge
