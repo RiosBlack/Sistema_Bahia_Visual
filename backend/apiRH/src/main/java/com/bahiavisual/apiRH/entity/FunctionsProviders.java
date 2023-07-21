@@ -20,5 +20,5 @@ public class FunctionsProviders {
 
     @NotBlank
     @Column(nullable = false, unique = true)
-    private String functionProvideres;
+    private String functionProviders;
 }

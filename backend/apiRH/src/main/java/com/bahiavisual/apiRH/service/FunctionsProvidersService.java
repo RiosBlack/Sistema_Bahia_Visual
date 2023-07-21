@@ -2,7 +2,7 @@ package com.bahiavisual.apiRH.service;
 
 import com.bahiavisual.apiRH.entity.FunctionsProviders;
 import com.bahiavisual.apiRH.entity.dto.FunctionDTO;
-import com.bahiavisual.apiRH.repository.FunctionRepository;
+import com.bahiavisual.apiRH.repository.FunctionsProvidersRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,12 +15,12 @@ import java.util.Optional;
 
 
 @Service
-public class FunctionsService {
+public class FunctionsProvidersService {
     @Autowired
-    FunctionRepository functionRepository;
+    FunctionsProvidersRepository functionsProvidersRepository;
 
     public List<FunctionDTO> getAll(){
-        List<FunctionsProviders> functionList = functionRepository.findAll();
+        List<FunctionsProviders> functionList = functionsProvidersRepository.findAll();
         List<FunctionDTO> functionDTOList = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
         for (FunctionsProviders functions : functionList){
@@ -30,21 +30,21 @@ public class FunctionsService {
         return functionDTOList;
     }
 
-    public ResponseEntity saveFunction(FunctionsProviders functionProvideres){
-        if (functionProvideres == null){
+    public ResponseEntity saveFunction(FunctionsProviders functionProviders){
+        if (functionProviders == null){
             return  new ResponseEntity("O objeto não pode ser vaziu", HttpStatus.BAD_REQUEST);
         }
-        FunctionsProviders functionSave = functionRepository.saveAndFlush(functionProvideres);
+        FunctionsProviders functionSave = functionsProvidersRepository.saveAndFlush(functionProviders);
         return new ResponseEntity(functionSave, HttpStatus.OK);
     }
 
     public ResponseEntity delFunction(String functionName){
-        Optional<FunctionsProviders> functionsDb = functionRepository.findByFunction(functionName);
+        Optional<FunctionsProviders> functionsDb = functionsProvidersRepository.findByFunctionProviders(functionName);
         FunctionsProviders functions = functionsDb.get();
-        if (functions == null || functions.getFunctionProvideres() == null){
+        if (functions == null || functions.getFunctionProviders() == null){
             return  new ResponseEntity("Erro ao deletar função", HttpStatus.BAD_REQUEST);
         }
-        functionRepository.deleteById(functions.getId());
+        functionsProvidersRepository.deleteById(functions.getId());
         return new ResponseEntity("Função " + functionName + " deletada com sucesso!", HttpStatus.OK);
     }
 }
