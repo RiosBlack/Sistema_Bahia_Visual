@@ -1,7 +1,7 @@
 package com.bahiavisual.apiRH.service;
 
 import com.bahiavisual.apiRH.entity.FunctionsProviders;
-import com.bahiavisual.apiRH.entity.dto.FunctionDTO;
+import com.bahiavisual.apiRH.entity.dto.FunctionProvidersDTO;
 import com.bahiavisual.apiRH.repository.FunctionsProvidersRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +19,12 @@ public class FunctionsProvidersService {
     @Autowired
     FunctionsProvidersRepository functionsProvidersRepository;
 
-    public List<FunctionDTO> getAll(){
+    public List<FunctionProvidersDTO> getAll(){
         List<FunctionsProviders> functionList = functionsProvidersRepository.findAll();
-        List<FunctionDTO> functionDTOList = new ArrayList<>();
+        List<FunctionProvidersDTO> functionDTOList = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
         for (FunctionsProviders functions : functionList){
-            FunctionDTO functionDTO = mapper.convertValue(functions, FunctionDTO.class);
+            FunctionProvidersDTO functionDTO = mapper.convertValue(functions, FunctionProvidersDTO.class);
             functionDTOList.add(functionDTO);
         }
         return functionDTOList;

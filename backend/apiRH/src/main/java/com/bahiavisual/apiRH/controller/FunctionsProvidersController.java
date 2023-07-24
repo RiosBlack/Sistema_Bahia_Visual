@@ -1,7 +1,7 @@
 package com.bahiavisual.apiRH.controller;
 
 import com.bahiavisual.apiRH.entity.FunctionsProviders;
-import com.bahiavisual.apiRH.entity.dto.FunctionDTO;
+import com.bahiavisual.apiRH.entity.dto.FunctionProvidersDTO;
 import com.bahiavisual.apiRH.service.FunctionsProvidersService;
 import com.bahiavisual.apiRH.validator.FunctionValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,10 +25,10 @@ public class FunctionsProvidersController {
     ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping()
-    public List<FunctionDTO> getAll(){ return service.getAll(); }
+    public List<FunctionProvidersDTO> getAll(){ return service.getAll(); }
 
     @PostMapping()
-    public ResponseEntity addFunction(@RequestBody @Valid FunctionDTO functionDTO){
+    public ResponseEntity addFunction(@RequestBody @Valid FunctionProvidersDTO functionDTO){
         FunctionsProviders functions = mapper.convertValue(functionDTO, FunctionsProviders.class);
         FunctionsProviders functionsDB = validator.spaceRemove(functions);
         if (functionsDB != null){

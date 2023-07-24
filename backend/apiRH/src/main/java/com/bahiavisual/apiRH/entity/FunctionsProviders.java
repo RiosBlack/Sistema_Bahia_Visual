@@ -15,7 +15,7 @@ import lombok.Setter;
 @Table(name = "FUNCTIONS_PROVIDERS")
 public class FunctionsProviders {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
