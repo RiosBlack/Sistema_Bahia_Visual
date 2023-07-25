@@ -36,9 +36,4 @@ public class ContratacaoDemissao {
     @OneToOne
     private Providers providers;
 
-
-    @NotBlank
-    @JoinColumn(name = "FUNCTIONS_ID")
-    @OneToOne
-    private  FunctionsProviders functions;
 }

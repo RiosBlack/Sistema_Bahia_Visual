@@ -28,9 +28,10 @@ public class ProvidersController {
     ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping()
-    public List<ProvidersDTO> getAllProviders(){
-        return providersService.getAll();
-    };
+    public List<ProvidersDTO> getAllProviders(){ return providersService.getAll(); };
+
+    @GetMapping("/{cpf}")
+    public Providers getProvider(@PathVariable("cpf") String cpf) { return providersService.getProvider(cpf); }
 
     @PostMapping()
     public ResponseEntity addProviders(@RequestBody @Valid ProvidersDTO providersDTO) {

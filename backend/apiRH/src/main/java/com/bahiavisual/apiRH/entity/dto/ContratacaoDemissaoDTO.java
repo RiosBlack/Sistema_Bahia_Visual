@@ -21,4 +21,7 @@ public class ContratacaoDemissaoDTO {
     private String motivoDemissao;
 
     private Boolean isContratado;
+
+    private String cpf;
+
 }

@@ -1,12 +1,9 @@
 package com.bahiavisual.apiRH.controller;
 
-import com.bahiavisual.apiRH.entity.Andress;
 import com.bahiavisual.apiRH.entity.ContratacaoDemissao;
-import com.bahiavisual.apiRH.entity.dto.AndressDTO;
+import com.bahiavisual.apiRH.entity.Providers;
 import com.bahiavisual.apiRH.entity.dto.ContratacaoDemissaoDTO;
-import com.bahiavisual.apiRH.service.AndressService;
 import com.bahiavisual.apiRH.service.ContratacaoDemissaoService;
-import com.bahiavisual.apiRH.validator.AndressValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +20,7 @@ public class ContratacaoDemissaoController {
     @Autowired
     ContratacaoDemissaoService service;
 
+    ProvidersController providersController = new ProvidersController();
     ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping()
@@ -30,12 +28,14 @@ public class ContratacaoDemissaoController {
 
     @PostMapping()
     public ResponseEntity addContratacao(@RequestBody @Valid ContratacaoDemissaoDTO contratacaoDemissaoDTO){
+        Providers provider = providersController.getProvider(contratacaoDemissaoDTO.getCpf());
         ContratacaoDemissao contratacaoDemissao = mapper.convertValue(contratacaoDemissaoDTO, ContratacaoDemissao.class);
+        contratacaoDemissao.setProviders(provider);
         if (contratacaoDemissao != null) {
             service.saveContratacaoDemissao(contratacaoDemissao);
             return new ResponseEntity(contratacaoDemissao, HttpStatus.OK);
         }
-        return new ResponseEntity("Erro ao salvar endereço.", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity("Erro ao salvar contratação.", HttpStatus.BAD_REQUEST);
     };
 
     @PutMapping()

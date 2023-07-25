@@ -1,7 +1,9 @@
 package com.bahiavisual.apiRH.service;
 
+import com.bahiavisual.apiRH.entity.FunctionsProviders;
 import com.bahiavisual.apiRH.entity.Providers;
 import com.bahiavisual.apiRH.entity.dto.ProvidersDTO;
+import com.bahiavisual.apiRH.repository.FunctionsProvidersRepository;
 import com.bahiavisual.apiRH.repository.ProvidersRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,10 @@ public class ProvidersService {
     @Autowired
     ProvidersRepository providersRepository;
 
+    @Autowired
+    FunctionsProvidersRepository functionsProvidersRepository;
 
+    ObjectMapper mapper = new ObjectMapper();
 
     public List<ProvidersDTO> getAll(){
         List<Providers> listProviders = providersRepository.findAll();
@@ -86,11 +91,20 @@ public class ProvidersService {
             provider.setNaturalness(providers.getNaturalness());
         }
         if (provider.getFunctionsProviders() != null) {
-            provider.setFunctionsProviders(providers.getFunctionsProviders());
+            String functionProviders = providers.getFunctionsProviders().getFunctionProviders();
+            Optional<FunctionsProviders> byFunctionProviders = functionsProvidersRepository.findByFunctionProviders(functionProviders);
+            FunctionsProviders functionsProviders = byFunctionProviders.get();
+            provider.setFunctionsProviders(functionsProviders);
         }
         provider.setModifiedDate(Timestamp.from(Instant.now()));
 
         providersRepository.save(provider);
         return new ResponseEntity(provider, HttpStatus.OK);
+    }
+
+    public Providers getProvider(String cpf) {
+        Optional<Providers> provider = providersRepository.findByCpf(cpf);
+        Providers providers = provider.get();
+        return providers;
     }
 }
