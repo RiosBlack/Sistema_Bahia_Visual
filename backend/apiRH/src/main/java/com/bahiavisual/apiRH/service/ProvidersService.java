@@ -85,6 +85,9 @@ public class ProvidersService {
         if (provider.getNaturalness() != null || !provider.getNaturalness().isEmpty()) {
             provider.setNaturalness(providers.getNaturalness());
         }
+        if (provider.getFunctionsProviders() != null) {
+            provider.setFunctionsProviders(providers.getFunctionsProviders());
+        }
         provider.setModifiedDate(Timestamp.from(Instant.now()));
 
         providersRepository.save(provider);

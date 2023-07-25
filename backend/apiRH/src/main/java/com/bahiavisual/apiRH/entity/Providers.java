@@ -2,13 +2,14 @@ package com.bahiavisual.apiRH.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Getter
 @Setter
@@ -55,7 +56,11 @@ public class Providers {
 
     private Timestamp modifiedDate;
 
-    @JoinColumn(name="ID_PROVIDERS)", referencedColumnName = "id")
-    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="ID_ANDRESS)", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Andress andress;
+
+    @JoinColumn(name="ID_FUNCTIONS)", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private FunctionsProviders functionsProviders;
 }

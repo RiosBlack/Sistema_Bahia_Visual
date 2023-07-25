@@ -32,13 +32,13 @@ public class ContratacaoDemissao {
     private Boolean isContratado;
 
     @NotBlank
-    @OneToOne
     @JoinColumn(name = "PROVIDERS_ID")
+    @OneToOne
     private Providers providers;
 
 
     @NotBlank
-    @OneToOne
     @JoinColumn(name = "FUNCTIONS_ID")
+    @OneToOne
     private  FunctionsProviders functions;
 }
