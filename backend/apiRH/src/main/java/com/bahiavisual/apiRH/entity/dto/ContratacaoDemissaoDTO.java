@@ -1,5 +1,6 @@
 package com.bahiavisual.apiRH.entity.dto;
 
+import com.bahiavisual.apiRH.entity.Providers;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +23,6 @@ public class ContratacaoDemissaoDTO {
 
     private Boolean isContratado;
 
-    private String cpf;
+    private Providers providers;
 
 }

@@ -1,8 +1,7 @@
 package com.bahiavisual.apiRH.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,18 +20,18 @@ public class ContratacaoDemissao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
+    @NotNull
     private Timestamp contratacaoDate;
 
     private Timestamp demissaoDate;
 
     private String motivoDemissao;
 
-    @NotEmpty
+    @NotNull
     private Boolean isContratado;
 
-    @NotBlank
-    @JoinColumn(name = "PROVIDERS_ID")
+    @NotNull
+    @JoinColumn(name = "PROVIDERS_ID", referencedColumnName = "id")
     @OneToOne
     private Providers providers;
 

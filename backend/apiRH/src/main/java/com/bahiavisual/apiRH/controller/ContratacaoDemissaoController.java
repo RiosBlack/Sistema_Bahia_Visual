@@ -1,7 +1,6 @@
 package com.bahiavisual.apiRH.controller;
 
 import com.bahiavisual.apiRH.entity.ContratacaoDemissao;
-import com.bahiavisual.apiRH.entity.Providers;
 import com.bahiavisual.apiRH.entity.dto.ContratacaoDemissaoDTO;
 import com.bahiavisual.apiRH.service.ContratacaoDemissaoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,9 +27,7 @@ public class ContratacaoDemissaoController {
 
     @PostMapping()
     public ResponseEntity addContratacao(@RequestBody @Valid ContratacaoDemissaoDTO contratacaoDemissaoDTO){
-        Providers provider = providersController.getProvider(contratacaoDemissaoDTO.getCpf());
         ContratacaoDemissao contratacaoDemissao = mapper.convertValue(contratacaoDemissaoDTO, ContratacaoDemissao.class);
-        contratacaoDemissao.setProviders(provider);
         if (contratacaoDemissao != null) {
             service.saveContratacaoDemissao(contratacaoDemissao);
             return new ResponseEntity(contratacaoDemissao, HttpStatus.OK);
