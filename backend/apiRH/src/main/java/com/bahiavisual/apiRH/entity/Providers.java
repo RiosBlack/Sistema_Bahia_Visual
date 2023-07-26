@@ -61,6 +61,6 @@ public class Providers {
     private Andress andress;
 
     @JoinColumn(name="ID_FUNCTIONS)", referencedColumnName = "id")
-    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToOne
     private FunctionsProviders functionsProviders;
 }
