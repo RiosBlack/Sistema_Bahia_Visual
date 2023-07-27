@@ -92,7 +92,8 @@ public class ProvidersService {
         }
         if (provider.getFunctionsProviders() != null) {
             String functionProviders = providers.getFunctionsProviders().getFunctionProviders();
-            Optional<FunctionsProviders> byFunctionProviders = functionsProvidersRepository.findByFunctionProviders(functionProviders);
+            Optional<FunctionsProviders> byFunctionProviders =
+                    functionsProvidersRepository.findByFunctionProviders(functionProviders);
             FunctionsProviders functionsProviders = byFunctionProviders.get();
             provider.setFunctionsProviders(functionsProviders);
         }

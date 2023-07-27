@@ -1,4 +1,4 @@
-package com.bahiavisual.apiRH.corsConfiguration;
+package com.bahiavisual.apiRH.configuration.corsConfiguration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

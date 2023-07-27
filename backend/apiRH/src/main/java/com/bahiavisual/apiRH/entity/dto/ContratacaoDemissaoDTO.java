@@ -15,6 +15,8 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ContratacaoDemissaoDTO {
+    private Long id;
+
     private Timestamp contratacaoDate;
 
     private Timestamp demissaoDate;

@@ -39,10 +39,19 @@ public class ContratacaoDemissaoController {
     public ResponseEntity editContratacao(@RequestBody @Valid ContratacaoDemissaoDTO contratacaoDemissaoDTO){
         ContratacaoDemissao contratacaoDemissao = mapper.convertValue(contratacaoDemissaoDTO, ContratacaoDemissao.class);
         if (contratacaoDemissao != null) {
-            service.editContratacaoDemissao(contratacaoDemissao);
+            service.editContratacao(contratacaoDemissao);
             return new ResponseEntity(contratacaoDemissao, HttpStatus.OK);
         }
         return new ResponseEntity("Erro ao editar endereço.", HttpStatus.BAD_REQUEST);
     }
 
+    @PutMapping("/dismiss")
+    public ResponseEntity demicao(@RequestBody @Valid ContratacaoDemissaoDTO contratacaoDemissaoDTO){
+        ContratacaoDemissao contratacaoDemissao = mapper.convertValue(contratacaoDemissaoDTO, ContratacaoDemissao.class);
+        if (contratacaoDemissao != null){
+            service.demissao(contratacaoDemissao);
+            return new ResponseEntity(contratacaoDemissao, HttpStatus.OK);
+        }
+        return new ResponseEntity("Erro ao cadastrar demissão.", HttpStatus.BAD_REQUEST);
+    }
 }
