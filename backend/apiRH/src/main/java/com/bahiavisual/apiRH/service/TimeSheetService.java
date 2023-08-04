@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +35,7 @@ public class TimeSheetService {
 
     public ResponseEntity saveTimeSheet(TimeSheet timeSheet){
         timeSheet.setDate(Timestamp.from(Instant.now()));
+        timeSheet.setFunctions(timeSheet.getProviders().getFunctionsProviders().getFunctionProviders());
         TimeSheet timeSalvo = repository.saveAndFlush(timeSheet);
         return new ResponseEntity(timeSalvo, HttpStatus.OK);
     }

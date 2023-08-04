@@ -25,9 +25,7 @@ public class TimeSheet {
     @JoinColumn(name = "PROVIDERS_ID")
     private Providers providers;
 
-    @OneToOne
-    @JoinColumn(name = "FUNCTIONS_ID")
-    private FunctionsProviders functions;
+    private String functions;
 
     @NotEmpty
     private Timestamp date;
@@ -57,4 +55,9 @@ public class TimeSheet {
     private Time saidaTurnoNoite;
 
     private Timestamp modifiedDate;
+
+    private Boolean isSigned;
+
+    private String signedImg;
+
 }
