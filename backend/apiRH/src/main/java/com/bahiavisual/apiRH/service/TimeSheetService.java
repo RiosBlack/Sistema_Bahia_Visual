@@ -1,8 +1,10 @@
 package com.bahiavisual.apiRH.service;
 
 
+import com.bahiavisual.apiRH.entity.Providers;
 import com.bahiavisual.apiRH.entity.TimeSheet;
 import com.bahiavisual.apiRH.entity.dto.TimeSheetDTO;
+import com.bahiavisual.apiRH.repository.ProvidersRepository;
 import com.bahiavisual.apiRH.repository.TimeSheetRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class TimeSheetService {
     @Autowired
     TimeSheetRepository repository;
 
+    @Autowired
+    ProvidersRepository providersRepository;
+
     public List<TimeSheetDTO> getAll(){
         List<TimeSheet> listTimeSheet = repository.findAll();
         List<TimeSheetDTO> listTimeSheetDTO = new ArrayList<>();
@@ -34,6 +39,9 @@ public class TimeSheetService {
     }
 
     public ResponseEntity saveTimeSheet(TimeSheet timeSheet){
+        //consultar o cpf para puxar o providers e setar
+        Optional<Providers> providers = providersRepository.findByCpf(timeSheet.getCpf());
+        timeSheet.setProviders(providers.get());
         timeSheet.setDate(Timestamp.from(Instant.now()));
         timeSheet.setFunctions(timeSheet.getProviders().getFunctionsProviders().getFunctionProviders());
         TimeSheet timeSalvo = repository.saveAndFlush(timeSheet);

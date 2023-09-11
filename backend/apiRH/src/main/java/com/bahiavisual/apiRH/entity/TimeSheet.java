@@ -25,33 +25,26 @@ public class TimeSheet {
     @JoinColumn(name = "PROVIDERS_ID")
     private Providers providers;
 
+    private String cpf;
+
     private String functions;
 
-    @NotEmpty
     private Timestamp date;
 
-    @NotEmpty
     private Time entradaTurnoDia;
 
-    @NotEmpty
     private Time intervaloTurnoDia;
 
-    @NotEmpty
     private Time retornoTurnoDia;
 
-    @NotEmpty
     private Time saidaTurnoDia;
 
-    @NotEmpty
     private Time entradaTurnoNoite;
 
-    @NotEmpty
     private Time intervaloTurnoNoite;
 
-    @NotEmpty
     private Time retornoTurnoNoite;
 
-    @NotEmpty
     private Time saidaTurnoNoite;
 
     private Timestamp modifiedDate;

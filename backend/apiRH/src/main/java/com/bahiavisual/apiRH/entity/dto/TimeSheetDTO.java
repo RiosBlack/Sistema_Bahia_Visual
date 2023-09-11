@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TimeSheetDTO {
 
-    private ProvidersDTO providersDTO;
+    private String cpf;
 
     private Time entradaTurnoDia;
 
