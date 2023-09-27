@@ -1,7 +1,6 @@
-version: '3'
+version: '3.1'
 
 services:
-  services:
   db:
     image: mysql
     restart: always
@@ -15,18 +14,9 @@ services:
     expose:
       - '3306'
     volumes:
-      - '*/docker/db/data:/var/lib/mysql'
-
-  adminer:
-    container_name: adminer
-    image: adminer
-    restart: always
-    ports:
-      - "16543:80"
-    depends_on:
-      - db
-    networks:
-      - docker-network
+      - type: bind
+        source: "/home/douglasbv/Documentos/Douglas Pessoal/BancoDeDados/Docker"
+        target: /var/lib/mysql
 
 networks:
   docker-network:
