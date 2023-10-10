@@ -28,11 +28,7 @@ public class ContratacaoDemissaoController {
     @PostMapping()
     public ResponseEntity addContratacao(@RequestBody @Valid ContratacaoDemissaoDTO contratacaoDemissaoDTO){
         ContratacaoDemissao contratacaoDemissao = mapper.convertValue(contratacaoDemissaoDTO, ContratacaoDemissao.class);
-        if (contratacaoDemissao != null) {
-            service.saveContratacaoDemissao(contratacaoDemissao);
-            return new ResponseEntity(contratacaoDemissao, HttpStatus.OK);
-        }
-        return new ResponseEntity("Erro ao salvar contratação.", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(service.saveContratacaoDemissao(contratacaoDemissao), HttpStatus.BAD_REQUEST);
     };
 
     @PutMapping()

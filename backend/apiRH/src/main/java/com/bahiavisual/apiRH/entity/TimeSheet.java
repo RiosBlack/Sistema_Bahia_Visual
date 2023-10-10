@@ -1,7 +1,6 @@
 package com.bahiavisual.apiRH.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +28,7 @@ public class TimeSheet {
 
     private String functions;
 
-    private Timestamp date;
+    private String date;
 
     private Time entradaTurnoDia;
 

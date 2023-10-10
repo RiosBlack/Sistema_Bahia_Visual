@@ -38,6 +38,17 @@ public class ContratacaoDemissaoService {
         if (contratacaoDemissao == null){
             return new ResponseEntity("O objeto é nulo ou vaziu", HttpStatus.BAD_REQUEST);
         }
+        Optional<ContratacaoDemissao> providersContratado = repository.findByCpf(contratacaoDemissao.getCpf());
+        if (providersContratado.isPresent()){
+            if (providersContratado.get().getDemissaoDate() == null){
+                return new ResponseEntity("O prestador está contratado.", HttpStatus.BAD_REQUEST);
+            }
+        }
+        Optional<Providers> providerDB = providersRepository.findByCpf(contratacaoDemissao.getCpf());
+        if (providerDB == null || providerDB.isEmpty()){
+            return new ResponseEntity("Prestador não encontrado no banco de dados", HttpStatus.BAD_REQUEST);
+        }
+        contratacaoDemissao.setProviders(providerDB.get());
         contratacaoDemissao.setIsContratado(true);
         ContratacaoDemissao contratacaoDemissaoSave = repository.saveAndFlush(contratacaoDemissao);
         return new ResponseEntity(contratacaoDemissaoSave, HttpStatus.OK);

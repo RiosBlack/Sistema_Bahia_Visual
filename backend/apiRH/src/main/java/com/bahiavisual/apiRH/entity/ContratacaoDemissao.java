@@ -35,4 +35,6 @@ public class ContratacaoDemissao {
     @OneToOne
     private Providers providers;
 
+    private String cpf;
+
 }

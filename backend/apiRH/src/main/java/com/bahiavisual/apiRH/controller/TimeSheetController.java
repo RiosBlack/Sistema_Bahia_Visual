@@ -27,9 +27,8 @@ public class TimeSheetController {
     public ResponseEntity addTimeSheet(@RequestBody @Valid TimeSheetDTO timeSheetDTO){
         TimeSheet timeSheet = mapper.convertValue(timeSheetDTO, TimeSheet.class);
         if (timeSheet != null){
-            timeSheetService.saveTimeSheet(timeSheet);
-            return new ResponseEntity(timeSheet, HttpStatus.OK);
+           return timeSheetService.saveTimeSheet(timeSheet);
         }
-        return new ResponseEntity("Erro ao salvar folha de ponto", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(timeSheetService.saveTimeSheet(timeSheet), HttpStatus.BAD_REQUEST);
     }
 }

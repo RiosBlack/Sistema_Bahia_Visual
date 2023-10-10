@@ -25,6 +25,6 @@ public class ContratacaoDemissaoDTO {
 
     private Boolean isContratado;
 
-    private Providers providers;
+    private String cpf;
 
 }

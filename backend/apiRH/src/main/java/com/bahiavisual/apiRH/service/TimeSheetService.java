@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +42,22 @@ public class TimeSheetService {
     public ResponseEntity saveTimeSheet(TimeSheet timeSheet){
         //consultar o cpf para puxar o providers e setar
         Optional<Providers> providers = providersRepository.findByCpf(timeSheet.getCpf());
+        if (providers == null || providers.isEmpty()){
+            return new ResponseEntity("Prestador não encontrado no banco de dados", HttpStatus.BAD_REQUEST);
+        }
         timeSheet.setProviders(providers.get());
-        timeSheet.setDate(Timestamp.from(Instant.now()));
+        Timestamp dataNow = Timestamp.from(Instant.now());
+        String dataFormatada = new SimpleDateFormat("dd/MM/yyyy").format(dataNow);
+        timeSheet.setDate(dataFormatada);
+        List<TimeSheet> dateDB = repository.findByDate(dataFormatada);
+        //infelizmente não está parando no if
+        for (TimeSheet dateDb : dateDB) {
+            System.out.println(dateDb.getDate() + " " + dateDb.getProviders().getCpf());
+            if (dateDb.getProviders().getCpf().equals(timeSheet.getProviders().getCpf()) &&
+                    dateDb.getDate().equals(timeSheet.getDate())) {
+                return new ResponseEntity("Diária do prestador já foi lançada", HttpStatus.BAD_REQUEST);
+            }
+        }
         timeSheet.setFunctions(timeSheet.getProviders().getFunctionsProviders().getFunctionProviders());
         TimeSheet timeSalvo = repository.saveAndFlush(timeSheet);
         return new ResponseEntity(timeSalvo, HttpStatus.OK);
