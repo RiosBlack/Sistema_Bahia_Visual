@@ -11,6 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,64 +43,79 @@ public class ContratacaoDemissaoService {
         if (contratacaoDemissao == null){
             return new ResponseEntity("O objeto é nulo ou vaziu", HttpStatus.BAD_REQUEST);
         }
-        Optional<ContratacaoDemissao> providersContratado = repository.findByCpf(contratacaoDemissao.getCpf());
+
+
+        Optional<ContratacaoDemissao> providersContratado = repository.findByCpfAndIsContratadoAndDemissaoDateIsNull(contratacaoDemissao.getCpf(), true);
+
         if (providersContratado.isPresent()){
             if (providersContratado.get().getDemissaoDate() == null){
                 return new ResponseEntity("O prestador está contratado.", HttpStatus.BAD_REQUEST);
             }
         }
+
         Optional<Providers> providerDB = providersRepository.findByCpf(contratacaoDemissao.getCpf());
+
         if (providerDB == null || providerDB.isEmpty()){
             return new ResponseEntity("Prestador não encontrado no banco de dados", HttpStatus.BAD_REQUEST);
         }
+
         contratacaoDemissao.setProviders(providerDB.get());
+        ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
+        Instant instant = Instant.now();
+        ZonedDateTime zonedDateTime = instant.atZone(zoneId);
+        Timestamp dataNow = Timestamp.from(zonedDateTime.toInstant());
+        contratacaoDemissao.setContratacaoDate(dataNow);
         contratacaoDemissao.setIsContratado(true);
         ContratacaoDemissao contratacaoDemissaoSave = repository.saveAndFlush(contratacaoDemissao);
         return new ResponseEntity(contratacaoDemissaoSave, HttpStatus.OK);
     }
 
     public ResponseEntity editContratacao(ContratacaoDemissao contratacaoDemissao){
-        Optional<ContratacaoDemissao> dataOptional = repository.findById(contratacaoDemissao.getId());
-        ContratacaoDemissao contratacaoDemissao2 = dataOptional.get();
-        if (contratacaoDemissao2 == null || dataOptional.isEmpty()) {
-            return new ResponseEntity("Contratação não existe", HttpStatus. BAD_REQUEST);
+        if (contratacaoDemissao == null){
+            return new ResponseEntity("O objeto é nulo ou vaziu", HttpStatus.BAD_REQUEST);
         }
+        Optional<ContratacaoDemissao> providersContratado = repository.findById(contratacaoDemissao.getId());
+        if (providersContratado.isPresent()){
+            ContratacaoDemissao contratacaoDemissaoEdit = providersContratado.get();
 
-        if (contratacaoDemissao2.getContratacaoDate() != null) {
-            contratacaoDemissao2.setContratacaoDate(contratacaoDemissao.getContratacaoDate());
+            contratacaoDemissaoEdit.setContratacaoDate(contratacaoDemissao.getContratacaoDate());
+            contratacaoDemissaoEdit.setDemissaoDate(contratacaoDemissao.getDemissaoDate());
+            contratacaoDemissaoEdit.setMotivoDemissao(contratacaoDemissao.getMotivoDemissao());
+            ContratacaoDemissao contratacaoDemissaoSave = repository.saveAndFlush(contratacaoDemissaoEdit);
+            return new ResponseEntity(contratacaoDemissaoSave, HttpStatus.OK);
+        } else {
+            return new ResponseEntity("O prestador não está contratado", HttpStatus.BAD_REQUEST);
         }
-
-        contratacaoDemissao2.setIsContratado(true);
-
-        if (contratacaoDemissao2.getProviders() != null) {
-            String cpfProvider = contratacaoDemissao.getProviders().getCpf();
-            Optional<Providers> providerData = providersRepository.findByCpf(cpfProvider);
-            if (providerData.get() == null || providerData.isEmpty()){
-                return new ResponseEntity("Prestador não cadastrado", HttpStatus.BAD_REQUEST);
-            }
-            contratacaoDemissao2.setProviders(providerData.get());
-        }
-
-        repository.saveAndFlush(contratacaoDemissao2);
-        return new ResponseEntity(contratacaoDemissao2, HttpStatus.OK);
     }
 
 
     public ResponseEntity demissao(ContratacaoDemissao contratacaoDemissao) {
-        Optional<ContratacaoDemissao> contrataçãoDemissãoDb = repository.findById(contratacaoDemissao.getId());
-        String cpfProvider = contratacaoDemissao.getProviders().getCpf();
-        Optional<Providers> providerData = providersRepository.findByCpf(cpfProvider);
-
-        if (providerData.isEmpty()){
-            return new ResponseEntity("Prestador não encontrado", HttpStatus.BAD_REQUEST);
+        if (contratacaoDemissao == null){
+            return new ResponseEntity("O objeto é nulo ou vaziu", HttpStatus.BAD_REQUEST);
         }
 
-        if (contrataçãoDemissãoDb.get() != null || !contrataçãoDemissãoDb.isEmpty()){
-            contratacaoDemissao.setContratacaoDate(contrataçãoDemissãoDb.get().getContratacaoDate());
-            contratacaoDemissao.setProviders(providerData.get());
-            contratacaoDemissao.setIsContratado(false);
-            repository.saveAndFlush(contratacaoDemissao);
+        Optional<ContratacaoDemissao> providersContratado = repository.findByCpfAndIsContratado(contratacaoDemissao.getCpf(), true);
+
+        if (!providersContratado.isPresent()){
+            return new ResponseEntity<>("O prestador não se encontra contratado", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity("Erro ao cadastrar demissão do prestador", HttpStatus.BAD_REQUEST);
+
+        if (providersContratado.isPresent()){
+            ContratacaoDemissao contratacaoDemissaoEdit = providersContratado.get();
+            contratacaoDemissaoEdit.setIsContratado(false);
+            ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
+            Instant instant = Instant.now();
+            ZonedDateTime zonedDateTime = instant.atZone(zoneId);
+            Timestamp dataNow = Timestamp.from(zonedDateTime.toInstant());
+            contratacaoDemissaoEdit.setDemissaoDate(dataNow);
+            contratacaoDemissaoEdit.setMotivoDemissao(contratacaoDemissao.getMotivoDemissao());
+            if (contratacaoDemissaoEdit.getDemissaoDate().compareTo(contratacaoDemissaoEdit.getContratacaoDate()) <= 0){
+                return new ResponseEntity("A data da demissão não pode ser inferior a data de demissão.", HttpStatus.BAD_REQUEST);
+            }
+            ContratacaoDemissao contratacaoDemissaoSave = repository.saveAndFlush(contratacaoDemissaoEdit);
+            return new ResponseEntity(contratacaoDemissaoSave, HttpStatus.OK);
+        } else {
+            return new ResponseEntity("O prestador não está contratado", HttpStatus.BAD_REQUEST);
+        }
     }
 }

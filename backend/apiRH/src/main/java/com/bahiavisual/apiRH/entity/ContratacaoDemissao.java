@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -36,5 +38,10 @@ public class ContratacaoDemissao {
     private Providers providers;
 
     private String cpf;
+
+    private String functionContratado;
+
+    @NotNull
+    private Double diary;
 
 }
