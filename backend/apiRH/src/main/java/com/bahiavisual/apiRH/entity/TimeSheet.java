@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -28,7 +31,7 @@ public class TimeSheet {
 
     private String functions;
 
-    private String date;
+    private LocalDate date;
 
     private Time entradaTurnoDia;
 
@@ -51,5 +54,9 @@ public class TimeSheet {
     private Boolean isSigned;
 
     private String signedImg;
+
+    private Time hoursService;
+
+    private Double diaryDay;
 
 }

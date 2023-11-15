@@ -23,9 +23,9 @@ public class ContratacaoDemissao {
     private Long id;
 
     @NotNull
-    private Timestamp contratacaoDate;
+    private LocalDate contratacaoDate;
 
-    private Timestamp demissaoDate;
+    private LocalDate demissaoDate;
 
     private String motivoDemissao;
 

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class ContratacaoDemissaoService {
         ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
         Instant instant = Instant.now();
         ZonedDateTime zonedDateTime = instant.atZone(zoneId);
-        Timestamp dataNow = Timestamp.from(zonedDateTime.toInstant());
+        LocalDate dataNow = LocalDate.now();
         contratacaoDemissao.setContratacaoDate(dataNow);
         contratacaoDemissao.setIsContratado(true);
         ContratacaoDemissao contratacaoDemissaoSave = repository.saveAndFlush(contratacaoDemissao);
@@ -104,9 +105,8 @@ public class ContratacaoDemissaoService {
             ContratacaoDemissao contratacaoDemissaoEdit = providersContratado.get();
             contratacaoDemissaoEdit.setIsContratado(false);
             ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
-            Instant instant = Instant.now();
-            ZonedDateTime zonedDateTime = instant.atZone(zoneId);
-            Timestamp dataNow = Timestamp.from(zonedDateTime.toInstant());
+            ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
+            LocalDate dataNow = zonedDateTime.toLocalDate();
             contratacaoDemissaoEdit.setDemissaoDate(dataNow);
             contratacaoDemissaoEdit.setMotivoDemissao(contratacaoDemissao.getMotivoDemissao());
             if (contratacaoDemissaoEdit.getDemissaoDate().compareTo(contratacaoDemissaoEdit.getContratacaoDate()) <= 0){

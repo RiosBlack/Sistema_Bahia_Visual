@@ -40,4 +40,8 @@ public class TimeSheetDTO {
     private Boolean isSigned;
 
     private String signedImg;
+
+    private Time hoursService;
+
+    private Double diaryDay;
 }

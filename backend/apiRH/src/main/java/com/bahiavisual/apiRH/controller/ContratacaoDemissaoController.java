@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 
 import java.util.List;
 
@@ -33,7 +35,8 @@ public class ContratacaoDemissaoController {
 
     @PutMapping()
     public ResponseEntity editContratacao(@RequestBody @Valid ContratacaoDemissaoDTO contratacaoDemissaoDTO){
-        ContratacaoDemissao contratacaoDemissao = mapper.convertValue(contratacaoDemissaoDTO, ContratacaoDemissao.class);
+        ContratacaoDemissao contratacaoDemissao = contratacaoDemissaoDTO.toMapper();
+        //ContratacaoDemissao contratacaoDemissao = mapper.convertValue(contratacaoDemissaoDTO, ContratacaoDemissao.class);
         return new ResponseEntity(service.editContratacao(contratacaoDemissao), HttpStatus.BAD_REQUEST);
     }
 
