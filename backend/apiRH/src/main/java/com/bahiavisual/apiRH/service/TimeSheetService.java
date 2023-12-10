@@ -5,6 +5,7 @@ import com.bahiavisual.apiRH.entity.ContratacaoDemissao;
 import com.bahiavisual.apiRH.entity.Providers;
 import com.bahiavisual.apiRH.entity.TimeSheet;
 import com.bahiavisual.apiRH.entity.dto.TimeSheetDTO;
+import com.bahiavisual.apiRH.entity.dto.TimeSheetDateDTO;
 import com.bahiavisual.apiRH.repository.ContratacaoDemissaoRepository;
 import com.bahiavisual.apiRH.repository.ProvidersRepository;
 import com.bahiavisual.apiRH.repository.TimeSheetRepository;
@@ -70,7 +71,7 @@ public class TimeSheetService {
 
         timeSheet.setDiaryDay(contratacaoPrestador.getDiary());
 
-        Time horasTrabalhadas = calcHoursDay(timeSheet.getEntradaTurnoDia(),timeSheet.getIntervaloTurnoDia(),timeSheet.getRetornoTurnoDia(),timeSheet.getSaidaTurnoDia(),
+        LocalTime horasTrabalhadas = calcHoursDay(timeSheet.getEntradaTurnoDia(),timeSheet.getIntervaloTurnoDia(),timeSheet.getRetornoTurnoDia(),timeSheet.getSaidaTurnoDia(),
                 timeSheet.getEntradaTurnoNoite(),timeSheet.getIntervaloTurnoNoite(),timeSheet.getRetornoTurnoNoite(),timeSheet.getSaidaTurnoNoite());
 
         System.out.println(horasTrabalhadas);
@@ -90,29 +91,19 @@ public class TimeSheetService {
         return new ResponseEntity(timeSalvo, HttpStatus.OK);
     }
 
-    public ResponseEntity editTimeService(TimeSheet timeSheet){
-       Optional<TimeSheet> timeSheets = repository.findById(timeSheet.getId());
-       TimeSheet timeSheetDB = timeSheets.get();
-
-       if (timeSheets.isEmpty() || timeSheetDB == null){
-           return new ResponseEntity("A ficha não pode ser vazia", HttpStatus.BAD_REQUEST);
-       }
-       //para manter a data do banco
-       timeSheetDB.setDate(timeSheetDB.getDate());
-       timeSheetDB.setEntradaTurnoDia(timeSheet.getEntradaTurnoDia());
-       timeSheetDB.setIntervaloTurnoDia(timeSheet.getIntervaloTurnoDia());
-       timeSheetDB.setRetornoTurnoDia(timeSheet.getRetornoTurnoDia());
-       timeSheetDB.setSaidaTurnoDia(timeSheet.getSaidaTurnoDia());
-       timeSheetDB.setEntradaTurnoNoite(timeSheet.getEntradaTurnoNoite());
-       timeSheetDB.setIntervaloTurnoNoite(timeSheet.getIntervaloTurnoNoite());
-       timeSheetDB.setRetornoTurnoNoite(timeSheet.getRetornoTurnoNoite());
-       timeSheetDB.setSaidaTurnoNoite(timeSheet.getSaidaTurnoNoite());
-       TimeSheet timeSheetSalvo = repository.saveAndFlush(timeSheet);
-        return new ResponseEntity(timeSheetSalvo, HttpStatus.OK);
+    public ResponseEntity delTimeSheet(TimeSheetDateDTO timeSheetDateDTO){
+        Optional<TimeSheet> timeSheetDB = repository.findByDateAndCpf(timeSheetDateDTO.getDate(), timeSheetDateDTO.getCpf());
+        if (timeSheetDB == null || timeSheetDB.isEmpty()){
+            return new ResponseEntity("Diária ou prestador não encontrado.", HttpStatus.BAD_REQUEST);
+        }
+        repository.deleteById(timeSheetDB.get().getId());
+        return new ResponseEntity("Diaria do dia " + timeSheetDB.get().getDate() + " , do prestador " +
+                                         timeSheetDB.get().getProviders().getName() + " foi excluida com sucesso.", HttpStatus.OK);
     }
 
-    public Time calcHoursDay(Time entradaTurnoDia, Time intervaloTurnoDia, Time retornoTurnoDia, Time saidaTurnoDia,
-                             Time entradaTurnoNoite, Time intervaloTurnoNoite, Time retornoTurnoNoite, Time saidaTurnoNoite) {
+
+    public LocalTime calcHoursDay(Time entradaTurnoDia, Time intervaloTurnoDia, Time retornoTurnoDia, Time saidaTurnoDia,
+                                  Time entradaTurnoNoite, Time intervaloTurnoNoite, Time retornoTurnoNoite, Time saidaTurnoNoite) {
         // Converte os objetos Time em milissegundos
         long ms1 = entradaTurnoDia.getTime();
         long ms2 = intervaloTurnoDia.getTime();
@@ -123,7 +114,6 @@ public class TimeSheetService {
         long ms7 = retornoTurnoNoite.getTime();
         long ms8 = saidaTurnoNoite.getTime();
 
-
         // Calcula as durações em milissegundos
         long turnoManhaMs = (ms1 - ms4) - (ms2 - ms3);
         long turnoNoiteMs = (ms5 - ms8) - (ms6 - ms7);
@@ -133,11 +123,11 @@ public class TimeSheetService {
         long minutosTrabalhados = TimeUnit.MILLISECONDS.toMinutes(horasTrabalhadasMs);
 
         // Calcula horas e minutos
-        long hours = minutosTrabalhados / 60;
-        long minutes = minutosTrabalhados % 60;
+        long hours = (minutosTrabalhados / 60)*-1;
+        long minutes = (minutosTrabalhados % 60)*-1;
 
-        // Cria um novo objeto Time com as horas e minutos calculados
-        return new Time(hours * 3600000 + minutes * 60000);
+        // Cria um novo objeto LocalTime com as horas e minutos calculados
+        return LocalTime.of((int) hours, (int) minutes);
     }
 
 }

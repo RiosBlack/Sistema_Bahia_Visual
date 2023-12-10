@@ -55,7 +55,7 @@ public class TimeSheet {
 
     private String signedImg;
 
-    private Time hoursService;
+    private LocalTime hoursService;
 
     private Double diaryDay;
 
