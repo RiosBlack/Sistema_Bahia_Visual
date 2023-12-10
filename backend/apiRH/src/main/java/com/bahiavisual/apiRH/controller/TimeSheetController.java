@@ -24,7 +24,13 @@ public class TimeSheetController {
     ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping()
-    public List<TimeSheetDTO> getAllTimeSheet(){ return timeSheetService.getAll(); }
+    public List<TimeSheet> getAllTimeSheet(){ return timeSheetService.getAll(); }
+
+    @GetMapping("/{cpf}")
+    public ResponseEntity getCpfAll(@PathVariable("cpf") String cpf){ return timeSheetService.getTimeSheetCPFall(cpf); }
+
+    @GetMapping("/cpfDate")
+    public ResponseEntity getCpfDate(@RequestBody TimeSheetDateDTO timeSheetDateDTO) { return timeSheetService.getTimeSheetCPFandDate(timeSheetDateDTO); }
 
     @PostMapping()
     public ResponseEntity addTimeSheet(@RequestBody @Valid TimeSheetDTO timeSheetDTO){

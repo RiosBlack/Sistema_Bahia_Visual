@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -41,7 +42,7 @@ public class TimeSheetDTO {
 
     private String signedImg;
 
-    private Time hoursService;
+    private LocalTime hoursService;
 
     private Double diaryDay;
 }

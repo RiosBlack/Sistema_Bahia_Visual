@@ -35,15 +35,30 @@ public class TimeSheetService {
     @Autowired
     ContratacaoDemissaoRepository contratacaoDemissaoRepository;
 
-    public List<TimeSheetDTO> getAll(){
+    public List<TimeSheet> getAll(){
         List<TimeSheet> listTimeSheet = repository.findAll();
-        List<TimeSheetDTO> listTimeSheetDTO = new ArrayList<>();
-        ObjectMapper mapper = new ObjectMapper();
-        for (TimeSheet timeSheet : listTimeSheet) {
-            TimeSheetDTO timeSheetDTO = mapper.convertValue(timeSheet, TimeSheetDTO.class);
-            listTimeSheetDTO.add(timeSheetDTO);
+//        List<TimeSheetDTO> listTimeSheetDTO = new ArrayList<>();
+//        ObjectMapper mapper = new ObjectMapper();
+//        for (TimeSheet timeSheet : listTimeSheet) {
+//            TimeSheetDTO timeSheetDTO = mapper.convertValue(timeSheet, TimeSheetDTO.class);
+//            listTimeSheetDTO.add(timeSheetDTO);
+//        }
+        return listTimeSheet;
+    }
+
+    public ResponseEntity<TimeSheet> getTimeSheetCPFall(String cpf){
+        List<TimeSheet> listTimeSheetCpfAll = repository.findByCpf(cpf);
+        if (listTimeSheetCpfAll.isEmpty() || listTimeSheetCpfAll == null){
+            return new ResponseEntity("Cpf não encontrado", HttpStatus.BAD_REQUEST);
         }
-        return listTimeSheetDTO;
+        return new ResponseEntity(listTimeSheetCpfAll, HttpStatus.OK);
+    }
+    public ResponseEntity<TimeSheet> getTimeSheetCPFandDate(TimeSheetDateDTO timeSheetDateDTO){
+        Optional<TimeSheet> dataDateAndCpf = repository.findByDateAndCpf(timeSheetDateDTO.getDate(), timeSheetDateDTO.getCpf());
+        if (dataDateAndCpf.isEmpty() || dataDateAndCpf == null){
+            return new ResponseEntity("Data ou Cpf inválidos", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(dataDateAndCpf.get(), HttpStatus.OK);
     }
 
     public ResponseEntity saveTimeSheet(TimeSheet timeSheet){
