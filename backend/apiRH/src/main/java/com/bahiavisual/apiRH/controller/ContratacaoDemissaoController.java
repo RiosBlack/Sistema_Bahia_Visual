@@ -25,7 +25,10 @@ public class ContratacaoDemissaoController {
     ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping()
-    public List<ContratacaoDemissaoDTO> getAllAndress(){ return service.getAll(); }
+    public ResponseEntity<ContratacaoDemissao> getAllAndress(){ return service.getAll(); }
+
+    @GetMapping("/{cpf}")
+    public ResponseEntity<ContratacaoDemissao> getCpfAll(@PathVariable("cpf") String cpf){return service.getCpfAll(cpf);}
 
     @PostMapping()
     public ResponseEntity addContratacao(@RequestBody @Valid ContratacaoDemissaoDTO contratacaoDemissaoDTO){

@@ -29,15 +29,27 @@ public class ContratacaoDemissaoService {
     @Autowired
     ProvidersRepository providersRepository;
 
-    public List<ContratacaoDemissaoDTO> getAll(){
+    public ResponseEntity<ContratacaoDemissao> getAll(){
         List<ContratacaoDemissao> contratacaoDemissaoList = repository.findAll();
-        List<ContratacaoDemissaoDTO> contratacaoDemissaoDTOList = new ArrayList<>();
-        ObjectMapper mapper = new ObjectMapper();
-        for(ContratacaoDemissao contratacaoDemissao : contratacaoDemissaoList){
-            ContratacaoDemissaoDTO contratacaoDemissaoDTO = mapper.convertValue(contratacaoDemissao, ContratacaoDemissaoDTO.class);
-            contratacaoDemissaoDTOList.add(contratacaoDemissaoDTO);
+
+        if (contratacaoDemissaoList.isEmpty()){
+            return new ResponseEntity("Erro ao procurar contratação", HttpStatus.BAD_REQUEST);
         }
-        return contratacaoDemissaoDTOList;
+//        List<ContratacaoDemissaoDTO> contratacaoDemissaoDTOList = new ArrayList<>();
+//        ObjectMapper mapper = new ObjectMapper();
+//        for(ContratacaoDemissao contratacaoDemissao : contratacaoDemissaoList){
+//            ContratacaoDemissaoDTO contratacaoDemissaoDTO = mapper.convertValue(contratacaoDemissao, ContratacaoDemissaoDTO.class);
+//            contratacaoDemissaoDTOList.add(contratacaoDemissaoDTO);
+//        }
+        return new ResponseEntity(contratacaoDemissaoList, HttpStatus.OK);
+    }
+
+    public ResponseEntity<ContratacaoDemissao> getCpfAll(String cpf){
+        List<ContratacaoDemissao> contratacaoDemissaoList = repository.findByCpf(cpf);
+        if (contratacaoDemissaoList.isEmpty()){
+            return new ResponseEntity("Cpf não encontrado.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(contratacaoDemissaoList, HttpStatus.OK);
     }
 
     public ResponseEntity saveContratacaoDemissao(ContratacaoDemissao contratacaoDemissao){
