@@ -1,6 +1,6 @@
 import Layout from '../../layout/index';
 import { TbClockPause } from 'react-icons/tb';
-import { Button } from '@chakra-ui/react';
+// import { Button } from '@chakra-ui/react';
 import TitleProviders from '../../components/folhas/titleProviders';
 import DateFolhas from '../../components/folhas/date';
 import Turno1 from '../../components/folhas/turno1';
@@ -27,7 +27,7 @@ export default function FolhasPagamentoPage() {
                     ) : null}
 
                     <ModalAssinar screenshot={screenshot} />
-                    <Button size={'sm'} colorScheme={'orange'}>
+                    {/* <Button size={'sm'} colorScheme={'orange'}>
                         <TbClockPause className="mr-2 font-bold" /> Alterar
                         Lançamento
                     </Button>
@@ -35,7 +35,7 @@ export default function FolhasPagamentoPage() {
                     <Button size={'sm'} colorScheme={'red'}>
                         <TbClockPause className="mr-2 font-bold" /> Enviar
                         Lançamento
-                    </Button>
+                    </Button> */}
                 </div>
             </div>
         </Layout>

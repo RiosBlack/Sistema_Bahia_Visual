@@ -1,16 +1,16 @@
 import { TbClockPause } from 'react-icons/tb';
 
-import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    Button,
-    useDisclosure,
-} from '@chakra-ui/react';
+// import {
+//     Modal,
+//     ModalOverlay,
+//     ModalContent,
+//     ModalHeader,
+//     ModalFooter,
+//     ModalBody,
+//     ModalCloseButton,
+//     Button,
+//     useDisclosure,
+// } from '@chakra-ui/react';
 import Image from 'next/image';
 
 export default function ModalAssinar({ screenshot }) {
@@ -18,7 +18,7 @@ export default function ModalAssinar({ screenshot }) {
 
     return (
         <>
-            <Button onClick={onOpen} size={'sm'} colorScheme={'facebook'}>
+            {/* <Button onClick={onOpen} size={'sm'} colorScheme={'facebook'}>
                 <TbClockPause className="mr-2 font-bold" /> Visualizar
                 Assinatura
             </Button>
@@ -53,7 +53,7 @@ export default function ModalAssinar({ screenshot }) {
                         </Button>
                     </ModalFooter>
                 </ModalContent>
-            </Modal>
+            </Modal> */}
         </>
     );
 }

@@ -1,11 +1,11 @@
-import {
-    FormControl,
-    FormLabel,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Button,
-} from '@chakra-ui/react';
+// import {
+//     FormControl,
+//     FormLabel,
+//     Input,
+//     InputGroup,
+//     InputRightElement,
+//     Button,
+// } from '@chakra-ui/react';
 
 import { useState } from 'react';
 
@@ -21,7 +21,7 @@ export default function LoginFromComponent() {
             <h1 className="flex justify-center text-lg font-bold text-bvAzul">
                 Login
             </h1>
-            <FormControl>
+            {/* <FormControl>
                 <FormLabel className="text-bv-Escuro">Email</FormLabel>
                 <Input
                     type="email"
@@ -60,7 +60,7 @@ export default function LoginFromComponent() {
                 >
                     Submit
                 </Button>
-            </FormControl>
+            </FormControl> */}
         </div>
     );
 }

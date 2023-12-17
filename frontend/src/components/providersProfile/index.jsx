@@ -1,17 +1,17 @@
-import {
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-    TableCaption,
-    TableContainer,
-    Stack,
-    Input,
-    InputGroup,
-    InputLeftElement,
-} from '@chakra-ui/react';
+// import {
+//     Table,
+//     Thead,
+//     Tbody,
+//     Tr,
+//     Th,
+//     Td,
+//     TableCaption,
+//     TableContainer,
+//     Stack,
+//     Input,
+//     InputGroup,
+//     InputLeftElement,
+// } from '@chakra-ui/react';
 import Image from 'next/image';
 import perfil from '../../assets/perfil.jpg';
 import { FaUser } from 'react-icons/fa';
@@ -21,7 +21,7 @@ import Link from 'next/link';
 export default function ProvidersProfile() {
     return (
         <div className="w-full p-5">
-            <Stack className="mb-4 flex">
+            {/* <Stack className="mb-4 flex">
                 <InputGroup>
                     <InputLeftElement children={<GoSearch />} />
                     <Input
@@ -201,8 +201,8 @@ export default function ProvidersProfile() {
                             </Tr>
                         </Tbody>
                     </Table>
-                </TableContainer>
-            </div>
+                </TableContainer> 
+            </div>*/}
         </div>
     );
 }
