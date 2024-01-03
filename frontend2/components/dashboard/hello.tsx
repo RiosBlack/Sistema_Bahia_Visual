@@ -36,7 +36,7 @@ export default function Hello() {
   }, [icoWeather, params.access_key])
 
   return (
-    <div className='bg-gray-400 rounded-xl p-5 mx-2 w-1/2 h-1/3 flex relative items-center'>
+    <div className='bg-gray-400 rounded-xl p-5 w-full h-1/3 flex relative items-center'>
       <div className='space-y-2'>
         <h1 className='text-2xl font-bold text-orange-600'>Olá, NOME!</h1>
         <p className='text-slate-100'>Bem Vindo ao Sistema da Bahia Visual.</p>
