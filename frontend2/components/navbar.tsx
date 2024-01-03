@@ -72,8 +72,8 @@ export const Navbar = () => {
 						isExternal
 						as={Link}
 						href={siteConfig.links.sistema}
-						className="text-sm font-normal text-default-600 bg-default-100"
-						startContent={<PiDesktop size={22} className="text-danger" />}
+						className="text-sm font-normal text-default-600 bg-gradient-to-r from-Mooonlit-Asteroid1 via-Mooonlit-Asteroid2 to-Mooonlit-Asteroid"
+						startContent={<PiDesktop size={22} className="text-orange-500" />}
 						variant="flat"
 					>
 						Acessar o sistema
