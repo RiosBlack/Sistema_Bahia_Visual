@@ -14,7 +14,7 @@ function Page() {
       <div className='flex w-full'>
         <div className='w-2/3 px-2'>
           <Hello />
-          <NavMensage />
+          {/* <NavMensage /> */}
           <Reminder />
         </div>
         <div className='w-1/3'>
