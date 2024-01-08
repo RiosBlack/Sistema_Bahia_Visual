@@ -12,7 +12,7 @@ function Page() {
     <div className='h-full w-full flex'>
       <Sidebar />
       <div className='flex w-full'>
-        <div className='w-2/3 px-2'>
+        <div className='w-2/3 px-2 space-y-2'>
           <Hello />
           {/* <NavMensage /> */}
           <Reminder />

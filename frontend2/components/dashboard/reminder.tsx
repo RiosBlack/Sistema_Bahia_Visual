@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, ChipProps, getKeyValue, Checkbox, Pagination } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Checkbox, Pagination } from "@nextui-org/react";
 import { FaPen } from "react-icons/fa6";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { columns, reminders } from "../../config/reminder/data";
@@ -11,14 +11,14 @@ export default function reminder() {
 
   //pagination
   const [page, setPage] = React.useState(1);
-  const rowsPerPage = 4;
+  const rowsPerPage = 6;
   const pages = Math.ceil(reminders.length / rowsPerPage);
-  // const items = React.useMemo(() => {
-  //   const start = (page - 1) * rowsPerPage;
-  //   const end = start + rowsPerPage;
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
 
-  //   return users.slice(start, end);
-  // }, [page, users]);
+    return reminders.slice(start, end);
+  }, [page, reminders]);
 
 
 
@@ -90,7 +90,7 @@ export default function reminder() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={reminders}>
+      <TableBody items={items}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
