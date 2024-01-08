@@ -1,9 +1,11 @@
 "use client";
 import React from "react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Checkbox, Pagination } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Checkbox, Pagination, Button, useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Textarea } from "@nextui-org/react";
 import { FaPen } from "react-icons/fa6";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { columns, reminders } from "../../config/reminder/data";
+import { CgMathPlus } from "react-icons/cg";
+
 
 export default function reminder() {
 
@@ -20,6 +22,8 @@ export default function reminder() {
     return reminders.slice(start, end);
   }, [page, reminders]);
 
+  //modal add
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
 
   const renderCell = React.useCallback((reminders: Reminder, columnKey: React.Key) => {
@@ -68,36 +72,67 @@ export default function reminder() {
   }, []);
 
   return (
-    <Table aria-label="Tabela de lembretes"
-      bottomContent={
-        <div className="flex w-full justify-center">
-          <Pagination
-            isCompact
-            showControls
-            showShadow
-            color="secondary"
-            page={page}
-            total={pages}
-            onChange={(page) => setPage(page)}
-          />
-        </div>
-      }
-    >
-      <TableHeader columns={columns}>
-        {(column) => (
-          <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody items={items}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <div>
+      <Table aria-label="Tabela de lembretes"
+        bottomContent={
+          <div className="flex w-full justify-center items-center space-x-2">
+            <Pagination
+              isCompact
+              showControls
+              showShadow
+              color="secondary"
+              page={page}
+              total={pages}
+              onChange={(page) => setPage(page)}
+            />
+            <Button onPress={onOpen} color="warning">
+              Adicionar <CgMathPlus />
+            </Button>
+          </div>
+        }
+      >
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={items}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      <Modal
+        isOpen={isOpen}
+        placement={'bottom'}
+        onOpenChange={onOpenChange}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Adicionar lembrete</ModalHeader>
+              <ModalBody>
+                <Textarea
+                  placeholder="Descreva o lembrete abaixo"
+                />
+              </ModalBody>
+              <ModalFooter>
+                {/* <Button color="danger" variant="light" onPress={onClose}>
+                  Fechar
+                </Button> */}
+                <Button color="warning" onPress={onClose}>
+                  Adicionar
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </div>
   );
 }
 
