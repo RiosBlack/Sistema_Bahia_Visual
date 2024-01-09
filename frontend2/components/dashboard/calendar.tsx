@@ -17,6 +17,7 @@ import {
   startOfToday,
 } from 'date-fns'
 import { Fragment, useState } from 'react'
+import { Card } from '@nextui-org/react';
 
 function classNames(...classes: (string | boolean)[]) {
   return classes.filter(Boolean).join(' ')
@@ -45,10 +46,10 @@ export default function Calendar() {
 
   return (
 
-    <div className="grid content-center justify-items-center bg-gray-400 h-full rounded-xl">
+    <Card className="grid content-start justify-items-center rounded-xl">
       <div className="w-full p-5">
         <div className="flex items-center">
-          <h2 className="flex-auto font-semibold text-gray-900">
+          <h2 className="flex-auto font-semibold text-orange-600">
             {format(firstDayCurrentMonth, 'MMMM yyyy')}
           </h2>
           <button
@@ -97,16 +98,16 @@ export default function Calendar() {
                   !isEqual(day, selectedDay) &&
                   !isToday(day) &&
                   isSameMonth(day, firstDayCurrentMonth) &&
-                  'text-gray-900',
+                  'text-gray-600',
                   !isEqual(day, selectedDay) &&
                   !isToday(day) &&
                   !isSameMonth(day, firstDayCurrentMonth) &&
-                  'text-gray-400',
-                  isEqual(day, selectedDay) && isToday(day) && 'bg-orange-500',
+                  'text-gray-600',
+                  isEqual(day, selectedDay) && isToday(day) && 'bg-orange-600',
                   isEqual(day, selectedDay) &&
                   !isToday(day) &&
-                  'bg-gray-900',
-                  !isEqual(day, selectedDay) && 'hover:bg-gray-200',
+                  'bg-orange-300',
+                  !isEqual(day, selectedDay) && 'hover:bg-orange-300',
                   (isEqual(day, selectedDay) || isToday(day)) &&
                   'font-semibold',
                   'mx-auto flex h-8 w-8 items-center justify-center rounded-full'
@@ -122,16 +123,7 @@ export default function Calendar() {
           ))}
         </div>
       </div>
-      <section className="">
-        <h2 className="font-semibold text-gray-900">
-          Agenda de {' '}
-          <time dateTime={format(selectedDay, 'yyyy-MM-dd')}>
-            {format(selectedDay, 'MMM dd, yyy')}
-          </time>
-        </h2>
-        
-      </section>
-    </div>
+    </Card>
 
 
   )

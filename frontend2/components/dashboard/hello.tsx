@@ -5,6 +5,7 @@ const axios = require('axios');
 import { FaHouseChimney } from "react-icons/fa6";
 import { TbTemperatureCelsius, TbTemperaturePlus } from "react-icons/tb";
 import { MdCloud } from "react-icons/md";
+import { Card } from '@nextui-org/react';
 
 export default function Hello() {
   //Collecting browser data
@@ -20,37 +21,37 @@ export default function Hello() {
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
-      // axios.get('https://api.openweathermap.org/data/2.5/weather?lat=' + position.coords.latitude + '&lon=' + position.coords.longitude + '&appid=' + params.access_key + '&lang=pt_br&units=metric')
-      //   .then((response: { data: any; }) => {
-      //     const apiResponse = response.data;
-      //     apiResponse.weather.forEach((element: { icon: SetStateAction<String>, description: any }) => {
-      //       setNameWeather(element.description)
-      //       setIcoWeather(`https://openweathermap.org/img/wn/${element.icon}@2x.png`)
-      //     });
-      //     setNameCity(apiResponse.name)
-      //     setTempWeather(apiResponse.main.temp)
-      //   }).catch((error: any) => {
-      //     console.log(error);
-      //   });
+      axios.get('https://api.openweathermap.org/data/2.5/weather?lat=' + position.coords.latitude + '&lon=' + position.coords.longitude + '&appid=' + params.access_key + '&lang=pt_br&units=metric')
+        .then((response: { data: any; }) => {
+          const apiResponse = response.data;
+          apiResponse.weather.forEach((element: { icon: SetStateAction<String>, description: any }) => {
+            setNameWeather(element.description)
+            setIcoWeather(`https://openweathermap.org/img/wn/${element.icon}@2x.png`)
+          });
+          setNameCity(apiResponse.name)
+          setTempWeather(apiResponse.main.temp)
+        }).catch((error: any) => {
+          console.log(error);
+        });
     })
   }, [icoWeather, params.access_key])
 
   return (
-    <div className='bg-gray-400 rounded-xl p-5 w-full h-1/4 flex relative items-center'>
+    <Card className='rounded-xl p-5 w-full'>
       <div className='space-y-2'>
         <h1 className='text-2xl font-bold text-orange-600'>Olá, NOME!</h1>
         <p className='text-slate-100'>Bem Vindo ao Sistema da Bahia Visual.</p>
         <div>
           <div className='flex space-x-2 items-center mb-2 pl-2'>
             <FaHouseChimney className='text-xl' />
-            <p className='text-slate-800'>
+            <p className='text-slate-600'>
               {nameCity}
             </p>
           </div>
 
           <div className='flex space-x-2 items-center pl-2'>
             <TbTemperaturePlus className='text-xl' />
-            <div className='text-slate-800 flex items-center'>
+            <div className='text-slate-600 flex items-center'>
               Temperatura por volta de {tempWeather}
               <TbTemperatureCelsius className='text-xl' />
             </div>
@@ -66,6 +67,6 @@ export default function Hello() {
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   )
 }
