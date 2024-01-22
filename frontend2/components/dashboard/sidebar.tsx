@@ -14,13 +14,18 @@ export default function Sidebar({ }: Props) {
       href: '/dashRh'
     },
     {
-      key: "Cadastrar",
-      label: "Cadastrar Prestador",
+      key: "prestadores",
+      label: "Prestadores",
       href: '/'
     },
     {
-      key: "horas",
-      label: "Lançar Horas",
+      key: "relatórios",
+      label: "Relatórios",
+      href: '/'
+    },
+    {
+      key: "perfil",
+      label: "Perfil",
       href: '/'
     }
   ];
