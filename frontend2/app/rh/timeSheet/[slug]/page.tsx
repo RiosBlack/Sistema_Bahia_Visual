@@ -1,9 +1,10 @@
 'use client'
 import Sidebar from '@/components/dashboard/sidebar'
 import React from 'react'
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Select, SelectItem, Chip, Tooltip, ChipProps } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Select, SelectItem, Chip, Tooltip, ChipProps, Button } from "@nextui-org/react";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import SignatureModal from '@/components/timeSheet/signatureModal';
+import SignatureModalView from '@/components/timeSheet/signatureModalView';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Sim: "success",
@@ -141,19 +142,24 @@ export default function Page({ params }: { params: { slug: string } }) {
           <>
             {rows.status === 'Não' ?
               <div className="relative flex items-center gap-2">
-                
-                <Tooltip content="Assinar">
+
+                <Tooltip content="Assinar" color='danger'>
                   <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                     <SignatureModal />
                   </span>
                 </Tooltip>
-                <Tooltip color="danger" content="Editar">
-                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <FaRegPenToSquare />
-                  </span>
+                <Tooltip color="warning" content="Editar">
+                  <Button isIconOnly variant="light" size="md" className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                    <FaRegPenToSquare  />
+                  </Button>
                 </Tooltip>
               </div>
-              : <></>}
+              :
+              <>
+                <Tooltip color="primary" content="Visualizar Assinatura">
+                  <SignatureModalView />
+                </Tooltip>
+              </>}
           </>
         );
       default:
@@ -163,8 +169,10 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   return (
     <div className='h-full w-full flex'>
+      <div className='w-40'>
       <Sidebar />
-      <div className='px-3 space-y-2 w-full'>
+      </div>
+      <div className='px-3 space-y-2'>
         <h1 className='text-xl font-bold'>Folha de ponto</h1>
         <div className='flex justify-between'>
           <div>

@@ -1,44 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
 import { LuPenTool } from "react-icons/lu";
+import SignatureCanvas from 'react-signature-canvas'
+
+
 export default function SignatureModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+//Assinatura
+  const [sign,setSign] = useState<SignaturePad | null>(null)
+  const [url,setUrl] = useState<string | null>(null);
+
+  function handleClear(): void {
+      sign!.clear()
+      setUrl('')
+  }
+  function handleGenerate(){
+      setUrl(sign!.getTrimmedCanvas().toDataURL('image/png'))
+  }
+
+
+
   return (
     <>
-      <Button variant="light" size="sm" onPress={onOpen}>
+      <Button isIconOnly variant="light" size="md" onPress={onOpen}>
         <LuPenTool color='#E83F7A' />
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="5xl">
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">Assine no quadro abaixo</ModalHeader>
               <ModalBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
-                  dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis.
-                  Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod.
-                  Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur
-                  proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
+                <SignatureCanvas penColor='red'
+                  canvasProps={{ className: 'sigCanvas'}}
+                  ref={data=>setSign(data)}
+                />
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
+                <Button color="danger" variant="light" onPress={handleClear}>
+                  Limpar
                 </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
+                <Button color="primary" onPress={handleGenerate}>
+                  Assinar
                 </Button>
               </ModalFooter>
             </>

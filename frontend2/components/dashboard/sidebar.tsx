@@ -10,11 +10,16 @@ export default function Sidebar({ }: Props) {
   const items = [
     {
       key: "dashRh",
-      label: "DashBoard",
+      label: "DashBoard RH",
       href: '/dashRh'
     },
     {
-      key: "prestadores",
+      key: "timeSheet",
+      label: "Folha de ponto",
+      href: '/rh/timeSheet'
+    },
+    {
+      key: "providers",
       label: "Prestadores",
       href: '/'
     },
@@ -23,11 +28,6 @@ export default function Sidebar({ }: Props) {
       label: "Relatórios",
       href: '/'
     },
-    {
-      key: "perfil",
-      label: "Perfil",
-      href: '/'
-    }
   ];
 
   return (

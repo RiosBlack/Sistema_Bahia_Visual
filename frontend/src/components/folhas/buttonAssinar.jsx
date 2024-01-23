@@ -2,17 +2,17 @@ import { TbClockPause } from 'react-icons/tb';
 import { useState } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
 import html2canvas from 'html2canvas';
-// import {
-//     Modal,
-//     ModalOverlay,
-//     ModalContent,
-//     ModalHeader,
-//     ModalFooter,
-//     ModalBody,
-//     ModalCloseButton,
-//     Button,
-//     useDisclosure,
-// } from '@chakra-ui/react';
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    Button,
+    useDisclosure,
+} from '@chakra-ui/react';
 
 export default function ButtonAssinar({ setScreenshot }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,7 +37,7 @@ export default function ButtonAssinar({ setScreenshot }) {
 
     return (
         <>
-            {/* <Button onClick={onOpen} size={'sm'} colorScheme={'whatsapp'}>
+            <Button onClick={onOpen} size={'sm'} colorScheme={'whatsapp'}>
                 <TbClockPause className="mr-2 font-bold" /> Assinar
             </Button>
 
@@ -88,7 +88,7 @@ export default function ButtonAssinar({ setScreenshot }) {
                         )}
                     </ModalFooter>
                 </ModalContent>
-            </Modal> */}
+            </Modal>
         </>
     );
 }
