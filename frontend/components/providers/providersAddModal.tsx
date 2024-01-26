@@ -15,7 +15,7 @@ export default function ProvidersAddModal() {
               <ModalHeader className="flex flex-col gap-1">Adicionar novo prestador</ModalHeader>
               <ModalBody>
                 <div className="w-full flex justify-center items-center">
-                  <Avatar size="lg" name="Junior" />
+                  <Avatar size="lg" />
                 </div>
                 <div>
                   <Input
