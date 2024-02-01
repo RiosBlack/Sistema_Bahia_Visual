@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -63,4 +64,8 @@ public class Providers {
     @JoinColumn(name="ID_FUNCTIONS)", referencedColumnName = "id")
     @OneToOne
     private FunctionsProviders functionsProviders;
+
+    @JoinColumn(name="ID_CONTRATACAO", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<ContratacaoDemissao> contratacaoDemissao;
 }

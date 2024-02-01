@@ -1,58 +1,86 @@
 'use client'
-import { useCallback, useMemo, useState } from "react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, ChipProps, getKeyValue, Pagination } from "@nextui-org/react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, ChipProps, Pagination } from "@nextui-org/react";
 import { LuPencilLine } from "react-icons/lu";
 import { RiNewspaperLine } from "react-icons/ri";
 import { FaEye } from "react-icons/fa";
-import { columns, users } from "../../config/providers/data";
-
-const statusColorMap: Record<string, ChipProps["color"]> = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
-
-type User = typeof users[0];
+import { PrestadoresContext, ProvidersData, getAllProviders } from "@/context/providersContext";
+import { pages } from "next/dist/build/templates/app-page";
 
 export default function ProvidersTable() {
+
+  const statusColorMap: Record<string, ChipProps["color"]> = {
+    active: "success",
+    paused: "danger",
+    vacation: "warning",
+  };
+
+  function ifProviders() {
+    if (allProviders == null || allProviders == undefined) {
+      getAllProviders
+    } else {
+      return allProviders;
+    }
+  }
+
+  useEffect(() => {
+    ifProviders()
+    console.log(allProviders);
+  }, [ifProviders])
+
+
+  const columns = [
+    { name: "NOME", uid: "name" },
+    { name: "FUNÇÃO", uid: "functionsProviders" },
+    { name: "STATUS", uid: "status" },
+    { name: "AÇÕES", uid: "actions" },
+  ];
+
+  const { allProviders } = useContext(PrestadoresContext)
+
+
   //pagination
-  const [page, setPage] = useState(1);
-  const rowsPerPage = 4;
-  const pages = Math.ceil(users.length / rowsPerPage);
+  // const [page, setPage] = useState(1);
+  // const rowsPerPage = 4;
 
-  const items = useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
+  // const pages = Math.ceil(allProviders.name.length / rowsPerPage);
 
-    return users.slice(start, end);
-  }, [page, users]);
+  // const items = useMemo(() => {
+  //   const start = (page - 1) * rowsPerPage;
+  //   const end = start + rowsPerPage;
 
-  const renderCell = useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+  //   return allProviders.slice(start, end);
+  // }, [page, allProviders]);
+
+  const renderCell = (allProviders: User, columnKey: React.Key) => {
+
+    type Providers = typeof allProviders[0];
+
+    const cellValue = allProviders[columnKey as keyof Providers];
 
     switch (columnKey) {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "lg", src: user.avatar }}
-            description={user.cpf}
-            name={cellValue}
+            avatarProps={{ radius: "lg", src: allProviders.image }}
+            description={allProviders.cpf}
+            name={allProviders.name}
           >
-            {user.cpf}
+            {allProviders.cpf}
           </User>
         );
-      case "role":
+      case "functionsProviders":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">{cellValue}</p>
+            <p className="text-bold text-sm capitalize">{allProviders.functionsProviders.functionProviders}</p>
           </div>
         );
-      case "status":
-        return (
-          <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
-            {cellValue}
-          </Chip>
-        );
+      // case "status":
+      //   return (
+      //     <Chip className="capitalize" color={statusColorMap[cellValue.status]} size="sm" variant="flat">
+      //       {cellValue}
+      //     </Chip>
+      //   );
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
@@ -76,26 +104,27 @@ export default function ProvidersTable() {
       default:
         return cellValue;
     }
-  }, []);
+  };
 
   return (
     <Table
-      bottomContent={
-        <div className="flex w-full justify-center">
-          <Pagination
-            isCompact
-            showControls
-            showShadow
-            color="secondary"
-            page={page}
-            total={pages}
-            onChange={(page) => setPage(page)}
-          />
-        </div>
-      }
-      classNames={{
-        wrapper: "min-h-[222px]",
-      }}
+    // bottomContent={
+    //   <div className="flex w-full justify-center">
+    //     <Pagination
+    //       isCompact
+    //       showControls
+    //       showShadow
+    //       color="secondary"
+    //       page={page}
+    //       total={pages}
+    //       onChange={(page) => setPage(page)}
+    //     />
+    //      <p>{console.log(allProviders)}</p>
+    //   </div>
+    // }
+    // classNames={{
+    //   wrapper: "min-h-[222px]",
+    // }}
     >
       <TableHeader columns={columns}>
         {(column) => (
@@ -104,12 +133,12 @@ export default function ProvidersTable() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={items}>
-        {(item) => (
-          <TableRow key={item.id}>
+      <TableBody items={allProviders}>
+        {allProviders && allProviders.map((item: ProvidersData) => (
+          <TableRow key={item.cpf}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
-        )}
+        ))}
       </TableBody>
     </Table>
   );

@@ -1,5 +1,6 @@
 package com.bahiavisual.apiRH.service;
 
+import com.bahiavisual.apiRH.entity.ContratacaoDemissao;
 import com.bahiavisual.apiRH.entity.FunctionsProviders;
 import com.bahiavisual.apiRH.entity.Providers;
 import com.bahiavisual.apiRH.entity.dto.ProvidersDTO;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +45,12 @@ public class ProvidersService {
     public ResponseEntity saveProvider(Providers providers){
             providers.setRegistrationDate(Timestamp.from(Instant.now()));
             providers.setModifiedDate(null);
+            ContratacaoDemissao contratacaoDemissao = new ContratacaoDemissao();
+            List<ContratacaoDemissao> contratacaoDemissaoList = new ArrayList();
+            contratacaoDemissao.setIsContratado(null);
+            contratacaoDemissao.setCpf(providers.getCpf());
+            contratacaoDemissaoList.add(contratacaoDemissao);
+            providers.setContratacaoDemissao(contratacaoDemissaoList);
             Providers providersSalvo = providersRepository.saveAndFlush(providers);
             return new ResponseEntity(providersSalvo, HttpStatus.OK);
     }

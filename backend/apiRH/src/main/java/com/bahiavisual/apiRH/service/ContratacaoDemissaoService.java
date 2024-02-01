@@ -72,7 +72,25 @@ public class ContratacaoDemissaoService {
             return new ResponseEntity("Prestador não encontrado no banco de dados", HttpStatus.BAD_REQUEST);
         }
 
-        contratacaoDemissao.setProviders(providerDB.get());
+        Optional<ContratacaoDemissao> providersCadastrado = repository.findByCpfAndIsContratado(contratacaoDemissao.getCpf(), null);
+
+        if (providersCadastrado.isPresent()){
+            ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
+            Instant instant = Instant.now();
+            ZonedDateTime zonedDateTime = instant.atZone(zoneId);
+            LocalDate dataNow = LocalDate.now();
+//            providersContratado.get().setDiary(contratacaoDemissao.getDiary());
+//            providersCadastrado.get().setFunctionContratado(contratacaoDemissao.getFunctionContratado());
+//            providersCadastrado.get().setContratacaoDate(dataNow);
+//            providersCadastrado.get().setIsContratado(true);
+            contratacaoDemissao.setId(providersCadastrado.get().getId());
+            contratacaoDemissao.setCpf(providersCadastrado.get().getCpf());
+            contratacaoDemissao.setContratacaoDate(dataNow);
+            contratacaoDemissao.setIsContratado(true);
+            ContratacaoDemissao contratacaoDemissaoSave = repository.saveAndFlush(contratacaoDemissao);
+            return new ResponseEntity(contratacaoDemissaoSave, HttpStatus.OK);
+        }
+
         ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
         Instant instant = Instant.now();
         ZonedDateTime zonedDateTime = instant.atZone(zoneId);
@@ -121,7 +139,7 @@ public class ContratacaoDemissaoService {
             LocalDate dataNow = zonedDateTime.toLocalDate();
             contratacaoDemissaoEdit.setDemissaoDate(dataNow);
             contratacaoDemissaoEdit.setMotivoDemissao(contratacaoDemissao.getMotivoDemissao());
-            if (contratacaoDemissaoEdit.getDemissaoDate().compareTo(contratacaoDemissaoEdit.getContratacaoDate()) <= 0){
+            if (contratacaoDemissaoEdit.getDemissaoDate().compareTo(contratacaoDemissaoEdit.getContratacaoDate()) < 0){
                 return new ResponseEntity("A data da demissão não pode ser inferior a data de demissão.", HttpStatus.BAD_REQUEST);
             }
             ContratacaoDemissao contratacaoDemissaoSave = repository.saveAndFlush(contratacaoDemissaoEdit);

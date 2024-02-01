@@ -22,26 +22,19 @@ public class ContratacaoDemissao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+
     private LocalDate contratacaoDate;
 
     private LocalDate demissaoDate;
 
     private String motivoDemissao;
 
-    @NotNull
     private Boolean isContratado;
-
-    @NotNull
-    @JoinColumn(name = "PROVIDERS_ID", referencedColumnName = "id")
-    @OneToOne
-    private Providers providers;
 
     private String cpf;
 
     private String functionContratado;
 
-    @NotNull
     private Double diary;
 
 }

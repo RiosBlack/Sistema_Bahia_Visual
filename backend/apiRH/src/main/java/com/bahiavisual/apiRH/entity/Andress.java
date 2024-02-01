@@ -21,7 +21,7 @@ public class Andress {
     private Long id;
 
     @NotBlank
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String zipCode;
 
     @NotBlank

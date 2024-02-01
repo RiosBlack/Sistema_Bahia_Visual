@@ -1,3 +1,4 @@
+'use client'
 import Sidebar from '@/components/dashboard/sidebar'
 import CardDash from '@/components/cardDash'
 import ProvidersTable from '@/components/dashboardRh/providersTable'
@@ -7,9 +8,8 @@ import { MdCloudOff } from "react-icons/md";
 import { SlPaperClip } from "react-icons/sl";
 
 
-type Props = {}
+export default function Page() {
 
-export default function Page({ }: Props) {
   const list = [
     {
       valor: '30',
