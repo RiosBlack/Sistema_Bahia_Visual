@@ -33,8 +33,8 @@ public class ContratacaoDemissao {
 
     private String cpf;
 
-    private String functionContratado;
-
     private Double diary;
+
+    private String functionContratado;
 
 }

@@ -2,13 +2,28 @@
 import Sidebar from '@/components/dashboard/sidebar'
 import CardDash from '@/components/cardDash'
 import ProvidersTable from '@/components/dashboardRh/providersTable'
-import React from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { MdCloudQueue } from "react-icons/md";
 import { MdCloudOff } from "react-icons/md";
 import { SlPaperClip } from "react-icons/sl";
+import { PrestadoresContext } from "@/context/providersContext";
 
 
 export default function Page() {
+  // const [ativos, setAtivos] = useState(null);
+  // const [inativos, setInativos] = useState(null);
+  // const [cadastrados, setCadastrados] = useState(null);
+
+  // const { allProviders } = useContext(PrestadoresContext)
+
+  // function verify() {
+  //   setCadastrados(allProviders.length)
+  // }
+
+  // useEffect(() => {
+  //   verify()
+  // }, [])
+  
 
   const list = [
     {
@@ -22,7 +37,7 @@ export default function Page() {
       ico: <MdCloudOff />
     },
     {
-      valor: '00',
+      valor: "22",
       title: 'Colaboradores Cadastrados',
       ico: <SlPaperClip />
     },

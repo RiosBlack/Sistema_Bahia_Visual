@@ -10,9 +10,9 @@ import { pages } from "next/dist/build/templates/app-page";
 export default function ProvidersTable() {
 
   const statusColorMap: Record<string, ChipProps["color"]> = {
-    active: "success",
-    paused: "danger",
-    vacation: "warning",
+    1: "success",
+    0: "danger",
+    null: "warning",
   };
 
   function ifProviders() {
@@ -75,12 +75,12 @@ export default function ProvidersTable() {
             <p className="text-bold text-sm capitalize">{allProviders.functionsProviders.functionProviders}</p>
           </div>
         );
-      // case "status":
-      //   return (
-      //     <Chip className="capitalize" color={statusColorMap[cellValue.status]} size="sm" variant="flat">
-      //       {cellValue}
-      //     </Chip>
-      //   );
+      case "status":
+        return (
+          <Chip className="capitalize" color={statusColorMap[allProviders.contratacaoDemissao.isContratado]} size="sm" variant="flat">
+            {allProviders.contratacaoDemissao.isContratado == null ? "null": allProviders.contratacaoDemissao.isContratado}
+          </Chip>
+        );
       case "actions":
         return (
           <div className="relative flex items-center gap-2">

@@ -35,12 +35,6 @@ public class ContratacaoDemissaoService {
         if (contratacaoDemissaoList.isEmpty()){
             return new ResponseEntity("Erro ao procurar contratação", HttpStatus.BAD_REQUEST);
         }
-//        List<ContratacaoDemissaoDTO> contratacaoDemissaoDTOList = new ArrayList<>();
-//        ObjectMapper mapper = new ObjectMapper();
-//        for(ContratacaoDemissao contratacaoDemissao : contratacaoDemissaoList){
-//            ContratacaoDemissaoDTO contratacaoDemissaoDTO = mapper.convertValue(contratacaoDemissao, ContratacaoDemissaoDTO.class);
-//            contratacaoDemissaoDTOList.add(contratacaoDemissaoDTO);
-//        }
         return new ResponseEntity(contratacaoDemissaoList, HttpStatus.OK);
     }
 
@@ -79,10 +73,6 @@ public class ContratacaoDemissaoService {
             Instant instant = Instant.now();
             ZonedDateTime zonedDateTime = instant.atZone(zoneId);
             LocalDate dataNow = LocalDate.now();
-//            providersContratado.get().setDiary(contratacaoDemissao.getDiary());
-//            providersCadastrado.get().setFunctionContratado(contratacaoDemissao.getFunctionContratado());
-//            providersCadastrado.get().setContratacaoDate(dataNow);
-//            providersCadastrado.get().setIsContratado(true);
             contratacaoDemissao.setId(providersCadastrado.get().getId());
             contratacaoDemissao.setCpf(providersCadastrado.get().getCpf());
             contratacaoDemissao.setContratacaoDate(dataNow);
@@ -108,7 +98,6 @@ public class ContratacaoDemissaoService {
         Optional<ContratacaoDemissao> providersContratado = repository.findById(contratacaoDemissao.getId());
         if (providersContratado.isPresent()){
             ContratacaoDemissao contratacaoDemissaoEdit = providersContratado.get();
-
             contratacaoDemissaoEdit.setContratacaoDate(contratacaoDemissao.getContratacaoDate());
             contratacaoDemissaoEdit.setDemissaoDate(contratacaoDemissao.getDemissaoDate());
             contratacaoDemissaoEdit.setMotivoDemissao(contratacaoDemissao.getMotivoDemissao());
