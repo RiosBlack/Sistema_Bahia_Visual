@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, CardBody } from "@nextui-org/react";
 
 type Props = {
-  valor: string,
+  valor: number,
   title: string,
   ico: any
 }

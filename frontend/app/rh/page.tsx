@@ -10,34 +10,48 @@ import { PrestadoresContext } from "@/context/providersContext";
 
 
 export default function Page() {
-  // const [ativos, setAtivos] = useState(null);
-  // const [inativos, setInativos] = useState(null);
-  // const [cadastrados, setCadastrados] = useState(null);
+  const [ativos, setAtivos] = useState(0);
+  const [inativos, setInativos] = useState(0);
+  const [cadastrados, setCadastrados] = useState(0);
 
-  // const { allProviders } = useContext(PrestadoresContext)
+  const { allProviders } = useContext(PrestadoresContext)
 
-  // function verify() {
-  //   setCadastrados(allProviders.length)
-  // }
+  function verifyCadastrados() {
+    let quatCadastrados = allProviders ? allProviders.length : 0;
+    setCadastrados(quatCadastrados)
+  }
 
-  // useEffect(() => {
-  //   verify()
-  // }, [])
+  function verifyAtivosAndInativos() {
+    let contratados = allProviders ? allProviders.filter(item => item.contratacaoDemissao[0].isContratado === true) : 0;
+    let quatContrataos = contratados.length; 
+    setAtivos(quatContrataos);
+
+    let inativos = allProviders? allProviders.filter(item => item.contratacaoDemissao[0].isContratado === null || item.contratacaoDemissao[0].isContratado === false) : 0;
+    let quatInativos = inativos.length; 
+    setInativos(quatInativos);
+  }
+
+  useEffect(() => {
+    if (allProviders) {
+      verifyCadastrados()
+      verifyAtivosAndInativos()
+    }
+  }, [allProviders])
   
 
   const list = [
     {
-      valor: '30',
+      valor: ativos,
       title: 'Colaboradores ativos',
       ico: <MdCloudQueue />
     },
     {
-      valor: '30',
+      valor: inativos,
       title: 'Colaboradores inativos',
       ico: <MdCloudOff />
     },
     {
-      valor: "22",
+      valor: cadastrados,
       title: 'Colaboradores Cadastrados',
       ico: <SlPaperClip />
     },
