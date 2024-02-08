@@ -21,12 +21,7 @@ export default function Sidebar({ }: Props) {
     {
       key: "providers",
       label: "Prestadores",
-      href: '/'
-    },
-    {
-      key: "relatórios",
-      label: "Relatórios",
-      href: '/'
+      href: '/rh/providers'
     },
   ];
 

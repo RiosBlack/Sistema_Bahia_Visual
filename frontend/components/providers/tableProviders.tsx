@@ -1,5 +1,5 @@
 'use client'
-import { useContext, useMemo, useState, useCallback } from "react";
+import { useContext, useMemo, useState, useCallback, Key } from "react";
 import {
   Table,
   TableHeader,
@@ -19,17 +19,16 @@ import {
   Selection,
   ChipProps,
   SortDescriptor,
-  Tooltip
+  Tooltip,
+  user
 } from "@nextui-org/react";
-import {columns, users} from "../../config/providers/data";
-import {capitalize} from "../../config/reminder/utils";
+import { capitalize } from "../../config/reminder/utils";
 import { FaEye } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { FaAngleDown } from "react-icons/fa6";
 import ProvidersAddModal from "./providersAddModal";
-import { PrestadoresContext } from "@/context/providersContext";
-
-
+import { PrestadoresContext, ProviderData } from "@/context/providersContext";
+import Link from "next/link";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -38,17 +37,24 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 };
 
 const statusOptions = [
-  {name: "Active", uid: "active"},
-  {name: "Paused", uid: "paused"},
-  {name: "Vacation", uid: "vacation"},
+  { name: "Active", uid: "active" },
+  { name: "Paused", uid: "paused" },
+  { name: "Vacation", uid: "vacation" },
 ];
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
+const columns = [
+  { name: "NOME", uid: "name" },
+  { name: "FUNÇÃO", uid: "functionProviders" },
+  { name: "STATUS", uid: "status" },
+  { name: "AÇÕES", uid: "actions" },
+];
 
-type User = typeof users[0];
+const INITIAL_VISIBLE_COLUMNS = ["name", "functionProviders", "status", "actions"];
+
+type User = ProviderData;
 
 export default function TableProviders() {
-  
+
   const [filterValue, setFilterValue] = useState("");
   const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
@@ -71,25 +77,21 @@ export default function TableProviders() {
   }, [visibleColumns]);
 
   const filteredItems = useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredUsers: ProviderData[] = allProviders ? [...allProviders] : [];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
+      filteredUsers = filteredUsers.filter((provider) =>
+        provider.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
+      filteredUsers = filteredUsers.filter((provider) =>
+        Array.from(statusFilter).includes(provider.name)
       );
     }
 
-    const addProviders = () => {
-      
-    }
-
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [allProviders, filterValue, statusFilter, hasSearchFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -101,49 +103,51 @@ export default function TableProviders() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
+    return [...items].sort((a: ProviderData, b: ProviderData) => {
+      const first = a[sortDescriptor.column as keyof ProviderData] as number;
+      const second = b[sortDescriptor.column as keyof ProviderData] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+  const renderCell = useCallback((allProviders: User, columnKey: Key) => {
+    const cellValue = allProviders[columnKey as keyof User];
 
     switch (columnKey) {
       case "name":
         return (
           <User
-            avatarProps={{radius: "lg", src: user.avatar}}
-            description={user.cpf}
-            name={cellValue}
+            avatarProps={{ radius: "lg", src: allProviders.image }}
+            description={allProviders.cpf}
+            name={allProviders.name}
           >
             {user.name}
           </User>
         );
-      case "role":
+      case "functionProviders":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-small capitalize">{allProviders.functionsProviders.functionProviders}</p>
           </div>
         );
       case "status":
         return (
-          <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
-            {cellValue}
+          <Chip className="capitalize" color={statusColorMap[allProviders.contratacaoDemissao.isContratado]} size="sm" variant="flat">
+            {allProviders.contratacaoDemissao.isContratado == null ? "null" : allProviders.contratacaoDemissao.isContratado}
           </Chip>
         );
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
-            <Tooltip content="Perfil">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-              <FaEye />
-              </span>
-            </Tooltip>
+            <Link href={'http://localhost:3000/rh/profile/' + allProviders.cpf}>
+              <Tooltip content="Perfil">
+                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                  <FaEye />
+                </span>
+              </Tooltip>
+            </Link>
           </div>
         );
       default:
@@ -177,10 +181,10 @@ export default function TableProviders() {
     }
   }, []);
 
-  const onClear = useCallback(()=>{
+  const onClear = useCallback(() => {
     setFilterValue("")
     setPage(1)
-  },[])
+  }, [])
 
   const topContent = useMemo(() => {
     return (
@@ -242,7 +246,6 @@ export default function TableProviders() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {users.length} de prestadores cadastrados</span>
           <label className="flex items-center text-default-400 text-small">
             Prestadores por pagina:
             <select
@@ -263,7 +266,6 @@ export default function TableProviders() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
     hasSearchFilter,
   ]);
 
@@ -318,7 +320,7 @@ export default function TableProviders() {
       </TableHeader>
       <TableBody emptyContent={"Sem prestadores cadastrados"} items={sortedItems}>
         {(item) => (
-          <TableRow key={item.id}>
+          <TableRow key={item.cpf}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}
