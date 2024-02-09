@@ -1,12 +1,16 @@
 "use Client"
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useContext, useEffect } from "react";
 import { CgMathPlus } from "react-icons/cg";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Avatar, Input } from "@nextui-org/react";
 import Webcam from "react-webcam";
 import { FaCamera } from "react-icons/fa";
 import { Select, SelectItem } from "@nextui-org/react";
+import { FunctionsContext } from "@/context/functionsContext";
+import { testaCPF } from "@/services/validations/cpfValidations";
 export default function ProvidersAddModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const { allFunctionsProviders, getFunctionsProviders } = useContext(FunctionsContext);
 
   const [name, setName] = useState('')
   const [surname, setSurname] = useState('')
@@ -27,6 +31,33 @@ export default function ProvidersAddModal() {
   const [state, setState] = useState('')
   const [functionsProvidersPost, setFunctionsProvidersPost] = useState('')
 
+  //validations
+  const [nameValid, setNameValid] = useState(false)
+  const [surnameValid, setSurnameValid] = useState(false)
+  const [cpfValid, setCpfValid] = useState(false)
+
+  function validatorNameAndSurname(value: string, funcao: Function) {
+    if (value == null || value.length > 3) {
+      funcao(false)
+    }else{
+      funcao(true)
+    }
+  }
+
+function validatorCpf(value: string) {
+    let cpfFormat = value.replace(/\D/g, '');
+    cpfFormat = cpfFormat.slice(0, 3) + '.' + cpfFormat.slice(3, 6) + '.' + cpfFormat.slice(6, 9) + '-' + cpfFormat.slice(9);
+    setCpf(cpfFormat);
+
+    let isValid = testaCPF(cpf)
+    if (isValid === false) {
+      setCpfValid(true)
+    }else{
+      setCpfValid(false)
+    }
+  }
+
+  //webcam
   const webcamRef = useRef(null);
   const [imgSrc, setImgSrc] = useState(null)
 
@@ -37,6 +68,22 @@ export default function ProvidersAddModal() {
 
   }, [webcamRef, setImgSrc]);
 
+  function ifFunctions() {
+    if (allFunctionsProviders == null || allFunctionsProviders == undefined) {
+      getFunctionsProviders()
+    } else {
+      return allFunctionsProviders;
+    }
+  }
+
+  useEffect(() => {
+    ifFunctions()
+    console.log(allFunctionsProviders);
+  }, [ifFunctions])
+
+  useEffect(() => {
+    console.log(cpfValid);
+  }, [cpfValid])
 
   return (
     <>
@@ -66,24 +113,49 @@ export default function ProvidersAddModal() {
                 </div>
                 <div className='flex space-x-2'>
                   <Input
+                    isRequired
+                    isClearable
                     type='text'
                     label="Nome"
+                    value={name}
+                    onClear={() => setName('')}
+                    onChange={e => (setName(e.target.value), validatorNameAndSurname(e.target.value, setNameValid))}
+                    isInvalid={nameValid}
+                    errorMessage={nameValid && "O nome tem de ser maior que 3 caracteres"}
                   />
                   <Input
+                    isRequired
+                    isClearable
                     type='text'
                     label="Sobrenome"
+                    value={surname}
+                    onClear={() => setSurname('')}
+                    onChange={e => (setSurname(e.target.value), validatorNameAndSurname(e.target.value, setSurnameValid))}
+                    isInvalid={surnameValid}
+                    errorMessage={surnameValid && "O sobrenome tem de ser maior que 3 caracteres"}
                   />
                 </div>
                 <div className='flex space-x-2'>
                   <Input
+                    isRequired
+                    isClearable
                     type='text'
                     label="CPF"
+                    value={cpf}
+                    onClear={() => setCpf('')}
+                    onChange={e => (setCpf(e.target.value), validatorCpf(e.target.value))}
+                    isInvalid={cpfValid}
+                    errorMessage={cpfValid && "Digite um cpf valido"}
+                    placeholder="000.000.000-00"
                   />
                   <Input
+                    isRequired
                     type='date'
                     label="Data Nascimento"
+                    placeholder="DD/MM/AAAA"
                   />
                   <Input
+                    isRequired
                     type='text'
                     label="RG"
                   />
@@ -94,13 +166,26 @@ export default function ProvidersAddModal() {
                     label="Pai"
                   />
                   <Input
+                    isRequired
                     type='text'
                     label="Mãe"
                   />
                 </div>
                 <div className='space-y-2'>
                   <h1 className='text-xl font-bold'>Endereço</h1>
+                  <div className="flex space-x-2">
+                    <Input
+                      isRequired
+                      type='number'
+                      label="Cep"
+                      placeholder="00.000-000"
+                    />
+                    <Button color="primary">
+                      Consultar
+                    </Button>
+                  </div>
                   <Input
+                    isRequired
                     type='text'
                     label="Rua"
                   />
@@ -111,18 +196,22 @@ export default function ProvidersAddModal() {
                 </div>
                 <div className='flex space-x-2' >
                   <Input
+                    isRequired
                     type='number'
                     label="Numero"
                   />
                   <Input
+                    isRequired
                     type='text'
                     label="Cidade"
                   />
                   <Input
+                    isRequired
                     type='text'
                     label="Estado"
                   />
                   <Input
+                    isRequired
                     type='text'
                     label="Bairro"
                   />
@@ -130,12 +219,12 @@ export default function ProvidersAddModal() {
                 <div>
                   <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
                     <Select
-                      label="Select an animal"
+                      label="Selecione uma função"
                       className="max-w-xs"
                     >
-                      {functionsProviders.map((item) => (
-                        <SelectItem key={item.value} value={item.value}>
-                          {item.label}
+                      {allFunctionsProviders.map((item) => (
+                        <SelectItem key={item.functionProviders} value={item.functionProviders}>
+                          {item.functionProviders}
                         </SelectItem>
                       ))}
                     </Select>
