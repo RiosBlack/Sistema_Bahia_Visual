@@ -1,6 +1,6 @@
+'use client'
 import Sidebar from '@/components/dashboard/sidebar'
 import TableProviders from '@/components/providers/tableProviders'
-import React from 'react'
 
 type Props = {}
 

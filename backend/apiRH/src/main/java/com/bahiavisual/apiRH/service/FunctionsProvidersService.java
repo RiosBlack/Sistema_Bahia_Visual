@@ -39,12 +39,11 @@ public class FunctionsProvidersService {
     }
 
     public ResponseEntity delFunction(String functionName){
-        Optional<FunctionsProviders> functionsDb = functionsProvidersRepository.findByFunctionProviders(functionName);
-        FunctionsProviders functions = functionsDb.get();
-        if (functions == null || functions.getFunctionProviders() == null){
+        FunctionsProviders functionsDb = functionsProvidersRepository.findByFunctionProviders(functionName);
+        if (functionsDb == null || functionsDb.getFunctionProviders() == null){
             return  new ResponseEntity("Erro ao deletar função", HttpStatus.BAD_REQUEST);
         }
-        functionsProvidersRepository.deleteById(functions.getId());
+        functionsProvidersRepository.deleteById(functionsDb.getId());
         return new ResponseEntity("Função " + functionName + " deletada com sucesso!", HttpStatus.OK);
     }
 }

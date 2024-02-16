@@ -45,6 +45,11 @@ public class ProvidersService {
     public ResponseEntity saveProvider(Providers providers){
             providers.setRegistrationDate(Timestamp.from(Instant.now()));
             providers.setModifiedDate(null);
+            FunctionsProviders byFunctionProviders = functionsProvidersRepository.findByFunctionProviders(providers.getFunctionsProviders().getFunctionProviders());
+            if (byFunctionProviders == null){
+                return new ResponseEntity("Função não encontrada", HttpStatus.BAD_REQUEST);
+            }
+            providers.setFunctionsProviders(byFunctionProviders);
             ContratacaoDemissao contratacaoDemissao = new ContratacaoDemissao();
             List<ContratacaoDemissao> contratacaoDemissaoList = new ArrayList();
             contratacaoDemissao.setIsContratado(null);
@@ -100,10 +105,9 @@ public class ProvidersService {
         }
         if (provider.getFunctionsProviders() != null) {
             String functionProviders = providers.getFunctionsProviders().getFunctionProviders();
-            Optional<FunctionsProviders> byFunctionProviders =
+            FunctionsProviders byFunctionProviders =
                     functionsProvidersRepository.findByFunctionProviders(functionProviders);
-            FunctionsProviders functionsProviders = byFunctionProviders.get();
-            provider.setFunctionsProviders(functionsProviders);
+            provider.setFunctionsProviders(byFunctionProviders);
         }
         provider.setModifiedDate(Timestamp.from(Instant.now()));
 

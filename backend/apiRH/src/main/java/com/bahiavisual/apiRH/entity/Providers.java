@@ -24,6 +24,7 @@ public class Providers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "BLOB")
     private String image;
 
     @NotBlank
