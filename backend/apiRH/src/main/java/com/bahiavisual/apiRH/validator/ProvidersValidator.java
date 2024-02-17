@@ -36,10 +36,7 @@ public class ProvidersValidator {
 
         String providersFather = providers.getFatherName().trim();
         providers.setFatherName(providersFather.toUpperCase());
-
-        String providersImage = providers.getImage().trim();
-        providers.setImage(providersImage.toUpperCase());
-
+        
         return providers;
     };
 

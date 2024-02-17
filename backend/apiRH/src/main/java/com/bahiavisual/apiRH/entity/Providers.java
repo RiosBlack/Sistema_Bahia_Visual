@@ -24,8 +24,9 @@ public class Providers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "BLOB")
-    private String image;
+    @JoinColumn(name="ID_IMAGE_PROVIDERS)", referencedColumnName = "id")
+    @OneToOne(orphanRemoval = true)
+    private ImageProviders imageProviders;
 
     @NotBlank
     private String name;

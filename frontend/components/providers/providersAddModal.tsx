@@ -128,11 +128,11 @@ export default function ProvidersAddModal() {
 
   //webcam
   const webcamRef = useRef(null);
-  const [imgSrc, setImgSrc] = useState('')
-  const [imgRender, setRender] = useState('')
-  
+  const [imgSrc, setImgSrc] = useState<Blob | undefined>(undefined)
+  const [imgUrl, setImgUrl] = useState('')
+
   // Função para converter a string de dados URI em um objeto Blob
-  const dataURItoBlob = (dataURI) => {
+  const dataURItoBlob = (dataURI: any) => {
     const byteString = atob(dataURI.split(',')[1]);
     const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
     const ab = new ArrayBuffer(byteString.length);
@@ -147,49 +147,47 @@ export default function ProvidersAddModal() {
     const imageSrc = webcamRef.current.getScreenshot({ width: 854, height: 480 });
     if (imageSrc) {
       const blobData = dataURItoBlob(imageSrc);
+      setImgSrc(blobData);
       const imageURL = URL.createObjectURL(blobData);
-      setImgSrc(imageURL);
-      console.log(imageSrc);
+      setImgUrl(imageURL)
+      console.log(blobData);
+      console.log(imageURL);
     }
   }, [webcamRef, setImgSrc]);
 
-  function submit() {
-    axiosApi.post('/providers', {
-      image: imgSrc,
-      name: name,
-      surname: surname,
-      fatherName: fatherName,
-      motherName: motherName,
-      birthday: birthday,
-      cpf: cpf,
-      rg: rg,
-      naturalness: naturalness,
-      numberPhone1: numberPhone1,
-      numberPhone2: numberPhone2,
-      andress: 
-          {
-              zipCode: zipCode,
-              road: road,
-              number: number,
-              neighborhood: neighborhood,
-              complement: complement,
-              city: city,
-              state: state,
-      },
-      functionsProviders: {
-        functionProviders: functionsPostValue
-    }
-      
-    })
+  function submit(blobData) {
+    const formData = new FormData();
+    formData.append('image', blobData);
+    formData.append('name', name);
+    formData.append('surname', surname);
+    formData.append('fatherName', fatherName);
+    formData.append('motherName', motherName);
+    formData.append('birthday', birthday);
+    formData.append('cpf', cpf);
+    formData.append('rg', rg);
+    formData.append('naturalness', naturalness);
+    formData.append('numberPhone1', numberPhone1);
+    formData.append('numberPhone2', numberPhone2);
+    formData.append('andress.zipCode', zipCode);
+    formData.append('andress.road', road);
+    formData.append('andress.number', number);
+    formData.append('andress.neighborhood', neighborhood);
+    formData.append('andress.complement', complement);
+    formData.append('andress.city', city);
+    formData.append('andress.state', state);
+    formData.append('functionsProviders.functionProviders', functionsPostValue);
+  
+    axiosApi.post('/providers', formData)
       .then(function (response) {
         console.log(response);
         alert("Cadastro realizado com sucesso!");
       })
       .catch(function (error) {
         console.error(error);
-        alert("Erro ao cadastrar no banco de dados")
+        alert("Erro ao cadastrar no banco de dados");
       });
   }
+  
 
   useEffect(() => {
     buscaFunctions()
@@ -205,7 +203,7 @@ export default function ProvidersAddModal() {
               <ModalHeader className="flex flex-col gap-1">Adicionar novo prestador</ModalHeader>
               <ModalBody className="overflow-y-hidden">
                 <div className="w-full flex justify-center items-center">
-                  {imgSrc === ''
+                  {imgSrc === undefined
                     ?
                     <div className="grid justify-items-center content-center space-y-1 relative">
                       <Webcam
@@ -220,7 +218,7 @@ export default function ProvidersAddModal() {
                       <Button isIconOnly onPress={capture} color="primary" endContent={<FaCamera />}></Button>
                     </div>
                     :
-                    <Avatar className="w-28 h-28 text-large" src={imgSrc || ''} />
+                    <Avatar className="w-28 h-28 text-large" src={imgUrl || ''} />
                   }
                 </div>
                 <div className='flex space-x-2'>
@@ -418,7 +416,7 @@ export default function ProvidersAddModal() {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Fechar
                 </Button>
-                <Button color="primary" onPress={submit}>
+                <Button color="primary" onPress={e => submit(imgSrc)}>
                   Cadastrar
                 </Button>
               </ModalFooter>

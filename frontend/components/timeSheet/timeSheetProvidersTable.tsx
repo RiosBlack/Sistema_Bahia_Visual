@@ -3,7 +3,6 @@ import React from "react";
 import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, ChipProps, getKeyValue} from "@nextui-org/react";
 import { LuPencilLine } from "react-icons/lu";
 import { FaEye } from "react-icons/fa";
-import {users} from "../../config/providers/data";
 import { Props } from "next/script";
 
 const statusColorMap: Record<string, ChipProps["color"]>  = {
@@ -11,6 +10,19 @@ const statusColorMap: Record<string, ChipProps["color"]>  = {
   paused: "danger",
   vacation: "warning",
 };
+
+const users = [
+  {
+    id: 1,
+    name: "Tony Reichert",
+    role: "CEO",
+    team: "Management",
+    status: "active",
+    age: "29",
+    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+    email: "tony.reichert@example.com",
+  },
+]
 
 const columns = [
   {name: "NOME", uid: "name"},

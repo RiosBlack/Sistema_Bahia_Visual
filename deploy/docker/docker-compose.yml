@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   db:
-    image: mysql
+    image: mysql:latest
     restart: always
     environment:
       MYSQL_DATABASE: 'bvRH'
@@ -15,8 +15,10 @@ services:
       - '3306'
     volumes:
       - type: bind
-        source: "/home/douglasbv/Documentos/Douglas Pessoal/BancoDeDados/Docker"
+        source: "/home/douglas/Documents/ArquivosDouglas/Docker/MySqlDbSistemaBahiaVisual"
         target: /var/lib/mysql
+    networks:
+      - docker-network
 
 networks:
   docker-network:

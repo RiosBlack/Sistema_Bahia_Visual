@@ -1,16 +1,18 @@
 package com.bahiavisual.apiRH.entity.dto;
 
+import java.util.Date;
+import java.util.List;
+
 import com.bahiavisual.apiRH.entity.Andress;
 import com.bahiavisual.apiRH.entity.ContratacaoDemissao;
 import com.bahiavisual.apiRH.entity.FunctionsProviders;
+import com.bahiavisual.apiRH.entity.ImageProviders;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +21,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProvidersDTO {
 
-    private String image;
+    private ImageProviders imageProviders;
 
     private String name;
 

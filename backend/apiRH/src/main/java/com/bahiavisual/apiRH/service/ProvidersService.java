@@ -76,9 +76,6 @@ public class ProvidersService {
         if (providersDB.isEmpty() || provider == null){
             return new ResponseEntity("Prestador não existe no banco de dados", HttpStatus.BAD_REQUEST);
         }
-        if (provider.getImage() != null || !provider.getImage().isEmpty()) {
-            provider.setImage(providers.getImage());
-        }
         if (provider.getName() != null || !provider.getName().isEmpty()) {
             provider.setName(providers.getName());
         }
