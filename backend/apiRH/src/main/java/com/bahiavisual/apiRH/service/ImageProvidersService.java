@@ -1,6 +1,7 @@
 package com.bahiavisual.apiRH.service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class ImageProvidersService {
     return imageProvidersRepository.findById(id).get();
   }
 
-  public Stream<ImageProviders> getAllFiles() {
+  public Stream<ImageProviders> getAll() {
     return imageProvidersRepository.findAll().stream();
   }
 }

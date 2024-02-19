@@ -50,7 +50,7 @@ export interface ProviderData {
 export const PrestadoresContext = createContext<{
   allProviders: ProviderData[] | null;
   getAllProviders: () => Promise<void>;
-}>({ allProviders: null, getAllProviders: async () => {} });
+}>({ allProviders: null, getAllProviders: async () => { } });
 
 export default function PrestadoresProvider({
   children,

@@ -22,14 +22,16 @@ public class ImageProviders {
   @Lob
   private byte[] image;
 
-  private String name;
+  private String nameImageProvider;
 
   private String type;
+  
+  private String uri;
 
-  public ImageProviders(String name, String type, byte[] image) {
-    this.name = name;
+  public ImageProviders(String nameImageProvider, String type, byte[] image, String uri) {
+    this.nameImageProvider = nameImageProvider;
     this.type = type;
     this.image = image;
+    this.uri = uri;
   }
-
 }
