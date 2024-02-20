@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.bahiavisual.apiRH.entity.ImageProviders;
 import com.bahiavisual.apiRH.repository.ImageProvidersRepository;
@@ -20,11 +21,12 @@ public class ImageProvidersService {
   @Autowired
   ImageProvidersRepository imageProvidersRepository;
 
-  public ImageProviders salveImage(MultipartFile file) {
+  public ImageProviders salveImage(MultipartFile file, String uri) {
+    
     String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
     try {
-      ImageProviders imageProviders = new ImageProviders(fileName, file.getContentType(), file.getBytes());
+      ImageProviders imageProviders = new ImageProviders(fileName, file.getContentType(), file.getBytes(), uri);
       return imageProvidersRepository.save(imageProviders);
     } catch (IOException erro) {
       throw new RuntimeException("Não foi possível armazenar o arquivo " + fileName + ". Por favor tente novamente!",

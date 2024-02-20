@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.bahiavisual.apiRH.entity.ImageProviders;
 import com.bahiavisual.apiRH.entity.dto.ProvidersDTO;
@@ -26,7 +27,13 @@ public class ImageProvidersController {
 
   @PostMapping()
   public ResponseEntity uploadImage(@RequestParam("file") MultipartFile file) {
-    ImageProviders imageProviders = imageProvidersService.salveImage(file);
+
+    
+    String uriFile = ServletUriComponentsBuilder.fromCurrentContextPath()
+        .path(file.getOriginalFilename())
+        .toUriString();
+
+    ImageProviders imageProviders = imageProvidersService.salveImage(file, uriFile);
     return new ResponseEntity(imageProviders, HttpStatus.OK);
   }
 
