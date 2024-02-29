@@ -35,4 +35,14 @@ public class FileUplodCloudnaryService implements FileUploadCloudnaryInterface {
     }
   }
 
+  @Override
+  public Map deleteImageProviderFile(String nameId){
+    try {
+      Map dataDelete = this.cloudinary.uploader().destroy(nameId, ObjectUtils.emptyMap());
+      return dataDelete;
+    } catch (Exception e) {
+      throw new RuntimeException("Erro ao deletar imagem!");
+    }
+  }
+
 }
