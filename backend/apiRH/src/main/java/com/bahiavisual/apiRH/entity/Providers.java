@@ -24,9 +24,7 @@ public class Providers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name="ID_IMAGE_PROVIDERS)", referencedColumnName = "id")
-    @OneToOne(orphanRemoval = true)
-    private ImageProviders imageProviders;
+    private String urlImage;
 
     @NotBlank
     private String name;

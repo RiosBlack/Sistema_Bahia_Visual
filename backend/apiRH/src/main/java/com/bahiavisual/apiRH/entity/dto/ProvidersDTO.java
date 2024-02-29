@@ -6,7 +6,6 @@ import java.util.List;
 import com.bahiavisual.apiRH.entity.Andress;
 import com.bahiavisual.apiRH.entity.ContratacaoDemissao;
 import com.bahiavisual.apiRH.entity.FunctionsProviders;
-import com.bahiavisual.apiRH.entity.ImageProviders;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -21,7 +20,7 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProvidersDTO {
 
-    private ImageProviders imageProviders;
+    private String urlImage;
 
     private String name;
 

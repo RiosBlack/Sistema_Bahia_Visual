@@ -1,5 +1,5 @@
 'use client'
-import { useContext, useMemo, useState, useCallback, Key } from "react";
+import { useContext, useMemo, useState, useCallback, Key, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -20,7 +20,8 @@ import {
   ChipProps,
   SortDescriptor,
   Tooltip,
-  user
+  user,
+  image
 } from "@nextui-org/react";
 import { capitalize } from "../../config/reminder/utils";
 import { FaEye } from "react-icons/fa6";
@@ -64,7 +65,13 @@ export default function TableProviders() {
     direction: "ascending",
   });
 
-  const { allProviders } = useContext(PrestadoresContext)
+  const { allProviders } = useContext(PrestadoresContext);
+
+  useEffect(() => {
+    const objectUrl = URL.createObjectURL(allProviders.imageProviders.image);
+    console.log(objectUrl);
+  }, [])
+  
 
   const [page, setPage] = useState(1);
 
@@ -114,12 +121,13 @@ export default function TableProviders() {
 
   const renderCell = useCallback((allProviders: User, columnKey: Key) => {
     const cellValue = allProviders[columnKey as keyof User];
-
+    
+  
     switch (columnKey) {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "lg", src: allProviders.image }}
+            avatarProps={{ radius: "lg", src: allProviders.imageProviders}}
             description={allProviders.cpf}
             name={allProviders.name}
           >
