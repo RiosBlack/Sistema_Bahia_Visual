@@ -1,15 +1,21 @@
 "use Client"
 import { useState, useRef, useCallback, useEffect } from "react";
 import { CgMathPlus } from "react-icons/cg";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Avatar, Input } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Avatar, Input, Chip, Spinner } from "@nextui-org/react";
 import Webcam from "react-webcam";
-import { FaCamera } from "react-icons/fa";
+import { FaCamera, FaRegTrashAlt } from "react-icons/fa";
+import { IoIosSend } from "react-icons/io";
 import { Select, SelectItem } from "@nextui-org/react";
 import axiosApi from "@/services/axiosConfig";
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function ProvidersAddModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const [urlImage, setUrlImage] = useState('')
+  const [publicId, setPublicId] = useState('')
   const [name, setName] = useState('')
   const [surname, setSurname] = useState('')
   const [fatherName, setFatherName] = useState('')
@@ -29,6 +35,7 @@ export default function ProvidersAddModal() {
   const [state, setState] = useState('')
   const [functions, setFunctions] = useState([])
   const [functionsPostValue, setFunctionsPostValue] = useState('');
+  const { v4: uuidv4 } = require('uuid');
 
   //validations
   const [nameValid, setNameValid] = useState(false)
@@ -37,6 +44,23 @@ export default function ProvidersAddModal() {
   const [motherValid, setMotherValid] = useState(false)
   const [numberPhone1Valid, setNumberPhone1Valid] = useState(false)
   const [numberPhone2Valid, setNumberPhone2Valid] = useState(false)
+
+  //Loading
+  const [stateDisableButton, setStateDisableButton] = useState(false)
+  const [loadingButton, setLoadingButton] = useState(false)
+  const [loadingSubmit, setLoadingSubmit] = useState(false)
+
+  //Cadastrar
+  const [stateDisableButtonCadastar, setStateDisableButtonCadastrar] = useState(true)
+
+  function validCampos() {
+    if (name && surname && cpf && birthday && rg && motherName && numberPhone1
+      && zipCode && road && number && city && state && neighborhood) {
+      setStateDisableButtonCadastrar(false)
+    } else {
+      setStateDisableButtonCadastrar(true)
+    }
+  }
 
   function validatorNames(value: string, funcao: Function) {
     if (value == null || value.length > 3) {
@@ -109,7 +133,7 @@ export default function ProvidersAddModal() {
         setNeighborhood(data.neighborhood);
         setState(data.state)
       } catch (error) {
-        alert(error);
+        toast.error('Informe um cep valido.')
       }
     }
   }
@@ -130,6 +154,7 @@ export default function ProvidersAddModal() {
   const webcamRef = useRef(null);
   const [imgSrc, setImgSrc] = useState<Blob | undefined>(undefined)
   const [imgUrl, setImgUrl] = useState('')
+  const [uuidImage, setUuidImage] = useState('');
 
   // Função para converter a string de dados URI em um objeto Blob
   const dataURItoBlob = (dataURI: any) => {
@@ -150,44 +175,104 @@ export default function ProvidersAddModal() {
       setImgSrc(blobData);
       const imageURL = URL.createObjectURL(blobData);
       setImgUrl(imageURL)
-      console.log(blobData);
-      console.log(imageURL);
+      const uuid = uuidv4();
+      setUuidImage(uuid);
     }
   }, [webcamRef, setImgSrc]);
 
-  function submit(blobData) {
-    const formData = new FormData();
-    formData.append('image', blobData);
-    formData.append('name', name);
-    formData.append('surname', surname);
-    formData.append('fatherName', fatherName);
-    formData.append('motherName', motherName);
-    formData.append('birthday', birthday);
-    formData.append('cpf', cpf);
-    formData.append('rg', rg);
-    formData.append('naturalness', naturalness);
-    formData.append('numberPhone1', numberPhone1);
-    formData.append('numberPhone2', numberPhone2);
-    formData.append('andress.zipCode', zipCode);
-    formData.append('andress.road', road);
-    formData.append('andress.number', number);
-    formData.append('andress.neighborhood', neighborhood);
-    formData.append('andress.complement', complement);
-    formData.append('andress.city', city);
-    formData.append('andress.state', state);
-    formData.append('functionsProviders.functionProviders', functionsPostValue);
-  
-    axiosApi.post('/providers', formData)
+
+  function submit() {
+    axiosApi.post('/providers', {
+      urlImage: urlImage,
+      nameImageCloud: publicId,
+      name: name,
+      surname: surname,
+      fatherName: fatherName,
+      motherName: motherName,
+      birthday: birthday,
+      cpf: cpf,
+      rg: rg,
+      naturalness: naturalness,
+      numberPhone1: numberPhone1,
+      numberPhone2: numberPhone2,
+      andress: {
+        zipCode: zipCode,
+        road: road,
+        number: number,
+        neighborhood: neighborhood,
+        complement: complement,
+        city: city,
+        state: state
+      },
+      functionsProviders: {
+        functionProviders: functionsPostValue
+      }
+    })
       .then(function (response) {
-        console.log(response);
-        alert("Cadastro realizado com sucesso!");
+        setLoadingSubmit(true);
+        if (response.status === 200) {
+          setLoadingSubmit(false);
+          setImgSrc(undefined)
+          setUrlImage('')
+          setPublicId('')
+          setName('')
+          setSurname('')
+          setFatherName('')
+          setMotherName('')
+          setBirthday('')
+          setCpf('')
+          setRg('')
+          setNaturalness('')
+          setNumberPhone1('')
+          setNumberPhone2('')
+          setZipCode('')
+          setRoad('')
+          setNumber('')
+          setNeighborhood('')
+          setComplement('')
+          setCity('')
+          setState('')
+          setFunctionsPostValue('');
+          toast.success("Prestador cadastrado com sucesso!");
+        }
+      })
+      .catch(function (e) {
+        toast.error('Erro ao cadastrar prestador.');
+        console.log(e);
+      })
+  }
+
+  function deleteImage() {
+    setImgSrc(undefined);
+  }
+
+  function sendImage(file: any, nameImage: string) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('nameImage', nameImage)
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    axiosApi.post('/upload/provider', formData, config)
+      .then(function (response) {
+        setStateDisableButton(true);
+        setUrlImage(response.data.url)
+        setPublicId(response.data.public_id)
+        if (response.status === 200) {
+          toast.success("Imagem enviada com sucesso!")
+          setLoadingButton(false);
+        }
       })
       .catch(function (error) {
         console.error(error);
-        alert("Erro ao cadastrar no banco de dados");
+        toast.error("Erro ao enviar imagem!");
       });
   }
-  
+
 
   useEffect(() => {
     buscaFunctions()
@@ -203,6 +288,19 @@ export default function ProvidersAddModal() {
               <ModalHeader className="flex flex-col gap-1">Adicionar novo prestador</ModalHeader>
               <ModalBody className="overflow-y-hidden">
                 <div className="w-full flex justify-center items-center">
+                  <ToastContainer
+                    position="bottom-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="colored"
+                    transition={Bounce}
+                  />
                   {imgSrc === undefined
                     ?
                     <div className="grid justify-items-center content-center space-y-1 relative">
@@ -218,7 +316,30 @@ export default function ProvidersAddModal() {
                       <Button isIconOnly onPress={capture} color="primary" endContent={<FaCamera />}></Button>
                     </div>
                     :
-                    <Avatar className="w-28 h-28 text-large" src={imgUrl || ''} />
+                    <div className="grid justify-items-center content-center space-y-1 relative">
+                      <Avatar className="w-28 h-28 text-large" src={imgUrl || ''} />
+                      <div className="flex justify-center items-center space-x-2">
+                        {stateDisableButton ?
+                          <Chip color="success">Imagem enviada</Chip>
+                          :
+                          <>
+                            <Button
+                              isIconOnly
+                              onPress={() => deleteImage()}
+                              color="danger"
+                              isDisabled={stateDisableButton}
+                            ><FaRegTrashAlt /></Button>
+                            <Button
+                              isIconOnly
+                              onPress={() => (sendImage(imgSrc, uuidImage), setLoadingButton(true))}
+                              isDisabled={stateDisableButton}
+                              isLoading={loadingButton}
+                              color="primary"
+                            ><IoIosSend /></Button>
+                          </>
+                        }
+                      </div>
+                    </div>
                   }
                 </div>
                 <div className='flex space-x-2'>
@@ -229,7 +350,7 @@ export default function ProvidersAddModal() {
                     label="Nome"
                     value={name}
                     onClear={() => setName('')}
-                    onChange={e => (setName(e.target.value), validatorNames(e.target.value, setNameValid))}
+                    onChange={e => (setName(e.target.value), validatorNames(e.target.value, setNameValid), validCampos())}
                     isInvalid={nameValid}
                     errorMessage={nameValid && "O nome tem de ser maior que 3 caracteres"}
                   />
@@ -240,7 +361,7 @@ export default function ProvidersAddModal() {
                     label="Sobrenome"
                     value={surname}
                     onClear={() => setSurname('')}
-                    onChange={e => (setSurname(e.target.value), validatorNames(e.target.value, setSurnameValid))}
+                    onChange={e => (setSurname(e.target.value), validatorNames(e.target.value, setSurnameValid), validCampos())}
                     isInvalid={surnameValid}
                     errorMessage={surnameValid && "O sobrenome tem de ser maior que 3 caracteres"}
                   />
@@ -253,7 +374,7 @@ export default function ProvidersAddModal() {
                     label="CPF"
                     value={cpf}
                     onClear={() => setCpf('')}
-                    onChange={e => (setCpf(e.target.value), validatorCpf(e.target.value))}
+                    onChange={e => (setCpf(e.target.value), validatorCpf(e.target.value), validCampos())}
                     isInvalid={cpfValid}
                     errorMessage={cpfValid && "Digite um cpf valido"}
                     placeholder="000.000.000-00"
@@ -265,7 +386,7 @@ export default function ProvidersAddModal() {
                     placeholder="DD/MM/AAAA"
                     value={birthday}
                     onClear={() => setBirthday('')}
-                    onChange={e => setBirthday(e.target.value)}
+                    onChange={e => (setBirthday(e.target.value), validCampos())}
                   />
                   <Input
                     isRequired
@@ -273,7 +394,7 @@ export default function ProvidersAddModal() {
                     label="RG"
                     value={rg}
                     onClear={() => setRg('')}
-                    onChange={e => setRg(e.target.value)}
+                    onChange={e => (setRg(e.target.value), validCampos())}
                   />
                 </div>
                 <div className='flex space-x-2'>
@@ -282,7 +403,7 @@ export default function ProvidersAddModal() {
                     label="Pai"
                     value={fatherName}
                     onClear={() => setFatherName('')}
-                    onChange={e => setFatherName(e.target.value)}
+                    onChange={e => (setFatherName(e.target.value), validCampos())}
                   />
                   <Input
                     isRequired
@@ -290,7 +411,7 @@ export default function ProvidersAddModal() {
                     label="Mãe"
                     value={motherName}
                     onClear={() => setMotherName('')}
-                    onChange={e => (setMotherName(e.target.value), validatorNames(e.target.value, setMotherValid))}
+                    onChange={e => (setMotherName(e.target.value), validatorNames(e.target.value, setMotherValid), validCampos())}
                     isInvalid={motherValid}
                     errorMessage={motherValid && "O sobrenome tem de ser maior que 3 caracteres"}
                   />
@@ -301,7 +422,7 @@ export default function ProvidersAddModal() {
                     label="Naturalidade"
                     value={naturalness}
                     onClear={() => setNaturalness('')}
-                    onChange={e => setNaturalness(e.target.value)}
+                    onChange={e => (setNaturalness(e.target.value), validCampos())}
                   />
                   <Input
                     isRequired
@@ -309,7 +430,7 @@ export default function ProvidersAddModal() {
                     label="Telefone 1"
                     value={numberPhone1}
                     onClear={() => setNumberPhone1('')}
-                    onChange={e => (setNumberPhone1(e.target.value), validatorTel1(e.target.value))}
+                    onChange={e => (setNumberPhone1(e.target.value), validatorTel1(e.target.value), validCampos())}
                     isInvalid={numberPhone1Valid!}
                     errorMessage={numberPhone1Valid! && "O numero tem de ser maior que 10 caracteres"}
                   />
@@ -318,7 +439,7 @@ export default function ProvidersAddModal() {
                     label="Telefone 2"
                     value={numberPhone2}
                     onClear={() => setNumberPhone2('')}
-                    onChange={e => (setNumberPhone2(e.target.value), validatorTel2(e.target.value))}
+                    onChange={e => (setNumberPhone2(e.target.value), validatorTel2(e.target.value), validCampos())}
                     isInvalid={numberPhone2Valid!}
                     errorMessage={numberPhone2Valid! && "O numero tem de ser maior que 10 caracteres"}
                   />
@@ -333,7 +454,7 @@ export default function ProvidersAddModal() {
                       placeholder="00.000-000"
                       value={zipCode}
                       onClear={() => setZipCode('')}
-                      onChange={e => setZipCode(e.target.value)}
+                      onChange={e => (setZipCode(e.target.value), validCampos())}
                     />
                     <Button
                       color="primary"
@@ -348,14 +469,14 @@ export default function ProvidersAddModal() {
                     label="Rua"
                     value={road}
                     onClear={() => setRoad('')}
-                    onChange={e => setRoad(e.target.value)}
+                    onChange={e => (setRoad(e.target.value), validCampos())}
                   />
                   <Input
                     type='text'
                     label="Complemento"
                     value={complement}
                     onClear={() => setComplement('')}
-                    onChange={e => setComplement(e.target.value)}
+                    onChange={e => (setComplement(e.target.value), validCampos())}
                   />
                 </div>
                 <div className='flex space-x-2' >
@@ -365,7 +486,7 @@ export default function ProvidersAddModal() {
                     label="Numero"
                     value={number}
                     onClear={() => setNumber('')}
-                    onChange={e => setNumber(e.target.value)}
+                    onChange={e => (setNumber(e.target.value), validCampos())}
                   />
                   <Input
                     isRequired
@@ -373,7 +494,7 @@ export default function ProvidersAddModal() {
                     label="Cidade"
                     value={city}
                     onClear={() => setCity('')}
-                    onChange={e => setCity(e.target.value)}
+                    onChange={e => (setCity(e.target.value), validCampos())}
                   />
                   <Input
                     isRequired
@@ -381,7 +502,7 @@ export default function ProvidersAddModal() {
                     label="Estado"
                     value={state}
                     onClear={() => setState('')}
-                    onChange={e => setState(e.target.value)}
+                    onChange={e => (setState(e.target.value), validCampos())}
                   />
                   <Input
                     isRequired
@@ -389,7 +510,7 @@ export default function ProvidersAddModal() {
                     label="Bairro"
                     value={neighborhood}
                     onClear={() => setNeighborhood('')}
-                    onChange={e => setNeighborhood(e.target.value)}
+                    onChange={e => (setNeighborhood(e.target.value), validCampos())}
                   />
                 </div>
                 <div>
@@ -397,8 +518,9 @@ export default function ProvidersAddModal() {
                     <Select
                       label="Selecione uma função"
                       className="max-w-xs"
+                      isRequired
                       selectedKeys={[functionsPostValue]}
-                      onChange={e => setFunctionsPostValue(e.target.value)}
+                      onChange={e => (setFunctionsPostValue(e.target.value), validCampos())}
                     >
                       {functions.map((item) => (
                         <SelectItem
@@ -416,7 +538,7 @@ export default function ProvidersAddModal() {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Fechar
                 </Button>
-                <Button color="primary" onPress={e => submit(imgSrc)}>
+                <Button color="primary" isDisabled={stateDisableButtonCadastar} isLoading={loadingSubmit} onPress={e => submit()}>
                   Cadastrar
                 </Button>
               </ModalFooter>

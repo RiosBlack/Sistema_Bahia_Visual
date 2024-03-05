@@ -63,7 +63,7 @@ export default function ProvidersTable() {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "lg", src: allProviders.imageProviders.image}}
+            avatarProps={{ radius: "lg", src: allProviders.urlImage}}
             description={allProviders.cpf}
             name={allProviders.name}
           >

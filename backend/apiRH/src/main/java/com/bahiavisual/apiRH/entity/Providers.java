@@ -26,6 +26,8 @@ public class Providers {
 
     private String urlImage;
 
+    private String nameImageCloud;
+
     @NotBlank
     private String name;
 

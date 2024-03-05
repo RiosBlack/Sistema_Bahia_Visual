@@ -3,6 +3,7 @@ package com.bahiavisual.apiRH.service;
 import com.bahiavisual.apiRH.entity.ContratacaoDemissao;
 import com.bahiavisual.apiRH.entity.FunctionsProviders;
 import com.bahiavisual.apiRH.entity.Providers;
+import com.bahiavisual.apiRH.entity.dto.ContratacaoDemissaoDTO;
 import com.bahiavisual.apiRH.entity.dto.ProvidersDTO;
 import com.bahiavisual.apiRH.repository.FunctionsProvidersRepository;
 import com.bahiavisual.apiRH.repository.ProvidersRepository;
@@ -33,11 +34,11 @@ public class ProvidersService {
     public List<ProvidersDTO> getAll(){
         List<Providers> listProviders = providersRepository.findAll();
         List<ProvidersDTO> listProvidersDTO = new ArrayList<>();
-        ObjectMapper mapper = new ObjectMapper();
         for (Providers providers : listProviders) {
             ProvidersDTO providersDTO = mapper.convertValue(providers, ProvidersDTO.class);
             listProvidersDTO.add(providersDTO);
         }
+        
 
         return listProvidersDTO;
     }

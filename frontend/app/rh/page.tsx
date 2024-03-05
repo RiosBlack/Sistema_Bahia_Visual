@@ -14,7 +14,7 @@ export default function Page() {
   const [inativos, setInativos] = useState(0);
   const [cadastrados, setCadastrados] = useState(0);
 
-  const { allProviders } = useContext(PrestadoresContext)
+  const { allProviders, getAllProviders } = useContext(PrestadoresContext)
 
   function verifyCadastrados() {
     let quatCadastrados = allProviders ? allProviders.length : 0;
@@ -32,6 +32,7 @@ export default function Page() {
   }
 
   useEffect(() => {
+    getAllProviders()
     if (allProviders) {
       verifyCadastrados()
       verifyAtivosAndInativos()
@@ -66,7 +67,6 @@ export default function Page() {
             <CardDash ico={dado.ico} title={dado.title} valor={dado.valor} key={index} />
           ))}
         </div>
-        <ProvidersTable />
       </div>
     </div>
   )

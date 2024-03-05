@@ -67,12 +67,6 @@ export default function TableProviders() {
 
   const { allProviders } = useContext(PrestadoresContext);
 
-  useEffect(() => {
-    const objectUrl = URL.createObjectURL(allProviders.imageProviders.image);
-    console.log(objectUrl);
-  }, [])
-  
-
   const [page, setPage] = useState(1);
 
   const hasSearchFilter = Boolean(filterValue);
@@ -127,7 +121,7 @@ export default function TableProviders() {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "lg", src: allProviders.imageProviders}}
+            avatarProps={{ radius: "lg", src: allProviders.urlImage}}
             description={allProviders.cpf}
             name={allProviders.name}
           >

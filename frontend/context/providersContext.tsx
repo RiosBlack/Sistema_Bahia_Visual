@@ -30,16 +30,9 @@ interface ContratacaoDemissao {
   functionContratado: string | null;
 }
 
-interface ImageProviders {
-  id: number,
-  image: string,
-  nameImageProvider: string,
-  type: string,
-  uri: string
-}
-
 export interface ProviderData {
-  imageProviders: ImageProviders[];
+  urlImage: string;
+  nameImageCloud: string;
   name: string;
   surname: string;
   fatherName: string;

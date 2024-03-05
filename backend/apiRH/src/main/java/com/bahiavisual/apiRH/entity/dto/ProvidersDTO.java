@@ -22,6 +22,8 @@ public class ProvidersDTO {
 
     private String urlImage;
 
+    private String nameImageCloud;
+
     private String name;
 
     private String surname;
