@@ -8,6 +8,8 @@ import com.bahiavisual.apiRH.entity.dto.ProvidersDTO;
 import com.bahiavisual.apiRH.repository.FunctionsProvidersRepository;
 import com.bahiavisual.apiRH.repository.ProvidersRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,7 @@ public class ProvidersService {
         List<Providers> listProviders = providersRepository.findAll();
         List<ProvidersDTO> listProvidersDTO = new ArrayList<>();
         for (Providers providers : listProviders) {
+            mapper.registerModule(new JavaTimeModule());
             ProvidersDTO providersDTO = mapper.convertValue(providers, ProvidersDTO.class);
             listProvidersDTO.add(providersDTO);
         }

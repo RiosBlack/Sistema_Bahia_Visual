@@ -1,12 +1,12 @@
 'use client'
 import Sidebar from '@/components/dashboard/sidebar'
 import CardDash from '@/components/cardDash'
-import ProvidersTable from '@/components/dashboardRh/providersTable'
 import { useContext, useEffect, useState } from 'react'
 import { MdCloudQueue } from "react-icons/md";
 import { MdCloudOff } from "react-icons/md";
 import { SlPaperClip } from "react-icons/sl";
 import { PrestadoresContext } from "@/context/providersContext";
+import ChartCardProviders from '@/components/dashboardRh/chartCardProviders'
 
 
 export default function Page() {
@@ -55,7 +55,7 @@ export default function Page() {
       valor: cadastrados,
       title: 'Colaboradores Cadastrados',
       ico: <SlPaperClip />
-    },
+    }
   ]
   return (
     <div className='h-full w-full flex'>
@@ -66,6 +66,9 @@ export default function Page() {
           {list.map((dado, index) => (
             <CardDash ico={dado.ico} title={dado.title} valor={dado.valor} key={index} />
           ))}
+        </div>
+        <div>
+          <ChartCardProviders />
         </div>
       </div>
     </div>

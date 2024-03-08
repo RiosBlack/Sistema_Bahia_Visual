@@ -26,7 +26,7 @@ export default function Sidebar({ }: Props) {
   ];
 
   return (
-    <aside className="overflow-hidden bg-gradient-to-r from-Mooonlit-Asteroid1 via-Mooonlit-Asteroid2 to-Mooonlit-Asteroid3 h-full grid justify-items-start content-between rounded-xl p-2">
+    <aside className="w-52 overflow-hidden bg-gradient-to-r from-Mooonlit-Asteroid1 via-Mooonlit-Asteroid2 to-Mooonlit-Asteroid3 h-full grid justify-items-start content-between rounded-xl p-2">
       <div className='space-y-2 pr-2'>
         <Button
           variant="light"
