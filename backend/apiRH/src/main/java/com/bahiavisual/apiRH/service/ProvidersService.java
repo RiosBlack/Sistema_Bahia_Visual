@@ -80,39 +80,22 @@ public class ProvidersService {
         if (providersDB.isEmpty() || provider == null){
             return new ResponseEntity("Prestador não existe no banco de dados", HttpStatus.BAD_REQUEST);
         }
-        if (provider.getUrlImage() != null || !provider.getUrlImage().isEmpty()) {
             provider.setUrlImage(providers.getUrlImage());
-        }
-        if (provider.getName() != null || !provider.getName().isEmpty()) {
+            provider.setNameImageCloud(providers.getNameImageCloud());
             provider.setName(providers.getName());
-        }
-        if (provider.getSurname() != null || !provider.getSurname().isEmpty()) {
             provider.setSurname(providers.getSurname());
-        }
-        if (provider.getFatherName() != null || !provider.getFatherName().isEmpty()) {
             provider.setFatherName(providers.getFatherName());
-        }
-        if (provider.getMotherName() != null || !provider.getMotherName().isEmpty()) {
             provider.setMotherName(providers.getMotherName());
-        }
-        if (provider.getBirthday() != null) {
             provider.setBirthday(providers.getBirthday());
-        }
-        if (provider.getCpf() != null || !provider.getCpf().isEmpty()) {
             provider.setCpf(providers.getCpf());
-        }
-        if (provider.getRg() != null || !provider.getRg().isEmpty()) {
             provider.setRg(providers.getRg());
-        }
-        if (provider.getNaturalness() != null || !provider.getNaturalness().isEmpty()) {
             provider.setNaturalness(providers.getNaturalness());
-        }
-        if (provider.getFunctionsProviders() != null) {
+            provider.setAndress(providers.getAndress());
             String functionProviders = providers.getFunctionsProviders().getFunctionProviders();
             FunctionsProviders byFunctionProviders =
                     functionsProvidersRepository.findByFunctionProviders(functionProviders);
             provider.setFunctionsProviders(byFunctionProviders);
-        }
+
         provider.setModifiedDate(Timestamp.from(Instant.now()));
 
         providersRepository.save(provider);

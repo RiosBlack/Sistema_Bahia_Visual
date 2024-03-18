@@ -131,7 +131,7 @@ export default function TableProviders() {
       case "functionProviders":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{allProviders.functionsProviders.functionProviders}</p>
+            <p className="text-bold text-small capitalize">{allProviders.functionsProviders?.functionProviders}</p>
           </div>
         );
       case "status":

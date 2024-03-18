@@ -29,7 +29,7 @@ public class FileUploadCloudnaryController {
   }
 
   @PostMapping("/provider/delete")
-  public ResponseEntity<Map> postMethodName(@RequestParam("nameId") String nameId) {
+  public ResponseEntity<Map> postMethodName(@RequestBody String nameId) {
     Map dataDelete = fileUplodCloudnaryService.deleteImageProviderFile(nameId);
     return new ResponseEntity<>(dataDelete, HttpStatus.OK);
   }

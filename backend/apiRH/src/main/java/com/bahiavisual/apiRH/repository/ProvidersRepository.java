@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface ProvidersRepository extends JpaRepository<Providers, Long> {
     Optional<Providers> findByCpf(String cpf);
+    Optional <Providers> findByNameImageCloud(String nameImageCloud);
 }

@@ -1,21 +1,17 @@
 "use Client"
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { CgMathPlus } from "react-icons/cg";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Avatar, Input, Chip, Spinner } from "@nextui-org/react";
-import Webcam from "react-webcam";
-import { FaCamera, FaRegTrashAlt } from "react-icons/fa";
-import { IoIosSend } from "react-icons/io";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/react";
 import axiosApi from "@/services/axiosConfig";
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import WebcamComp from "../webcamComp";
+import useWebcamStore from "@/context/webcamStore";
 
 
 export default function ProvidersAddModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  const [urlImage, setUrlImage] = useState('')
-  const [publicId, setPublicId] = useState('')
   const [name, setName] = useState('')
   const [surname, setSurname] = useState('')
   const [fatherName, setFatherName] = useState('')
@@ -46,9 +42,13 @@ export default function ProvidersAddModal() {
   const [numberPhone2Valid, setNumberPhone2Valid] = useState(false)
 
   //Loading
-  const [stateDisableButton, setStateDisableButton] = useState(false)
-  const [loadingButton, setLoadingButton] = useState(false)
   const [loadingSubmit, setLoadingSubmit] = useState(false)
+
+  //context
+  const urlImage = useWebcamStore((state) => state.urlImage)
+  const nameImageCloud = useWebcamStore((state) => state.nameImageCloud)
+  const setUrlImage = useWebcamStore((state) => state.setUrlImage)
+  const setNameImageCloud = useWebcamStore((state) => state.setNameImageCloud)
 
   //Cadastrar
   const [stateDisableButtonCadastar, setStateDisableButtonCadastrar] = useState(true)
@@ -127,7 +127,7 @@ export default function ProvidersAddModal() {
     getUser()
     async function getUser() {
       try {
-        const { data } = await axios.get(`https://brasilapi.com.br/api/cep/v2/${cep}`);
+        const { data } = await axios.get(`https://brasilapi.com.br/api/cep/v1/${cep}`);
         setCity(data.city);
         setRoad(data.street);
         setNeighborhood(data.neighborhood);
@@ -150,41 +150,10 @@ export default function ProvidersAddModal() {
     }
   }
 
-  //webcam
-  const webcamRef = useRef(null);
-  const [imgSrc, setImgSrc] = useState<Blob | undefined>(undefined)
-  const [imgUrl, setImgUrl] = useState('')
-  const [uuidImage, setUuidImage] = useState('');
-
-  // Função para converter a string de dados URI em um objeto Blob
-  const dataURItoBlob = (dataURI: any) => {
-    const byteString = atob(dataURI.split(',')[1]);
-    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ab], { type: mimeString });
-  };
-
-  const capture = useCallback(() => {
-    const imageSrc = webcamRef.current.getScreenshot({ width: 854, height: 480 });
-    if (imageSrc) {
-      const blobData = dataURItoBlob(imageSrc);
-      setImgSrc(blobData);
-      const imageURL = URL.createObjectURL(blobData);
-      setImgUrl(imageURL)
-      const uuid = uuidv4();
-      setUuidImage(uuid);
-    }
-  }, [webcamRef, setImgSrc]);
-
-
   function submit() {
     axiosApi.post('/providers', {
       urlImage: urlImage,
-      nameImageCloud: publicId,
+      nameImageCloud: nameImageCloud,
       name: name,
       surname: surname,
       fatherName: fatherName,
@@ -212,9 +181,8 @@ export default function ProvidersAddModal() {
         setLoadingSubmit(true);
         if (response.status === 200) {
           setLoadingSubmit(false);
-          setImgSrc(undefined)
           setUrlImage('')
-          setPublicId('')
+          setNameImageCloud('')
           setName('')
           setSurname('')
           setFatherName('')
@@ -241,38 +209,6 @@ export default function ProvidersAddModal() {
         console.log(e);
       })
   }
-
-  function deleteImage() {
-    setImgSrc(undefined);
-  }
-
-  function sendImage(file: any, nameImage: string) {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('nameImage', nameImage)
-
-    const config = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-
-    axiosApi.post('/upload/provider', formData, config)
-      .then(function (response) {
-        setStateDisableButton(true);
-        setUrlImage(response.data.url)
-        setPublicId(response.data.public_id)
-        if (response.status === 200) {
-          toast.success("Imagem enviada com sucesso!")
-          setLoadingButton(false);
-        }
-      })
-      .catch(function (error) {
-        console.error(error);
-        toast.error("Erro ao enviar imagem!");
-      });
-  }
-
 
   useEffect(() => {
     buscaFunctions()
@@ -301,46 +237,7 @@ export default function ProvidersAddModal() {
                     theme="colored"
                     transition={Bounce}
                   />
-                  {imgSrc === undefined
-                    ?
-                    <div className="grid justify-items-center content-center space-y-1 relative">
-                      <Webcam
-                        className="rounded-full w-44 h-44 border-2 border-blue-600 flex justify-center items-center"
-                        screenshotFormat="image/png"
-                        ref={webcamRef}
-                        audio={false}
-                        screenshotQuality={1}
-                        disablePictureInPicture
-                      />
-                      <div className="w-1 h-1 bg-red-500 rounded-full absolute top-20"></div>
-                      <Button isIconOnly onPress={capture} color="primary" endContent={<FaCamera />}></Button>
-                    </div>
-                    :
-                    <div className="grid justify-items-center content-center space-y-1 relative">
-                      <Avatar className="w-28 h-28 text-large" src={imgUrl || ''} />
-                      <div className="flex justify-center items-center space-x-2">
-                        {stateDisableButton ?
-                          <Chip color="success">Imagem enviada</Chip>
-                          :
-                          <>
-                            <Button
-                              isIconOnly
-                              onPress={() => deleteImage()}
-                              color="danger"
-                              isDisabled={stateDisableButton}
-                            ><FaRegTrashAlt /></Button>
-                            <Button
-                              isIconOnly
-                              onPress={() => (sendImage(imgSrc, uuidImage), setLoadingButton(true))}
-                              isDisabled={stateDisableButton}
-                              isLoading={loadingButton}
-                              color="primary"
-                            ><IoIosSend /></Button>
-                          </>
-                        }
-                      </div>
-                    </div>
-                  }
+                  <WebcamComp />
                 </div>
                 <div className='flex space-x-2'>
                   <Input
