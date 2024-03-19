@@ -32,15 +32,15 @@ import { PrestadoresContext, ProviderData } from "@/context/providersContext";
 import Link from "next/link";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
+  Contratado: "success",
+  Demitido: "danger",
+  Cadastrado: "warning",
 };
 
 const statusOptions = [
-  { name: "Active", uid: "active" },
-  { name: "Paused", uid: "paused" },
-  { name: "Vacation", uid: "vacation" },
+  { name: "Contratado", uid: "Contratado" },
+  { name: "Cadastrado", uid: "Cadastrado" },
+  { name: "Demitido", uid: "Demitido" },
 ];
 
 const columns = [
@@ -136,8 +136,8 @@ export default function TableProviders() {
         );
       case "status":
         return (
-          <Chip className="capitalize" color={statusColorMap[allProviders.contratacaoDemissao.isContratado]} size="sm" variant="flat">
-            {allProviders.contratacaoDemissao.isContratado == null ? "null" : allProviders.contratacaoDemissao.isContratado}
+          <Chip className="capitalize" color={statusColorMap[allProviders.contratacaoDemissao.map((e)=>e.isContratado)]} size="sm" variant="flat">
+            {allProviders.contratacaoDemissao.map((e)=>e.isContratado)}
           </Chip>
         );
       case "actions":

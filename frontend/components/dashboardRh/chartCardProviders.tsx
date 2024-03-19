@@ -36,9 +36,6 @@ export default function ChartCardProviders() {
             console.log("passou aqui");
           });
           setData(dataNew);
-          console.log(allProviders);
-          console.log(data);
-          console.log(dataNew);
         }
 
       } catch (error) {

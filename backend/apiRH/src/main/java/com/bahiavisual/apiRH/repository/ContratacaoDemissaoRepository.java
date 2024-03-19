@@ -12,9 +12,9 @@ import java.util.List;
 
 @Repository
 public interface ContratacaoDemissaoRepository extends JpaRepository <ContratacaoDemissao, Long> {
-      Optional<ContratacaoDemissao> findByCpfAndIsContratado(String cpf, Boolean isContratado);
+      Optional<ContratacaoDemissao> findByCpfAndIsContratado(String cpf, String isContratado);
 
-      Optional<ContratacaoDemissao> findByCpfAndIsContratadoAndDemissaoDateIsNull(String cpf, Boolean isContratado);
+      Optional<ContratacaoDemissao> findByCpfAndIsContratadoAndDemissaoDateIsNull(String cpf, String isContratado);
 
       List<ContratacaoDemissao> findByCpf(String cpf);
 

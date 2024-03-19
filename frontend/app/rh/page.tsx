@@ -22,11 +22,11 @@ export default function Page() {
   }
 
   function verifyAtivosAndInativos() {
-    let contratados = allProviders ? allProviders.filter(item => item.contratacaoDemissao[0].isContratado === true) : 0;
+    let contratados = allProviders ? allProviders.filter(item => item.contratacaoDemissao[0].isContratado === "Contratado") : 0;
     let quatContrataos = contratados.length; 
     setAtivos(quatContrataos);
 
-    let inativos = allProviders? allProviders.filter(item => item.contratacaoDemissao[0].isContratado === null || item.contratacaoDemissao[0].isContratado === false) : 0;
+    let inativos = allProviders? allProviders.filter(item => item.contratacaoDemissao[0].isContratado === "Cadastratdo" || item.contratacaoDemissao[0].isContratado === "Demitido") : 0;
     let quatInativos = inativos.length; 
     setInativos(quatInativos);
   }

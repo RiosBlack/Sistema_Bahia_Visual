@@ -67,7 +67,7 @@ public class TimeSheetService {
         if (providers == null || providers.isEmpty()){
             return new ResponseEntity("Prestador não encontrado no banco de dados", HttpStatus.BAD_REQUEST);
         }
-        Optional<ContratacaoDemissao> prestadorContratado = contratacaoDemissaoRepository.findByCpfAndIsContratado(timeSheet.getCpf(), true);
+        Optional<ContratacaoDemissao> prestadorContratado = contratacaoDemissaoRepository.findByCpfAndIsContratado(timeSheet.getCpf(), "Contratado");
         if (!prestadorContratado.isPresent()){
             return new ResponseEntity<>("Erro ao lançar diária de trabalho pois o cpf não está contratado", HttpStatus.BAD_REQUEST);
         }

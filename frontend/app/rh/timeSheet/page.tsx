@@ -1,16 +1,59 @@
+"use client"
 import Sidebar from '@/components/dashboard/sidebar'
 import CardDash from '@/components/cardDash'
-import React from 'react'
+import { useEffect, useState } from 'react'
 import { MdAttachMoney } from "react-icons/md";
 import TimeSheetProvidersTable from '@/components/timeSheet/timeSheetProvidersTable';
 
-type Props = {}
+export default function page() {
+  const { getMonth } = require('date-fns');
+  const [month, setMonth] = useState('')
 
-export default function page({ }: Props) {
+  function getMonthNow() {
+    let date = new Date()
+    let monthNumber = getMonth(date)
+    const getMonthName = () => {
+      switch (monthNumber) {
+        case 0:
+          return "Janeiro";
+        case 1:
+          return "Fevereiro";
+        case 2:
+          return "Março";
+        case 3:
+          return "Abril";
+        case 4:
+          return "Maio";
+        case 5:
+          return "Junho";
+        case 6:
+          return "Julho";
+        case 7:
+          return "Agosto";
+        case 8:
+          return "Setembro";
+        case 9:
+          return "Outubro";
+        case 10:
+          return "Novembro";
+        case 11:
+          return "Dezembro";
+        default:
+          return "Mês inválido";
+      }
+    };
+    setMonth(getMonthName)
+  }
+
+  useEffect(() => {
+    getMonthNow()
+  }, [])
+  
+
   const list = [
     {
       valor: 'R$ 100.000,00',
-      title: 'Valor total da folha',
+      title: `Valor da folha do mês de ${month}`,
       ico: <MdAttachMoney />
     },
   ]

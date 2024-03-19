@@ -30,7 +30,7 @@ public class ContratacaoDemissao {
 
     private String motivoDemissao;
 
-    private Boolean isContratado;
+    private String isContratado;
 
     private String cpf;
 

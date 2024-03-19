@@ -24,7 +24,7 @@ interface ContratacaoDemissao {
   contratacaoDate: Date | null;
   demissaoDate: Date | null;
   motivoDemissao: string | null;
-  isContratado: boolean | null;
+  isContratado: string;
   cpf: string;
   diary: string | null;
   functionContratado: string | null;

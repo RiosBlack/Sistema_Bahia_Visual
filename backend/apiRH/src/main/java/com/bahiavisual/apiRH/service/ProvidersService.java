@@ -56,7 +56,7 @@ public class ProvidersService {
             providers.setFunctionsProviders(byFunctionProviders);
             ContratacaoDemissao contratacaoDemissao = new ContratacaoDemissao();
             List<ContratacaoDemissao> contratacaoDemissaoList = new ArrayList();
-            contratacaoDemissao.setIsContratado(null);
+            contratacaoDemissao.setIsContratado("Cadastrado");
             contratacaoDemissao.setCpf(providers.getCpf());
             contratacaoDemissaoList.add(contratacaoDemissao);
             providers.setContratacaoDemissao(contratacaoDemissaoList);
