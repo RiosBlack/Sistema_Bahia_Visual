@@ -2,6 +2,7 @@ package com.bahiavisual.apiRH.controller;
 
 import com.bahiavisual.apiRH.entity.TimeSheet;
 import com.bahiavisual.apiRH.entity.dto.TimeSheetDTO;
+import com.bahiavisual.apiRH.entity.dto.TimeSheetDateBetweenDTO;
 import com.bahiavisual.apiRH.entity.dto.TimeSheetDateDTO;
 import com.bahiavisual.apiRH.service.TimeSheetService;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -31,6 +32,9 @@ public class TimeSheetController {
 
     @GetMapping("/cpfDate")
     public ResponseEntity getCpfDate(@RequestBody TimeSheetDateDTO timeSheetDateDTO) { return timeSheetService.getTimeSheetCPFandDate(timeSheetDateDTO); }
+
+    @GetMapping("/cpfDateBetween")
+    public ResponseEntity getCpfDateBetween(@RequestBody TimeSheetDateBetweenDTO timeSheetDateBetweenDTO) { return timeSheetService.getTimeSheetCPFandDateBetween(timeSheetDateBetweenDTO); }
 
     @PostMapping()
     public ResponseEntity addTimeSheet(@RequestBody @Valid TimeSheetDTO timeSheetDTO){

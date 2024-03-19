@@ -5,6 +5,7 @@ import com.bahiavisual.apiRH.entity.ContratacaoDemissao;
 import com.bahiavisual.apiRH.entity.Providers;
 import com.bahiavisual.apiRH.entity.TimeSheet;
 import com.bahiavisual.apiRH.entity.dto.TimeSheetDTO;
+import com.bahiavisual.apiRH.entity.dto.TimeSheetDateBetweenDTO;
 import com.bahiavisual.apiRH.entity.dto.TimeSheetDateDTO;
 import com.bahiavisual.apiRH.repository.ContratacaoDemissaoRepository;
 import com.bahiavisual.apiRH.repository.ProvidersRepository;
@@ -59,6 +60,14 @@ public class TimeSheetService {
             return new ResponseEntity("Data ou Cpf inválidos", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity(dataDateAndCpf.get(), HttpStatus.OK);
+    }
+
+    public ResponseEntity getTimeSheetCPFandDateBetween(TimeSheetDateBetweenDTO timeSheetDateBetweenDTO) {
+        List<TimeSheet> dataDateBetween = repository.findByDateBetweenAndCpf(timeSheetDateBetweenDTO.getDateInitial(), timeSheetDateBetweenDTO.getDateFinal(), timeSheetDateBetweenDTO.getCpf());
+        if (dataDateBetween.isEmpty() || dataDateBetween == null){
+            return new ResponseEntity("Data ou Cpf Inválidos", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(dataDateBetween, HttpStatus.OK);
     }
 
     public ResponseEntity saveTimeSheet(TimeSheet timeSheet){
@@ -144,5 +153,6 @@ public class TimeSheetService {
         // Cria um novo objeto LocalTime com as horas e minutos calculados
         return LocalTime.of((int) hours, (int) minutes);
     }
+
 
 }
