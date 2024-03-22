@@ -17,5 +17,7 @@ public interface TimeSheetRepository extends JpaRepository<TimeSheet, Long> {
 
     List<TimeSheet> findByDateBetweenAndCpf(LocalDate dataInicial, LocalDate dataFinal, String cpf);
 
+    List<TimeSheet> findByDateBetween(LocalDate dataInicial, LocalDate dataFinal);
+
     List<TimeSheet> findByCpf(String cpf);
 }

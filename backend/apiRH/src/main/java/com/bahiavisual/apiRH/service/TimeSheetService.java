@@ -4,9 +4,7 @@ package com.bahiavisual.apiRH.service;
 import com.bahiavisual.apiRH.entity.ContratacaoDemissao;
 import com.bahiavisual.apiRH.entity.Providers;
 import com.bahiavisual.apiRH.entity.TimeSheet;
-import com.bahiavisual.apiRH.entity.dto.TimeSheetDTO;
-import com.bahiavisual.apiRH.entity.dto.TimeSheetDateBetweenDTO;
-import com.bahiavisual.apiRH.entity.dto.TimeSheetDateDTO;
+import com.bahiavisual.apiRH.entity.dto.*;
 import com.bahiavisual.apiRH.repository.ContratacaoDemissaoRepository;
 import com.bahiavisual.apiRH.repository.ProvidersRepository;
 import com.bahiavisual.apiRH.repository.TimeSheetRepository;
@@ -70,6 +68,17 @@ public class TimeSheetService {
         return new ResponseEntity(dataDateBetween, HttpStatus.OK);
     }
 
+    public ResponseEntity getTimeSheetValueDate(TimeSheetValueDateMonthDTO timeSheetValueDateMonthDTO) {
+        List<TimeSheet> dateValueSheet = repository.findByDateBetween(timeSheetValueDateMonthDTO.getDateInitial(), timeSheetValueDateMonthDTO.getDateFinal());
+        ObjectMapper mapper = new ObjectMapper();
+        TimeSheetLiteDTO timeSheetLiteDTO = mapper.convertValue(dateValueSheet, TimeSheetLiteDTO.class);
+        //estou tentando converter para só enviar o que preciso !!
+        if (dateValueSheet.isEmpty() || dateValueSheet == null){
+            return new ResponseEntity("Data Inválida", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(timeSheetLiteDTO, HttpStatus.OK);
+    }
+
     public ResponseEntity saveTimeSheet(TimeSheet timeSheet){
         //consultar o cpf para puxar o providers e setar
         Optional<Providers> providers = providersRepository.findByCpf(timeSheet.getCpf());
@@ -93,14 +102,22 @@ public class TimeSheetService {
 
         timeSheet.setFunctions(contratacaoPrestador.getFunctionContratado());
 
-        timeSheet.setDiaryDay(contratacaoPrestador.getDiary());
-
         LocalTime horasTrabalhadas = calcHoursDay(timeSheet.getEntradaTurnoDia(),timeSheet.getIntervaloTurnoDia(),timeSheet.getRetornoTurnoDia(),timeSheet.getSaidaTurnoDia(),
                 timeSheet.getEntradaTurnoNoite(),timeSheet.getIntervaloTurnoNoite(),timeSheet.getRetornoTurnoNoite(),timeSheet.getSaidaTurnoNoite());
 
-        System.out.println(horasTrabalhadas);
+        Double diary = contratacaoPrestador.getDiary();
 
         timeSheet.setHoursService(horasTrabalhadas);
+
+        int hour = horasTrabalhadas.getHour();
+
+        int minute = horasTrabalhadas.getMinute();
+
+        double diaryHour = (diary / 8) * hour;
+
+        double diaryMinute = ((diary / 8) /60) * minute;
+
+        timeSheet.setDiaryDay(diaryHour + diaryMinute);
 
         Optional<TimeSheet> diaria = repository.findByDateAndCpf(timeSheet.getDate(),timeSheet.getCpf());
         System.out.println(diaria);

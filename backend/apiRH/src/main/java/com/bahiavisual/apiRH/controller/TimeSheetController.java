@@ -4,6 +4,7 @@ import com.bahiavisual.apiRH.entity.TimeSheet;
 import com.bahiavisual.apiRH.entity.dto.TimeSheetDTO;
 import com.bahiavisual.apiRH.entity.dto.TimeSheetDateBetweenDTO;
 import com.bahiavisual.apiRH.entity.dto.TimeSheetDateDTO;
+import com.bahiavisual.apiRH.entity.dto.TimeSheetValueDateMonthDTO;
 import com.bahiavisual.apiRH.service.TimeSheetService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,6 +36,9 @@ public class TimeSheetController {
 
     @GetMapping("/cpfDateBetween")
     public ResponseEntity getCpfDateBetween(@RequestBody TimeSheetDateBetweenDTO timeSheetDateBetweenDTO) { return timeSheetService.getTimeSheetCPFandDateBetween(timeSheetDateBetweenDTO); }
+
+    @PostMapping("/dateMonthValue")
+    public ResponseEntity getValueDateMonth(@RequestBody TimeSheetValueDateMonthDTO timeSheetValueDateMonthDTO) { return timeSheetService.getTimeSheetValueDate(timeSheetValueDateMonthDTO); }
 
     @PostMapping()
     public ResponseEntity addTimeSheet(@RequestBody @Valid TimeSheetDTO timeSheetDTO){
