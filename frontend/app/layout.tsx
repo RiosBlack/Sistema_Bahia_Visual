@@ -44,7 +44,7 @@ export default function RootLayout({
 						<Navbar />
 						<main className="px-2 flex-grow w-full">
 							<PrestadoresProvider>
-								{children}
+									{children}
 							</PrestadoresProvider>
 						</main>
 						<footer className="w-full flex items-center justify-center py-2">

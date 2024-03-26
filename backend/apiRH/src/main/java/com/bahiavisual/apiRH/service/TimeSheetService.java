@@ -9,6 +9,7 @@ import com.bahiavisual.apiRH.repository.ContratacaoDemissaoRepository;
 import com.bahiavisual.apiRH.repository.ProvidersRepository;
 import com.bahiavisual.apiRH.repository.TimeSheetRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -70,13 +72,35 @@ public class TimeSheetService {
 
     public ResponseEntity getTimeSheetValueDate(TimeSheetValueDateMonthDTO timeSheetValueDateMonthDTO) {
         List<TimeSheet> dateValueSheet = repository.findByDateBetween(timeSheetValueDateMonthDTO.getDateInitial(), timeSheetValueDateMonthDTO.getDateFinal());
-        ObjectMapper mapper = new ObjectMapper();
-        TimeSheetLiteDTO timeSheetLiteDTO = mapper.convertValue(dateValueSheet, TimeSheetLiteDTO.class);
-        //estou tentando converter para só enviar o que preciso !!
+
         if (dateValueSheet.isEmpty() || dateValueSheet == null){
             return new ResponseEntity("Data Inválida", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(timeSheetLiteDTO, HttpStatus.OK);
+
+        List<TimeSheetTableValueDTO> groupedTimeSheetList = dateValueSheet.stream()
+                .collect(Collectors.groupingBy(TimeSheet::getCpf))
+                .entrySet()
+                .stream()
+                .map(entry -> {
+                    TimeSheetTableValueDTO dto = new TimeSheetTableValueDTO();
+                    dto.setCpf(entry.getKey());
+
+                    Double valueDailyTotal = entry.getValue().stream()
+                            .mapToDouble(TimeSheet::getDiaryDay)
+                            .sum();
+                    dto.setValueDailyTotal(valueDailyTotal);
+
+                    TimeSheet firstTimeSheet = entry.getValue().get(0);
+                    dto.setName(firstTimeSheet.getProviders().getName());
+                    dto.setSurname(firstTimeSheet.getProviders().getSurname());
+                    dto.setUrlImage(firstTimeSheet.getProviders().getUrlImage());
+                    dto.setNameImageCloud(firstTimeSheet.getProviders().getNameImageCloud());
+
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
+        return new ResponseEntity(groupedTimeSheetList, HttpStatus.OK);
     }
 
     public ResponseEntity saveTimeSheet(TimeSheet timeSheet){

@@ -26,11 +26,10 @@ import { capitalize } from "../../config/reminder/utils";
 import { FaEye } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { FaAngleDown } from "react-icons/fa6";
-import { PrestadoresContext, ProviderData } from "@/context/providersContext";
 import Link from "next/link";
-import useTimeSheetStore from "@/context/timeSheetStore";
+import axiosApi from "../../services/axiosConfig";
 import { lastDayOfMonth, format, startOfMonth } from "date-fns";
-import axiosApi from "@/services/axiosConfig";
+
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Contratado: "success",
@@ -46,15 +45,23 @@ const statusOptions = [
 
 const columns = [
   { name: "NOME", uid: "name" },
-  { name: "FUNÇÃO", uid: "functionProviders" },
-  { name: "STATUS", uid: "status" },
+  { name: "CPF", uid: "cpf" },
   { name: "AÇÕES", uid: "actions" },
   { name: "VALOR TOTAL", uid: "total"}
 ];
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "functionProviders", "status", "actions", "total"];
+export type TimeSheetTableValueDTO = {
+  urlImage: string | null;
+  nameImageCloud: string | null;
+  name: string,
+  surname: string,
+  cpf: string,
+  valueDailyTotal: number
+}
 
-type User = ProviderData;
+const INITIAL_VISIBLE_COLUMNS = ["name", "cpf", "status", "actions", "total"];
+
+type User = TimeSheetTableValueDTO;
 
 export default function TimeSheetProvidersTable() {
 
@@ -67,11 +74,7 @@ export default function TimeSheetProvidersTable() {
     direction: "ascending",
   });
 
-  const { allProviders } = useContext(PrestadoresContext);
-
-  //context
-  const setTimeSheetDateMonth = useTimeSheetStore((state)=>state.setTimeSheetDateMonth)
-  const timeSheetDateMonth = useTimeSheetStore((state)=>state.timeSheetDateMonth)
+  const [timeSheet, setTimeSheet] = useState<TimeSheetTableValueDTO[] | null>(null);
 
   const [page, setPage] = useState(1);
 
@@ -84,7 +87,7 @@ export default function TimeSheetProvidersTable() {
   }, [visibleColumns]);
 
   const filteredItems = useMemo(() => {
-    let filteredUsers: ProviderData[] = allProviders ? [...allProviders] : [];
+    let filteredUsers: TimeSheetTableValueDTO[] = timeSheet ? [...timeSheet] : [];
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((provider) =>
@@ -98,7 +101,7 @@ export default function TimeSheetProvidersTable() {
     }
 
     return filteredUsers;
-  }, [allProviders, filterValue, statusFilter, hasSearchFilter]);
+  }, [timeSheet, filterValue, statusFilter, hasSearchFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -110,70 +113,66 @@ export default function TimeSheetProvidersTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = useMemo(() => {
-    return [...items].sort((a: ProviderData, b: ProviderData) => {
-      const first = a[sortDescriptor.column as keyof ProviderData] as number;
-      const second = b[sortDescriptor.column as keyof ProviderData] as number;
+    return [...items].sort((a: TimeSheetTableValueDTO, b: TimeSheetTableValueDTO) => {
+      const first = a[sortDescriptor.column as keyof TimeSheetTableValueDTO] as number;
+      const second = b[sortDescriptor.column as keyof TimeSheetTableValueDTO] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  function getTimeSheetDateValue() {
+  async function getAllTimeSheet() {
     let lastDay = lastDayOfMonth(new Date(Date.now()))
     let lastDayFormat = format(lastDay, 'dd/MM/yyyy')
     let firstDayMonth = startOfMonth(new Date());
     let firstDayFormat = format(firstDayMonth, 'dd/MM/yyyy')
-    
-    axiosApi.post('/timeSheet/dateMonthValue', {
-      dateInitial: firstDayFormat,
-      dateFinal: lastDayFormat
-    }) .then(function (response) {
-      if (response.status === 200) {
-        setTimeSheetDateMonth(response.data);
-      }
-    })
-    .catch(function (e) {
-      console.log(e);
-    })
+    try {
+      const { data } = await axiosApi.post('/timeSheet/dateMonthValue', {
+        dateInitial: firstDayFormat,
+        dateFinal: lastDayFormat
+      })
+      setTimeSheet(data);
+    } catch (error) {
+      alert(error)
+    }
   }
 
   useEffect(() => {
-    getTimeSheetDateValue()
+    getAllTimeSheet()
   }, [])
   
-
-  const renderCell = useCallback((allProviders: User, columnKey: Key) => {
-    const cellValue = allProviders[columnKey as keyof User];
+  const renderCell = useCallback((timeSheet: User, columnKey: Key) => {
+    const cellValue = timeSheet[columnKey as keyof User];
     
   
     switch (columnKey) {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "lg", src: allProviders.urlImage}}
-            description={allProviders.cpf}
-            name={allProviders.name}
+            avatarProps={{ radius: "lg", src: timeSheet.urlImage}}
+            description={timeSheet.cpf}
+            name={timeSheet.name + ' ' + timeSheet.surname}
           >
-            {user.name}
+            {timeSheet.name}
           </User>
         );
-      case "functionProviders":
+      case "cpf":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{allProviders.functionsProviders?.functionProviders}</p>
+            <p className="text-bold text-small capitalize">{timeSheet.cpf}</p>
           </div>
         );
-      case "status":
+      case "cpf":
         return (
-          <Chip className="capitalize" color={statusColorMap[allProviders.contratacaoDemissao.map((e)=>e.isContratado)]} size="sm" variant="flat">
-            {allProviders.contratacaoDemissao.map((e)=>e.isContratado)}
+          <Chip className="capitalize" color={'primary'} size="sm" variant="flat">
+            {timeSheet.cpf}
           </Chip>
         );
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
-            <Link href={'http://localhost:3000/rh/profile/' + allProviders.cpf}>
+            <Link href={'http://localhost:3000/rh/profile/' + timeSheet.cpf}>
               <Tooltip content="Perfil">
                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                   <FaEye />
@@ -185,7 +184,7 @@ export default function TimeSheetProvidersTable() {
         case "total":
         return (
           <Chip className="capitalize" color={"primary"} size="sm" variant="flat">
-            {timeSheetDateMonth.filter((data)=> {data.providers.cpf})}
+            {'R$ ' + timeSheet.valueDailyTotal}
           </Chip>
         );
       default:
