@@ -1,22 +1,19 @@
 'use client'
 import Sidebar from '@/components/dashboard/sidebar'
 import CardDash from '@/components/cardDash'
-import { useContext, useEffect, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { MdCloudQueue } from "react-icons/md";
 import { MdCloudOff } from "react-icons/md";
 import { SlPaperClip } from "react-icons/sl";
 import { PrestadoresContext } from "@/context/providersContext";
 import ChartCardProviders from '@/components/dashboardRh/chartCardProviders'
-import { TimeSheetContext } from '@/context/timeSheetContext';
 
 export default function Page() {
   const [ativos, setAtivos] = useState(0);
   const [inativos, setInativos] = useState(0);
   const [cadastrados, setCadastrados] = useState(0);
 
-  const { allProviders, getAllProviders } = useContext(PrestadoresContext)
-  const { getAllTimeSheet } = useContext(TimeSheetContext)
- 
+  const { allProviders, getAllProviders } = useContext(PrestadoresContext) 
 
   function verifyCadastrados() {
     let quatCadastrados = allProviders ? allProviders.length : 0;
@@ -35,7 +32,6 @@ export default function Page() {
 
 
   useEffect(() => {
-    getAllTimeSheet()
     getAllProviders()
     if (allProviders) {
       verifyCadastrados()

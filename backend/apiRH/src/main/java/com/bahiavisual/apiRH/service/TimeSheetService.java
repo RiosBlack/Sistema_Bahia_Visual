@@ -74,7 +74,7 @@ public class TimeSheetService {
         List<TimeSheet> dateValueSheet = repository.findByDateBetween(timeSheetValueDateMonthDTO.getDateInitial(), timeSheetValueDateMonthDTO.getDateFinal());
 
         if (dateValueSheet.isEmpty() || dateValueSheet == null){
-            return new ResponseEntity("Data Inválida", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Sem informações no banco de dados", HttpStatus.BAD_REQUEST);
         }
 
         List<TimeSheetTableValueDTO> groupedTimeSheetList = dateValueSheet.stream()

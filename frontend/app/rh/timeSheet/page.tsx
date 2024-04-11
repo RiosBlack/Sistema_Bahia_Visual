@@ -4,10 +4,22 @@ import CardDash from '@/components/cardDash'
 import { useEffect, useState } from 'react'
 import { MdAttachMoney } from "react-icons/md";
 import TimeSheetProvidersTable from '@/components/timeSheet/timeSheetProvidersTable';
+import useTimeSheetStore from '@/context/timeSheetStore';
 
 export default function page() {
   const { getMonth } = require('date-fns');
   const [month, setMonth] = useState('')
+  const [value, setValue] =useState(0)
+
+
+  const timeSheet = useTimeSheetStore((state)=>state.timeSheet)
+
+function getValue() {
+  let values = timeSheet.map((data)=>data.valueDailyTotal)
+  let initialValue = 0;
+  let valueFin = values.reduce((acc, cur)=> acc + cur, initialValue)
+  setValue(valueFin)
+}
 
   function getMonthNow() {
     let date = new Date()
@@ -47,12 +59,13 @@ export default function page() {
 
   useEffect(() => {
     getMonthNow()
-  }, [])
+    getValue()
+  }, [timeSheet])
   
 
   const list = [
     {
-      valor: 'R$ 100.000,00',
+      valor: `R$ ${value}`,
       title: `Valor da folha do mês de ${month}`,
       ico: <MdAttachMoney />
     },

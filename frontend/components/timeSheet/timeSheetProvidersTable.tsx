@@ -1,5 +1,5 @@
 'use client'
-import { useContext, useMemo, useState, useCallback, Key, useEffect } from "react";
+import { useMemo, useState, useCallback, Key, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -20,7 +20,9 @@ import {
   ChipProps,
   SortDescriptor,
   Tooltip,
-  user
+  user,
+  Select,
+  SelectItem
 } from "@nextui-org/react";
 import { capitalize } from "../../config/reminder/utils";
 import { FaEye } from "react-icons/fa6";
@@ -28,8 +30,8 @@ import { IoSearch } from "react-icons/io5";
 import { FaAngleDown } from "react-icons/fa6";
 import Link from "next/link";
 import axiosApi from "../../services/axiosConfig";
-import { lastDayOfMonth, format, startOfMonth } from "date-fns";
-
+import { lastDayOfMonth, format, startOfMonth, getYear, getMonth } from "date-fns";
+import useTimeSheetStore from "@/context/timeSheetStore";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Contratado: "success",
@@ -43,11 +45,34 @@ const statusOptions = [
   { name: "Demitido", uid: "Demitido" },
 ];
 
+const statusOptionsMonth = [
+  { name: "Janeiro", uid: 0 },
+  { name: "Fevereiro", uid: 1 },
+  { name: "Março", uid: 2 },
+  { name: "Abril", uid: 3 },
+  { name: "Maio", uid: 4 },
+  { name: "Junho", uid: 5 },
+  { name: "Julho", uid: 6 },
+  { name: "Agosto", uid: 7 },
+  { name: "Setembro", uid: 8 },
+  { name: "Outubro", uid: 9 },
+  { name: "Novembro", uid: 10 },
+  { name: "Dezembro", uid: 11 },
+];
+
+const statusOptionsYear = [
+  { name: "2020", uid: 2020 },
+  { name: "2021", uid: 2021 },
+  { name: "2022", uid: 2022 },
+  { name: "2023", uid: 2023 },
+  { name: "2024", uid: 2024 },
+];
+
 const columns = [
   { name: "NOME", uid: "name" },
   { name: "CPF", uid: "cpf" },
   { name: "AÇÕES", uid: "actions" },
-  { name: "VALOR TOTAL", uid: "total"}
+  { name: "VALOR TOTAL", uid: "total" }
 ];
 
 export type TimeSheetTableValueDTO = {
@@ -74,7 +99,14 @@ export default function TimeSheetProvidersTable() {
     direction: "ascending",
   });
 
-  const [timeSheet, setTimeSheet] = useState<TimeSheetTableValueDTO[] | null>(null);
+  //context
+  const timeSheeetContext = useTimeSheetStore((state)=>state.setTimeSheet)
+  const timeSheet = useTimeSheetStore((state)=>state.timeSheet)
+
+  const [infoTimeSheet, setInfoTimeSheet] = useState('');
+
+  const [year, setYear] = useState(getYear(new Date()))
+  const [month, setMonth] = useState(getMonth(new Date()))
 
   const [page, setPage] = useState(1);
 
@@ -122,35 +154,39 @@ export default function TimeSheetProvidersTable() {
     });
   }, [sortDescriptor, items]);
 
-  async function getAllTimeSheet() {
-    let lastDay = lastDayOfMonth(new Date(Date.now()))
-    let lastDayFormat = format(lastDay, 'dd/MM/yyyy')
-    let firstDayMonth = startOfMonth(new Date());
+  async function getAllTimeSheet(year: number, month: number) {
+    let firstDayMonth = startOfMonth(new Date(year, month, 1));
     let firstDayFormat = format(firstDayMonth, 'dd/MM/yyyy')
+    let lastDay = lastDayOfMonth(new Date(firstDayMonth))
+    let lastDayFormat = format(lastDay, 'dd/MM/yyyy')
     try {
       const { data } = await axiosApi.post('/timeSheet/dateMonthValue', {
         dateInitial: firstDayFormat,
         dateFinal: lastDayFormat
       })
-      setTimeSheet(data);
+      timeSheeetContext(data);
+      setInfoTimeSheet('')
     } catch (error) {
-      alert(error)
+      console.log(error);
+      timeSheeetContext([])
+      setInfoTimeSheet('Sem informações referente a esse mês. Por favor selecionar outro mês.')
     }
   }
 
   useEffect(() => {
-    getAllTimeSheet()
+    getAllTimeSheet(year, month)
+    console.log(month);
+    
   }, [])
-  
+
   const renderCell = useCallback((timeSheet: User, columnKey: Key) => {
     const cellValue = timeSheet[columnKey as keyof User];
-    
-  
+
     switch (columnKey) {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "lg", src: timeSheet.urlImage}}
+            avatarProps={{ radius: "lg", src: timeSheet.urlImage }}
             description={timeSheet.cpf}
             name={timeSheet.name + ' ' + timeSheet.surname}
           >
@@ -181,7 +217,7 @@ export default function TimeSheetProvidersTable() {
             </Link>
           </div>
         );
-        case "total":
+      case "total":
         return (
           <Chip className="capitalize" color={"primary"} size="sm" variant="flat">
             {'R$ ' + timeSheet.valueDailyTotal}
@@ -225,7 +261,7 @@ export default function TimeSheetProvidersTable() {
 
   const topContent = useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col">
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
@@ -236,7 +272,33 @@ export default function TimeSheetProvidersTable() {
             onClear={() => onClear()}
             onValueChange={onSearchChange}
           />
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-center justify-center">
+            <Select
+              label="Selecione um mês"
+              className="w-40"
+              color="warning"
+              defaultSelectedKeys={[`${month}`]}
+              onChange={e => (setMonth(e.target.value), getAllTimeSheet(year, e.target.value))}
+            >
+              {statusOptionsMonth.map((data) => (
+                <SelectItem key={data.uid} value={data.uid}>
+                  {data.name}
+                </SelectItem>
+              ))}
+            </Select>
+            <Select
+              label="Selecione um ano"
+              className="w-40"
+              color="warning"
+              defaultSelectedKeys={[`${year}`]}
+              onChange={e => (setMonth(e.target.value), getAllTimeSheet(e.target.value, month))}
+            >
+              {statusOptionsYear.map((data) => (
+                <SelectItem key={data.uid} value={data.uid}>
+                  {data.name}
+                </SelectItem>
+              ))}
+            </Select>
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button endContent={<FaAngleDown className="text-small" />} variant="flat">
@@ -258,7 +320,6 @@ export default function TimeSheetProvidersTable() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -311,7 +372,7 @@ export default function TimeSheetProvidersTable() {
 
   return (
     <Table
-      aria-label="Example table with custom cells, pagination and sorting"
+      aria-label=""
       isHeaderSticky
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
@@ -334,7 +395,7 @@ export default function TimeSheetProvidersTable() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"Sem prestadores cadastrados"} items={sortedItems}>
+      <TableBody emptyContent={infoTimeSheet} items={sortedItems}>
         {(item) => (
           <TableRow key={item.cpf}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
