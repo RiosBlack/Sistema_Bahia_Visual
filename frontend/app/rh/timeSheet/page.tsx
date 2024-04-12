@@ -75,7 +75,7 @@ function getValue() {
     <div className='h-full w-full flex'>
       <Sidebar />
       <div className='px-3 space-y-2 w-full'>
-        <h1 className='text-xl font-bold'>Indicadores gerais</h1>
+        <h1 className='text-xl font-bold'>Folha de ponto</h1>
         <div className='flex justify-between w-full space-x-2'>
           {list.map((dado, index) => (
             <CardDash ico={dado.ico} title={dado.title} valor={dado.valor} key={index} />

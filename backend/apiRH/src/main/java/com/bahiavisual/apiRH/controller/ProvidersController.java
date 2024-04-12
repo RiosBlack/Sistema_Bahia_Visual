@@ -32,7 +32,10 @@ public class ProvidersController {
     public List<ProvidersDTO> getAllProviders(){ return providersService.getAll(); };
 
     @GetMapping("/{cpf}")
-    public Providers getProvider(@PathVariable("cpf") String cpf) { return providersService.getProvider(cpf); }
+    public Providers getProvider(@PathVariable("cpf") String cpf) { return providersService.getProvider(cpf); };
+
+    @GetMapping("/isContratado")
+    public List<ProvidersDTO> getAllProvidersIsContratado(){ return providersService.getProviderIsContratado(); };
 
     @PostMapping()
     public ResponseEntity addProviders(@RequestBody @Valid ProvidersDTO providersDTO) {

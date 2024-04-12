@@ -32,6 +32,7 @@ import Link from "next/link";
 import axiosApi from "../../services/axiosConfig";
 import { lastDayOfMonth, format, startOfMonth, getYear, getMonth } from "date-fns";
 import useTimeSheetStore from "@/context/timeSheetStore";
+import TimeSheetProvidersModal from "./timeSheetProvidersModal";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Contratado: "success",
@@ -175,8 +176,6 @@ export default function TimeSheetProvidersTable() {
 
   useEffect(() => {
     getAllTimeSheet(year, month)
-    console.log(month);
-    
   }, [])
 
   const renderCell = useCallback((timeSheet: User, columnKey: Key) => {
@@ -299,6 +298,7 @@ export default function TimeSheetProvidersTable() {
                 </SelectItem>
               ))}
             </Select>
+            <TimeSheetProvidersModal />
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button endContent={<FaAngleDown className="text-small" />} variant="flat">

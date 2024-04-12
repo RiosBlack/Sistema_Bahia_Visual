@@ -3,7 +3,6 @@ package com.bahiavisual.apiRH.service;
 import com.bahiavisual.apiRH.entity.ContratacaoDemissao;
 import com.bahiavisual.apiRH.entity.FunctionsProviders;
 import com.bahiavisual.apiRH.entity.Providers;
-import com.bahiavisual.apiRH.entity.dto.ContratacaoDemissaoDTO;
 import com.bahiavisual.apiRH.entity.dto.ProvidersDTO;
 import com.bahiavisual.apiRH.repository.FunctionsProvidersRepository;
 import com.bahiavisual.apiRH.repository.ProvidersRepository;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +41,17 @@ public class ProvidersService {
         }
         
 
+        return listProvidersDTO;
+    }
+
+    public List<ProvidersDTO> getProviderIsContratado() {
+        List<Providers> listProviders = providersRepository.findByContratacaoDemissaoIsContratado("Contratado");
+        List<ProvidersDTO> listProvidersDTO = new ArrayList<>();
+        for (Providers providers : listProviders) {
+            mapper.registerModule(new JavaTimeModule());
+            ProvidersDTO providersDTO = mapper.convertValue(providers, ProvidersDTO.class);
+            listProvidersDTO.add(providersDTO);
+        }
         return listProvidersDTO;
     }
 
@@ -107,4 +116,5 @@ public class ProvidersService {
         Providers providers = provider.get();
         return providers;
     }
+
 }
