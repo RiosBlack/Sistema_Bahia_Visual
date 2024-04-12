@@ -1,13 +1,14 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, User, Chip, Tooltip } from "@nextui-org/react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 import { PrestadoresContext } from "@/context/providersContext";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { LuPencilLine } from "react-icons/lu";
+import Link from "next/link";
 
 export default function TimeSheetProvidersModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const { allProviders } = useContext(PrestadoresContext)
+  const { allProvidersIsContratado, getAllProvidersIsContratado } = useContext(PrestadoresContext)
 
   const columns = [
     { name: "NOME", uid: "name" },
@@ -15,39 +16,45 @@ export default function TimeSheetProvidersModal() {
     { name: "AÇÕES", uid: "actions" },
   ];
 
-  type User = typeof allProviders[];
+  useEffect(() => {
+    getAllProvidersIsContratado()
+  }, [])
 
-  const renderCell = (allProviders: User, columnKey: React.Key) => {
+  type User = typeof allProvidersIsContratado[];
 
-    type Providers = typeof allProviders[0];
+  const renderCell = (allProvidersIsContratado: User, columnKey: React.Key) => {
 
-    const cellValue = allProviders[columnKey as keyof Providers];
+    type Providers = typeof allProvidersIsContratado[0];
+
+    const cellValue = allProvidersIsContratado[columnKey as keyof Providers];
 
     switch (columnKey) {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "lg", src: allProviders.urlImage}}
-            description={allProviders.cpf}
-            name={allProviders.name}
+            avatarProps={{ radius: "lg", src: allProvidersIsContratado.urlImage }}
+            description={allProvidersIsContratado.cpf}
+            name={allProvidersIsContratado.name}
           >
-            {allProviders.cpf}
+            {allProvidersIsContratado.cpf}
           </User>
         );
       case "functionsProviders":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">{allProviders.functionsProviders.functionProviders}</p>
+            <p className="text-bold text-sm capitalize">{allProvidersIsContratado.functionsProviders.functionProviders}</p>
           </div>
         );
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
-            <Tooltip content="Folha de pagamento">
-              <span className="text-lg cursor-pointer active:opacity-50">
-                <LuPencilLine />
-              </span>
-            </Tooltip>
+            <Link href={'http://localhost:3000/rh/timeSheet/' + allProvidersIsContratado.cpf}>
+              <Tooltip content="Folha de pagamento">
+                <span className="text-lg cursor-pointer active:opacity-50 hover:text-orange-500">
+                  <LuPencilLine />
+                </span>
+              </Tooltip>
+            </Link>
           </div>
         );
       default:
@@ -63,9 +70,9 @@ export default function TimeSheetProvidersModal() {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Prestadores</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">Prestadores Contratados</ModalHeader>
               <ModalBody>
-                <Table aria-label="Example static collection table">
+                <Table aria-label="Example static collection table" selectionMode="single">
                   <TableHeader columns={columns}>
                     {(column) => (
                       <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
@@ -73,7 +80,7 @@ export default function TimeSheetProvidersModal() {
                       </TableColumn>
                     )}
                   </TableHeader>
-                  <TableBody items={allProviders}>
+                  <TableBody items={allProvidersIsContratado}>
                     {(item) => (
                       <TableRow key={item.cpf}>
                         {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

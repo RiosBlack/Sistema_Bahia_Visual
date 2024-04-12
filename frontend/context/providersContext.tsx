@@ -49,9 +49,9 @@ export interface ProviderData {
 }
 
 export const PrestadoresContext = createContext<{
-  allProviders: ProviderData[] | null;
-  getAllProviders: () => Promise<void>;
-}>({ allProviders: null, getAllProviders: async () => { } });
+  allProviders: ProviderData[] | null;allProvidersIsContratado: ProviderData[] | null;
+  getAllProviders: () => Promise<void>; getAllProvidersIsContratado: () => Promise<void>;
+}>({ allProviders: null, allProvidersIsContratado: null, getAllProviders: async () => { }, getAllProvidersIsContratado: async () => { } });
 
 export default function PrestadoresProvider({
   children,
@@ -59,9 +59,11 @@ export default function PrestadoresProvider({
   children: React.ReactNode;
 }) {
   const [allProviders, setAllProviders] = useState<ProviderData[] | null>(null);
+  const [allProvidersIsContratado, setAllProvidersIsContratado] = useState<ProviderData[] | null>(null);
 
   useEffect(() => {
     getAllProviders();
+    getAllProvidersIsContratado()
   }, []);
 
   async function getAllProviders() {
@@ -73,8 +75,17 @@ export default function PrestadoresProvider({
     }
   }
 
+  async function getAllProvidersIsContratado() {
+    try {
+      const { data } = await axiosApi.get('/providers/isContratado')
+      setAllProvidersIsContratado(data)     
+    } catch (error) {
+      console.log("Erro ao buscar dados.", error);
+    }
+  }
+
   return (
-    <PrestadoresContext.Provider value={{ allProviders, getAllProviders }}>
+    <PrestadoresContext.Provider value={{ allProviders, allProvidersIsContratado, getAllProviders, getAllProvidersIsContratado }}>
       {children}
     </PrestadoresContext.Provider>
   );

@@ -1,16 +1,33 @@
 'use client'
 import Sidebar from '@/components/dashboard/sidebar'
-import React from 'react'
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Select, SelectItem, Chip, Tooltip, ChipProps, Button } from "@nextui-org/react";
+import React, { useEffect } from 'react'
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Select, SelectItem, Chip, Tooltip, ChipProps, Button, Input, User, user, Avatar } from "@nextui-org/react";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import SignatureModal from '@/components/timeSheet/signatureModal';
 import SignatureModalView from '@/components/timeSheet/signatureModalView';
+import { useParams } from 'next/navigation'
+import axiosApi from '@/services/axiosConfig';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Sim: "success",
   Não: "danger",
 };
 export default function Page({ params }: { params: { slug: string } }) {
+
+  const { slug } = useParams()
+
+  async function getProvider() {
+    try {
+      const { data } = await axiosApi.post(`/timeSheet/cpfDateBetween/${slug}`, {
+        dateInitial: "17/03/2024",
+        dateFinal: "19/03/2024",
+        cpf: "215.959.940-92"
+      });
+      console.log(data);
+    } catch (error) {
+      console.log("Erro ao buscar dados.", error);
+    }
+  }
 
   const rows = [
     {
@@ -117,14 +134,11 @@ export default function Page({ params }: { params: { slug: string } }) {
     },
   ];
 
-  const dataMes = [
-    {
-      label: "Janeiro/2024",
-      value: "Janeiro/2024",
-    },
-  ]
-
   type Rows = typeof rows[0];
+
+  useEffect(() => {
+    getProvider()
+  }, [])
 
 
   const renderCell = React.useCallback((rows: Rows, columnKey: React.Key) => {
@@ -150,7 +164,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 </Tooltip>
                 <Tooltip color="warning" content="Editar">
                   <Button isIconOnly variant="light" size="md" className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <FaRegPenToSquare  />
+                    <FaRegPenToSquare />
                   </Button>
                 </Tooltip>
               </div>
@@ -168,44 +182,62 @@ export default function Page({ params }: { params: { slug: string } }) {
   }, []);
 
   return (
-    <div className='h-full w-full flex'>
-      <div className='w-40'>
+    <div className='h-full w-full flex space-x-2'>
       <Sidebar />
-      </div>
-      <div className='px-3 space-y-2'>
+      <div className=' space-y-2'>
         <h1 className='text-xl font-bold'>Folha de ponto</h1>
-        <div className='flex justify-between'>
-          <div>
-            <h2>Nome: </h2>
-            <h2>Cpf: {params.slug}</h2>
+        <div className='flex justify-between space-x-2'>
+          <div className='flex w-full space-x-2'>
+            <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" className="w-28 h-28 text-tiny" />
+            <div className='grid content-start space-y-1 w-full'>
+              <Input
+                type='text'
+                isDisabled
+                defaultValue='Nome: João'
+              />
+              <Input
+                type='text'
+                isDisabled
+                defaultValue={`cpf: ${params.slug}`}
+              />
+            </div>
           </div>
-          <div>
-            <Select
-              items={dataMes}
-              label="Mês/Ano"
-              placeholder="Selecione o mês e ano de referência"
-              className="max-w-xs"
-            >
-              {(data) => <SelectItem key={data.value}>{data.label}</SelectItem>}
-            </Select>
+          <div className='grid space-y-1'>
+            <Input
+              isClearable
+              type="date"
+              label="Data Inicial"
+              defaultValue='01/10/1992'
+            />
+            <Input
+              isClearable
+              type="date"
+              label="Data Final"
+              defaultValue='01/10/1992'
+            />
+            <Button color="primary" variant='shadow'>
+              Atualizar
+            </Button>
           </div>
         </div>
-        <Table aria-label="Example table with custom cells">
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn key={column.key} align={column.label === "actions" ? "center" : "start"}>
-                {column.label}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody items={rows}>
-            {(item) => (
-              <TableRow key={item.cpf}>
-                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+        <div>
+          <Table>
+            <TableHeader columns={columns}>
+              {(column) => (
+                <TableColumn key={column.key} align={column.label === "actions" ? "center" : "start"}>
+                  {column.label}
+                </TableColumn>
+              )}
+            </TableHeader>
+            <TableBody items={rows}>
+              {(item) => (
+                <TableRow key={item.cpf}>
+                  {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   );

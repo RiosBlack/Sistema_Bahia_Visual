@@ -31,10 +31,10 @@ public class TimeSheetController {
     @GetMapping("/{cpf}")
     public ResponseEntity getCpfAll(@PathVariable("cpf") String cpf){ return timeSheetService.getTimeSheetCPFall(cpf); }
 
-    @GetMapping("/cpfDate")
+    @PostMapping("/cpfDate")
     public ResponseEntity getCpfDate(@RequestBody TimeSheetDateDTO timeSheetDateDTO) { return timeSheetService.getTimeSheetCPFandDate(timeSheetDateDTO); }
 
-    @GetMapping("/cpfDateBetween")
+    @PostMapping("/cpfDateBetween")
     public ResponseEntity getCpfDateBetween(@RequestBody TimeSheetDateBetweenDTO timeSheetDateBetweenDTO) { return timeSheetService.getTimeSheetCPFandDateBetween(timeSheetDateBetweenDTO); }
 
     @PostMapping("/dateMonthValue")
