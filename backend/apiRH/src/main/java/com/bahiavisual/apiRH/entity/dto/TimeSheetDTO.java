@@ -45,7 +45,7 @@ public class TimeSheetDTO {
 
     private String signedImg;
 
-    private LocalTime hoursService;
+    private Time hoursService;
 
     private Double diaryDay;
 }

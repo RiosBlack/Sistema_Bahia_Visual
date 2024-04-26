@@ -9,11 +9,10 @@ import { useParams } from 'next/navigation'
 import axiosApi from '@/services/axiosConfig';
 import useTimeSheetCpfStore from '@/context/timeSheetCpfStore';
 import TitleTimeSheet from '@/components/timeSheet/slug/titleTimeSheet';
-import { format } from 'date-fns';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Sim: "success",
-  Não: "danger",
+  null: "danger",
 };
 export default function Page({ params }: { params: { slug: string } }) {
 
@@ -41,56 +40,10 @@ export default function Page({ params }: { params: { slug: string } }) {
     }
   }
 
-  const rows = [
-    {
-      providers: "Joãozinho",
-      cpf: "000.000.000-00",
-      date: "25/10/1992",
-      day: "Segunda",
-      entradaTurnoDia: "8:00",
-      intervaloTurnoDia: "12:00",
-      retornoTurnoDia: "13:00",
-      saidaTurnoDia: "17:00",
-      entradaTurnoNoite: "17:00",
-      intervaloTurnoNoite: "18:00",
-      retornoTurnoNoite: "19:00",
-      saidaTurnoNoite: "20:00",
-      hoursService: "12:00",
-      diaryDay: "60,00",
-      hoursDiaryDay: "R$ 180,00",
-      status: "Não",
-    }
-  ];
-
-  for (let index = 0; index <= 30; index++) {
-    rows.push({
-      providers: "Joãozinho",
-      cpf: "000.000.000-00",
-      date: "25/10/1992",
-      day: "Segunda",
-      entradaTurnoDia: "8:00",
-      intervaloTurnoDia: "12:00",
-      retornoTurnoDia: "13:00",
-      saidaTurnoDia: "17:00",
-      entradaTurnoNoite: "17:00",
-      intervaloTurnoNoite: "18:00",
-      retornoTurnoNoite: "19:00",
-      saidaTurnoNoite: "20:00",
-      hoursService: "12:00",
-      diaryDay: "60,00",
-      hoursDiaryDay: "R$ 180,00",
-      status: "Sim",
-    })
-  }
-
   const columns = [
     {
       key: "date",
       label: "DATA",
-    },
-    {
-      key: "day",
-      label: "DIA",
     },
     {
       key: "entradaTurnoDia",
@@ -129,11 +82,11 @@ export default function Page({ params }: { params: { slug: string } }) {
       label: "TOTAL",
     },
     {
-      key: "diaryDay",
-      label: "DIARIA",
+      key: "diary",
+      label: "DIÁRIA CONT.",
     },
     {
-      key: "hoursDiaryDay",
+      key: "diaryDay",
       label: "VALOR/DIA",
     },
     {
@@ -146,7 +99,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     },
   ];
 
-  type Rows = typeof rows[0];
+  type Rows = typeof timeSheetStateCpf[0];
 
   useEffect(() => {
     getProvider()
@@ -157,16 +110,16 @@ export default function Page({ params }: { params: { slug: string } }) {
     const cellValue = rows[columnKey as keyof Rows];
 
     switch (columnKey) {
-      case "status":
+      case "isSigned":
         return (
-          <Chip className="capitalize" color={statusColorMap[rows.status]} size="sm" variant="flat">
-            {cellValue}
+          <Chip className="capitalize" color={statusColorMap[rows.isSigned]} size="sm" variant="flat">
+            {cellValue == null ? "Não" : cellValue.toString()}
           </Chip>
         );
       case "actions":
         return (
           <>
-            {rows.status === 'Não' ?
+            {rows.isSigned === null ?
               <div className="relative flex items-center gap-2">
 
                 <Tooltip content="Assinar" color='danger'>

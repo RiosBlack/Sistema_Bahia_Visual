@@ -128,7 +128,7 @@ public class TimeSheetService {
 
         Double diary = contratacaoPrestador.getDiary();
 
-        timeSheet.setHoursService(horasTrabalhadas);
+        timeSheet.setHoursService(Time.valueOf(horasTrabalhadas));
 
         int hour = horasTrabalhadas.getHour();
 
