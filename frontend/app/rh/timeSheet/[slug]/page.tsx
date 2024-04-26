@@ -1,12 +1,15 @@
 'use client'
 import Sidebar from '@/components/dashboard/sidebar'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Select, SelectItem, Chip, Tooltip, ChipProps, Button, Input, User, user, Avatar } from "@nextui-org/react";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import SignatureModal from '@/components/timeSheet/signatureModal';
 import SignatureModalView from '@/components/timeSheet/signatureModalView';
 import { useParams } from 'next/navigation'
 import axiosApi from '@/services/axiosConfig';
+import useTimeSheetCpfStore from '@/context/timeSheetCpfStore';
+import TitleTimeSheet from '@/components/timeSheet/slug/titleTimeSheet';
+import { format } from 'date-fns';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Sim: "success",
@@ -16,15 +19,24 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const { slug } = useParams()
 
+  const timeSheetCpf = useTimeSheetCpfStore((state) => state.setTimeSheetCpf)
+  const timeSheetStateCpf = useTimeSheetCpfStore((state) => state.timeSheetCpf)
+  const setIsLoading = useTimeSheetCpfStore((state) => state.setIsLoading)
+
   async function getProvider() {
     try {
-      const { data } = await axiosApi.post(`/timeSheet/cpfDateBetween/${slug}`, {
+      setIsLoading(true);
+      const { data } = await axiosApi.post('/timeSheet/cpfDateBetween', {
         dateInitial: "17/03/2024",
         dateFinal: "19/03/2024",
-        cpf: "215.959.940-92"
+        cpf: slug
       });
+      timeSheetCpf(data);
+      setIsLoading(false);
       console.log(data);
+      
     } catch (error) {
+      setIsLoading(false);
       console.log("Erro ao buscar dados.", error);
     }
   }
@@ -125,7 +137,7 @@ export default function Page({ params }: { params: { slug: string } }) {
       label: "VALOR/DIA",
     },
     {
-      key: "status",
+      key: "isSigned",
       label: "ASS",
     },
     {
@@ -188,19 +200,8 @@ export default function Page({ params }: { params: { slug: string } }) {
         <h1 className='text-xl font-bold'>Folha de ponto</h1>
         <div className='flex justify-between space-x-2'>
           <div className='flex w-full space-x-2'>
-            <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" className="w-28 h-28 text-tiny" />
-            <div className='grid content-start space-y-1 w-full'>
-              <Input
-                type='text'
-                isDisabled
-                defaultValue='Nome: João'
-              />
-              <Input
-                type='text'
-                isDisabled
-                defaultValue={`cpf: ${params.slug}`}
-              />
-            </div>
+            <Avatar src={timeSheetStateCpf[0]?.providers.urlImage} className="w-32 h-28 text-tiny" />
+            <TitleTimeSheet />
           </div>
           <div className='grid space-y-1'>
             <Input
@@ -229,7 +230,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 </TableColumn>
               )}
             </TableHeader>
-            <TableBody items={rows}>
+            <TableBody items={timeSheetStateCpf}>
               {(item) => (
                 <TableRow key={item.cpf}>
                   {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

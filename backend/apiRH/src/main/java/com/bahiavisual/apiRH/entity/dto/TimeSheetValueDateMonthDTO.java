@@ -17,9 +17,9 @@ import java.time.LocalDate;
 public class TimeSheetValueDateMonthDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate dateInitial;
+    private String dateInitial;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate dateFinal;
+    private String dateFinal;
 
 }

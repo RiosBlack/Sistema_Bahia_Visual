@@ -17,7 +17,7 @@ import java.time.LocalDate;
 public class TimeSheetDateDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate date;
+    private String date;
 
     private String cpf;
 

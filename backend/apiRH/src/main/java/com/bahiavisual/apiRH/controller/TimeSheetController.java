@@ -8,6 +8,7 @@ import com.bahiavisual.apiRH.entity.dto.TimeSheetValueDateMonthDTO;
 import com.bahiavisual.apiRH.service.TimeSheetService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,7 @@ public class TimeSheetController {
 
     @PostMapping()
     public ResponseEntity addTimeSheet(@RequestBody @Valid TimeSheetDTO timeSheetDTO){
+        mapper.registerModule(new JavaTimeModule());
         TimeSheet timeSheet = mapper.convertValue(timeSheetDTO, TimeSheet.class);
         if (timeSheet != null){
            return timeSheetService.saveTimeSheet(timeSheet);

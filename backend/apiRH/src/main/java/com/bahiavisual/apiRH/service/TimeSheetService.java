@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,12 +39,6 @@ public class TimeSheetService {
 
     public List<TimeSheet> getAll(){
         List<TimeSheet> listTimeSheet = repository.findAll();
-//        List<TimeSheetDTO> listTimeSheetDTO = new ArrayList<>();
-//        ObjectMapper mapper = new ObjectMapper();
-//        for (TimeSheet timeSheet : listTimeSheet) {
-//            TimeSheetDTO timeSheetDTO = mapper.convertValue(timeSheet, TimeSheetDTO.class);
-//            listTimeSheetDTO.add(timeSheetDTO);
-//        }
         return listTimeSheet;
     }
 
@@ -117,12 +112,14 @@ public class TimeSheetService {
 
         timeSheet.setProviders(providers.get());
 
-        ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
-        Instant instant = Instant.now();
-        ZonedDateTime zonedDateTime = instant.atZone(zoneId);
-        LocalDate dataNow = LocalDate.now();
-
-        timeSheet.setDate(dataNow);
+        if (timeSheet.getDate() == null){
+            ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
+            Instant instant = Instant.now();
+            ZonedDateTime zonedDateTime = instant.atZone(zoneId);
+            LocalDate dataNow = LocalDate.now();
+            String dataFormatada1 = dataNow.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+            timeSheet.setDate(dataFormatada1);
+        }
 
         timeSheet.setFunctions(contratacaoPrestador.getFunctionContratado());
 

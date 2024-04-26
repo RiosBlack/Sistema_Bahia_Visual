@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Getter
@@ -17,6 +18,8 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TimeSheetDTO {
+
+    private String date;
 
     private String cpf;
 

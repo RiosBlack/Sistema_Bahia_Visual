@@ -31,7 +31,7 @@ public class TimeSheet {
 
     private String functions;
 
-    private LocalDate date;
+    private String date;
 
     private Time entradaTurnoDia;
 
