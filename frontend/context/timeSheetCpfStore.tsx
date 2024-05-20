@@ -48,6 +48,11 @@ type ContratacaoDemissao = {
   functionContratado: string;
 }
 
+type FunctionsProviders = {
+  id: number;
+  functionProviders: string;
+}
+
 type Data = {
   id: number;
   providers: Provider;
@@ -69,21 +74,43 @@ type Data = {
   diaryDay: number;
 }
 
+type ProviderData = {
+  urlImage: string;
+  nameImageCloud: string;
+  name: string;
+  surname: string;
+  fatherName: string;
+  motherName: string;
+  birthday: number;
+  cpf: string;
+  rg: string;
+  naturalness: string;
+  numberPhone1: string;
+  numberPhone2: string | null;
+  andress: Address;
+  functionsProviders: FunctionsProviders;
+  contratacaoDemissao: ContratacaoDemissao[];
+}
+
 type State = {
   timeSheetCpf: Data[],
+  providerBackup: ProviderData[],
   isLoading: boolean
 }
 
 type Action = {
   setTimeSheetCpf: (timeSheetCpf: State['timeSheetCpf']) => void,
   setIsLoading: (isLoading: State['isLoading']) => void
+  setProviderBackup: (providerBackup: State['providerBackup']) => void
 }
 
 const useTimeSheetCpfStore = create<State & Action>((set) => ({
   timeSheetCpf: [],
+  providerBackup: [],
   isLoading: false,
   setIsLoading: ((isLoading) => set(() => ({ isLoading: isLoading }))),
   setTimeSheetCpf: (timeSheetCpf) => set(() => ({ timeSheetCpf: timeSheetCpf })),
+  setProviderBackup: (providerBackup) => set(()=>({ providerBackup: providerBackup }))
 }))
 
 export default useTimeSheetCpfStore

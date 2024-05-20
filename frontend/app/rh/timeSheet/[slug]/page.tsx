@@ -1,7 +1,7 @@
 'use client'
 import Sidebar from '@/components/dashboard/sidebar'
 import React, { useEffect, useState } from 'react'
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Select, SelectItem, Chip, Tooltip, ChipProps, Button, Input, User, user, Avatar } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Select, SelectItem, Chip, Tooltip, ChipProps, Button, Input, User, user, Avatar, Spinner } from "@nextui-org/react";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import SignatureModal from '@/components/timeSheet/signatureModal';
 import SignatureModalView from '@/components/timeSheet/signatureModalView';
@@ -21,6 +21,8 @@ export default function Page({ params }: { params: { slug: string } }) {
   const timeSheetCpf = useTimeSheetCpfStore((state) => state.setTimeSheetCpf)
   const timeSheetStateCpf = useTimeSheetCpfStore((state) => state.timeSheetCpf)
   const setIsLoading = useTimeSheetCpfStore((state) => state.setIsLoading)
+  const isLoading = useTimeSheetCpfStore((state) => state.isLoading);
+  const setProviderBackup = useTimeSheetCpfStore((state) => state.setProviderBackup);
 
   async function getProvider() {
     try {
@@ -33,10 +35,23 @@ export default function Page({ params }: { params: { slug: string } }) {
       timeSheetCpf(data);
       setIsLoading(false);
       console.log(data);
-      
     } catch (error) {
       setIsLoading(false);
-      console.log("Erro ao buscar dados.", error);
+      console.log("Erro ao buscar timesheet.", error);
+    }
+  }
+
+  async function getProviderBackup() {
+    try {
+      setIsLoading(true);
+      const { data } = await axiosApi.get(`/providers/${slug}`, {
+      });
+      setProviderBackup(data);
+      setIsLoading(false);
+      console.log(data);
+    } catch (error) {
+      setIsLoading(false);
+      console.log("Erro ao buscar prestador.", error);
     }
   }
 
@@ -103,6 +118,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   useEffect(() => {
     getProvider()
+    getProviderBackup()
   }, [])
 
 
@@ -121,7 +137,6 @@ export default function Page({ params }: { params: { slug: string } }) {
           <>
             {rows.isSigned === null ?
               <div className="relative flex items-center gap-2">
-
                 <Tooltip content="Assinar" color='danger'>
                   <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                     <SignatureModal />
@@ -149,31 +164,38 @@ export default function Page({ params }: { params: { slug: string } }) {
   return (
     <div className='h-full w-full flex space-x-2'>
       <Sidebar />
-      <div className=' space-y-2'>
+      <div className=' space-y-2 w-full px-2'>
         <h1 className='text-xl font-bold'>Folha de ponto</h1>
-        <div className='flex justify-between space-x-2'>
-          <div className='flex w-full space-x-2'>
-            <Avatar src={timeSheetStateCpf[0]?.providers.urlImage} className="w-32 h-28 text-tiny" />
-            <TitleTimeSheet />
+        {isLoading ? <Spinner label="Carregando" color="primary" labelColor="primary" /> : (
+          <div className='flex justify-between space-x-2'>
+            <div className='flex w-full space-x-2'>
+              <Avatar src={timeSheetStateCpf[0]?.providers.urlImage} className="w-32 h-28 text-tiny" />
+              <TitleTimeSheet />
+            </div>
+            <div className='grid space-y-1'>
+              <Input
+                isClearable
+                type="date"
+                label="Data Inicial"
+                defaultValue='01/10/1992'
+              />
+              <Input
+                isClearable
+                type="date"
+                label="Data Final"
+                defaultValue='01/10/1992'
+              />
+              <div className='flex space-x-1'>
+                <Button color="warning" variant='shadow'>
+                  Lançar diária
+                </Button>
+                <Button color="primary" variant='shadow'>
+                  Atualizar
+                </Button>
+              </div>
+            </div>
           </div>
-          <div className='grid space-y-1'>
-            <Input
-              isClearable
-              type="date"
-              label="Data Inicial"
-              defaultValue='01/10/1992'
-            />
-            <Input
-              isClearable
-              type="date"
-              label="Data Final"
-              defaultValue='01/10/1992'
-            />
-            <Button color="primary" variant='shadow'>
-              Atualizar
-            </Button>
-          </div>
-        </div>
+        )}
         <div>
           <Table>
             <TableHeader columns={columns}>

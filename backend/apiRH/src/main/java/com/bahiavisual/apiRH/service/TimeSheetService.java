@@ -60,7 +60,7 @@ public class TimeSheetService {
     public ResponseEntity getTimeSheetCPFandDateBetween(TimeSheetDateBetweenDTO timeSheetDateBetweenDTO) {
         List<TimeSheet> dataDateBetween = repository.findByDateBetweenAndCpf(timeSheetDateBetweenDTO.getDateInitial(), timeSheetDateBetweenDTO.getDateFinal(), timeSheetDateBetweenDTO.getCpf());
         if (dataDateBetween.isEmpty() || dataDateBetween == null){
-            return new ResponseEntity("Data ou Cpf Inválidos", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Sem dados no banco.", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity(dataDateBetween, HttpStatus.OK);
     }
