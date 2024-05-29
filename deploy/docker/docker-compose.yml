@@ -1,7 +1,7 @@
 version: '3.1'
 
 services:
-  db:
+  db_bvRH:
     image: mysql:latest
     restart: always
     environment:
@@ -14,9 +14,24 @@ services:
     expose:
       - '3306'
     volumes:
-      - type: bind
-        source: "/home/douglas/Documents/ArquivosDouglas/Docker/MySqlDbSistemaBahiaVisual"
-        target: /var/lib/mysql
+      - "/home/douglasbv/Documentos/Douglas Pessoal/BancoDeDados/Docker/MySqlDbRhBv:/var/lib/mysql"
+    networks:
+      - docker-network
+
+  db_comprasBV:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'comprasBV'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_ROOT_PASSWORD: 'admin123'
+    ports:
+      - '3307:3306'
+    expose:
+      - '3306'
+    volumes:
+      - "/home/douglasbv/Documentos/Douglas Pessoal/BancoDeDados/Docker/MySqlDbComprasBv:/var/lib/mysql"
     networks:
       - docker-network
 
