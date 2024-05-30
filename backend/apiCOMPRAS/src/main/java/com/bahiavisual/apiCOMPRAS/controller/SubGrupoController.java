@@ -29,4 +29,9 @@ public class SubGrupoController {
     public ResponseEntity deletarSubGrupo(@RequestBody SubgrupoProduto subgrupoProduto){
         return subGrupoService.deletarSubGrupo(subgrupoProduto);
     }
+
+    @PutMapping()
+    public ResponseEntity editarSubGrupo(@RequestBody SubgrupoProduto subgrupoProduto){
+        return subGrupoService.editarSubGrupo(subgrupoProduto);
+    }
 }

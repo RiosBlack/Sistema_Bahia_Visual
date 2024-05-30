@@ -41,4 +41,18 @@ public class GrupoService {
         grupoRepository.deleteById(dbNome.get().getId());
         return new ResponseEntity("GRUPO " + dbNome.get().getNome() +  " DELETADO COM SUCESSO", HttpStatus.OK);
     }
+
+    public ResponseEntity editarGrupo(GrupoProduto grupoProduto) {
+        if (grupoProduto.getNome().isEmpty()) {
+            return new ResponseEntity( "O NOME TEM DE ESTAR PREENCHIDO.",HttpStatus.NOT_FOUND);
+        }
+        Optional<GrupoProduto> dbNome = grupoRepository.findById(grupoProduto.getId());
+        if (dbNome.isEmpty()){
+            return new ResponseEntity("GRUPO NÃO CADASTRADO NO BANCO DE DADOS", HttpStatus.NOT_FOUND);
+        }
+        GrupoProduto dbGrupoProduto = dbNome.get();
+        dbGrupoProduto.setNome(grupoProduto.getNome());
+        grupoRepository.save(dbGrupoProduto);
+        return new ResponseEntity("O GRUPO " + dbNome.get().getNome() + " FOI ATUALIZADO COM SUCESSO.", HttpStatus.OK);
+    }
 }

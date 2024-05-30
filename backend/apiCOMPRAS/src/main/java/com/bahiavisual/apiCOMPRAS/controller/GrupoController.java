@@ -29,4 +29,9 @@ public class GrupoController {
     public ResponseEntity deletarGrupo(@RequestBody GrupoProduto grupoProduto){
         return grupoService.deletarGrupo(grupoProduto);
     }
+
+    @PutMapping()
+    public ResponseEntity editarGrupo(@RequestBody GrupoProduto grupoProduto){
+        return grupoService.editarGrupo(grupoProduto);
+    }
 }
