@@ -2,6 +2,7 @@ package com.bahiavisual.apiCOMPRAS.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +21,8 @@ public class Produtos {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @NotBlank
     private String nome;
 
-    @NotBlank
     private String unidadeMedida;
 
     private String codigoProduto;
@@ -32,13 +31,10 @@ public class Produtos {
 
     private String Observacoes;
 
-    @NotBlank
     @OneToOne
     private GrupoProduto grupoProduto;
 
-    @NotBlank
     private Double valorUnit;
 
-    @NotBlank
     private Integer quantidade;
 }
