@@ -22,7 +22,6 @@ public class SubgrupoProduto {
     @NotBlank
     private String nome;
 
-    @NotBlank
     @ManyToOne
     private GrupoProduto grupoProduto;
 }

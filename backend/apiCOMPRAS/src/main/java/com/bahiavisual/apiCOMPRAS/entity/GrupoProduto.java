@@ -20,6 +20,5 @@ public class GrupoProduto {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @NotBlank
     private String nome;
 }

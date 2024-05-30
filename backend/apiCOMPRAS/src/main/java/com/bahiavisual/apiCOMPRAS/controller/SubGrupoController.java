@@ -16,12 +16,17 @@ public class SubGrupoController {
     SubGrupoService subGrupoService;
 
     @GetMapping()
-    public List<SubgrupoProduto> getAll(){
+    public List<SubgrupoProduto> buscarTodos(){
         return subGrupoService.buscarTodosSubGrupos();
     }
 
     @PostMapping()
-    public ResponseEntity addSubGrupo(@RequestBody @Valid SubgrupoProduto subgrupoProduto){
+    public ResponseEntity adicionarSubGrupo(@RequestBody @Valid SubgrupoProduto subgrupoProduto){
         return subGrupoService.saveSubGrupo(subgrupoProduto);
+    }
+
+    @DeleteMapping()
+    public ResponseEntity deletarSubGrupo(@RequestBody SubgrupoProduto subgrupoProduto){
+        return subGrupoService.deletarSubGrupo(subgrupoProduto);
     }
 }

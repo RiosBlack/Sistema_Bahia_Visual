@@ -16,12 +16,17 @@ public class GrupoController {
     GrupoService grupoService;
 
     @GetMapping()
-    public List<GrupoProduto> getAll(){
+    public List<GrupoProduto> buscarTodos(){
         return grupoService.buscarTodosItens();
     }
 
     @PostMapping()
-    public ResponseEntity addItensGrupo(@RequestBody @Valid GrupoProduto grupoProduto){
+    public ResponseEntity adicionarGrupo(@RequestBody @Valid GrupoProduto grupoProduto){
         return grupoService.saveGrupo(grupoProduto);
+    }
+
+    @DeleteMapping()
+    public ResponseEntity deletarGrupo(@RequestBody GrupoProduto grupoProduto){
+        return grupoService.deletarGrupo(grupoProduto);
     }
 }

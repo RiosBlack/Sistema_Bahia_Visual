@@ -17,12 +17,12 @@ public class ProdutosController {
     ProdutosService produtosService;
 
     @GetMapping()
-    public List<Produtos> getAll(){
+    public List<Produtos> buscarTodos(){
         return produtosService.buscarTodosProdutos();
     }
 
     @PostMapping()
-    public ResponseEntity addProdutos(@RequestBody @Valid Produtos produtos){
+    public ResponseEntity adicionarProdutos(@RequestBody @Valid Produtos produtos){
         return produtosService.saveProduto(produtos);
     }
 }
