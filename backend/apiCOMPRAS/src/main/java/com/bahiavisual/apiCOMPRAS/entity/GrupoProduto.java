@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,4 +22,7 @@ public class GrupoProduto {
     private UUID id;
 
     private String nome;
+
+    @OneToMany(mappedBy = "grupoProduto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SubgrupoProduto> subgrupoProdutos = new ArrayList<>();
 }

@@ -31,7 +31,7 @@ public class Produtos {
 
     private String Observacoes;
 
-    @OneToOne
+    @ManyToOne
     private GrupoProduto grupoProduto;
 
     private Double valorUnit;

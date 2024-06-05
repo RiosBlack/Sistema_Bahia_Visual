@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/Produtos")
@@ -26,4 +27,13 @@ public class ProdutosController {
         return produtosService.saveProduto(produtos);
     }
 
+    @PutMapping()
+    public ResponseEntity editarProdutos(@RequestBody @Valid Produtos produtos){
+        return produtosService.editarProduto(produtos);
+    }
+
+    @DeleteMapping()
+    public ResponseEntity deletarProduto(@RequestBody Produtos produtos){
+        return produtosService.deletarProduto(produtos);
+    }
 }
