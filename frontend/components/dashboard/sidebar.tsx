@@ -11,17 +11,17 @@ export default function Sidebar({ }: Props) {
     {
       key: "dashRh",
       label: "DashBoard RH",
-      href: '/rh'
+      href: '/system/rh'
     },
     {
       key: "timeSheet",
       label: "Folha de ponto",
-      href: '/rh/timeSheet'
+      href: '/system/rh/timeSheet'
     },
     {
       key: "providers",
       label: "Prestadores",
-      href: '/rh/providers'
+      href: '/system/rh/providers'
     },
   ];
 

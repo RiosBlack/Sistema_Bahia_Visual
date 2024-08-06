@@ -9,6 +9,7 @@ import { useParams } from 'next/navigation'
 import axiosApi from '@/services/axiosConfig';
 import useTimeSheetCpfStore from '@/context/timeSheetCpfStore';
 import TitleTimeSheet from '@/components/timeSheet/slug/titleTimeSheet';
+import ButtonLancarDiaria from '@/components/timeSheet/buttonLancarDiaria';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Sim: "success",
@@ -186,9 +187,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 defaultValue='01/10/1992'
               />
               <div className='flex space-x-1'>
-                <Button color="warning" variant='shadow'>
-                  Lançar diária
-                </Button>
+                <ButtonLancarDiaria />
                 <Button color="primary" variant='shadow'>
                   Atualizar
                 </Button>

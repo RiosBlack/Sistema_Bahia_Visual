@@ -48,7 +48,7 @@ export default function TimeSheetProvidersModal() {
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
-            <Link href={'http://localhost:3000/rh/timeSheet/' + allProvidersIsContratado.cpf}>
+            <Link href={'http://localhost:3000/system/rh/timeSheet/' + allProvidersIsContratado.cpf}>
               <Tooltip content="Folha de pagamento">
                 <span className="text-lg cursor-pointer active:opacity-50 hover:text-orange-500">
                   <LuPencilLine />
