@@ -1,17 +1,13 @@
 package com.bahiavisual.apiRH.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-
-import com.bahiavisual.apiRH.entity.dto.ContratacaoDemissaoDTO;
 
 @Getter
 @Setter
@@ -38,16 +34,9 @@ public class ContratacaoDemissao {
 
     private String functionContratado;
 
-    public ContratacaoDemissaoDTO toMapper() {
-        ContratacaoDemissaoDTO contratacaoDemissaoDto = new  ContratacaoDemissaoDTO();
-        contratacaoDemissaoDto.setContratacaoDate(this.contratacaoDate);
-        contratacaoDemissaoDto.setDemissaoDate(this.demissaoDate);
-        contratacaoDemissaoDto.setMotivoDemissao(this.motivoDemissao);
-        contratacaoDemissaoDto.setIsContratado(this.isContratado);
-        contratacaoDemissaoDto.setCpf(this.cpf);
-        contratacaoDemissaoDto.setDiary(this.diary);
-        contratacaoDemissaoDto.setFunctionContratado(this.functionContratado);
-        return contratacaoDemissaoDto;
-    }
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "provider_id", referencedColumnName = "id")
+    private Providers providers;
 
 }

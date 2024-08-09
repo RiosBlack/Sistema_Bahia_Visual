@@ -1,11 +1,9 @@
 package com.bahiavisual.apiRH.repository;
 
 import com.bahiavisual.apiRH.entity.ContratacaoDemissao;
-import com.bahiavisual.apiRH.entity.TimeSheet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.List;
 

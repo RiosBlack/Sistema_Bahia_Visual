@@ -14,7 +14,7 @@ services:
     expose:
       - '3306'
     volumes:
-      - "/home/douglasbv/Documentos/Douglas Pessoal/BancoDeDados/Docker/MySqlDbRhBv:/var/lib/mysql"
+      - "C:/Users/User1/Documents/Douglas/Algoritimos/BancoDeDados/Docker/MySqlDbRhBv:/var/lib/mysql"
     networks:
       - docker-network
 
@@ -31,7 +31,7 @@ services:
     expose:
       - '3306'
     volumes:
-      - "/home/douglasbv/Documentos/Douglas Pessoal/BancoDeDados/Docker/MySqlDbComprasBv:/var/lib/mysql"
+      - "C:/Users/User1/Documents/Douglas/Algoritimos/BancoDeDados/Docker/MySqlDbComprasBv:/var/lib/mysql"
     networks:
       - docker-network
 

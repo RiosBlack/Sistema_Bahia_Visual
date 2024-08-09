@@ -1,15 +1,12 @@
 package com.bahiavisual.apiRH.service;
 
 import com.bahiavisual.apiRH.entity.Andress;
-import com.bahiavisual.apiRH.entity.dto.AndressDTO;
 import com.bahiavisual.apiRH.repository.AndressRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,16 +16,9 @@ public class AndressService {
     @Autowired
     AndressRepository repository;
 
-    public List<AndressDTO> getAll(){
+    public List<Andress> getAll(){
         List<Andress> andressList = repository.findAll();
-        List<AndressDTO> andressDTOList = new ArrayList<>();
-        ObjectMapper mapper = new ObjectMapper();
-
-        for (Andress andress : andressList){
-           AndressDTO andressDTO = mapper.convertValue(andress, AndressDTO.class);
-            andressDTOList.add(andressDTO);
-        }
-        return andressDTOList;
+        return andressList;
     }
 
     public ResponseEntity saveAndress(Andress andress){

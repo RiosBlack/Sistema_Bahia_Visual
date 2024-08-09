@@ -1,14 +1,10 @@
 package com.bahiavisual.apiRH.controller;
 
 import com.bahiavisual.apiRH.entity.TimeSheet;
-import com.bahiavisual.apiRH.entity.dto.TimeSheetDTO;
 import com.bahiavisual.apiRH.entity.dto.TimeSheetDateBetweenDTO;
 import com.bahiavisual.apiRH.entity.dto.TimeSheetDateDTO;
 import com.bahiavisual.apiRH.entity.dto.TimeSheetValueDateMonthDTO;
 import com.bahiavisual.apiRH.service.TimeSheetService;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +19,6 @@ import java.util.List;
 public class TimeSheetController {
     @Autowired
     TimeSheetService timeSheetService;
-
-    ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping()
     public List<TimeSheet> getAllTimeSheet(){ return timeSheetService.getAll(); }
@@ -42,9 +36,7 @@ public class TimeSheetController {
     public ResponseEntity getValueDateMonth(@RequestBody TimeSheetValueDateMonthDTO timeSheetValueDateMonthDTO) { return timeSheetService.getTimeSheetValueDate(timeSheetValueDateMonthDTO); }
 
     @PostMapping()
-    public ResponseEntity addTimeSheet(@RequestBody @Valid TimeSheetDTO timeSheetDTO){
-        mapper.registerModule(new JavaTimeModule());
-        TimeSheet timeSheet = mapper.convertValue(timeSheetDTO, TimeSheet.class);
+    public ResponseEntity addTimeSheet(@RequestBody @Valid TimeSheet timeSheet){
         if (timeSheet != null){
            return timeSheetService.saveTimeSheet(timeSheet);
         }

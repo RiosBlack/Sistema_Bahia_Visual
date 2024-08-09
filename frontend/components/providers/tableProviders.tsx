@@ -30,6 +30,9 @@ import { FaAngleDown } from "react-icons/fa6";
 import ProvidersAddModal from "./providersAddModal";
 import { PrestadoresContext, ProviderData } from "@/context/providersContext";
 import Link from "next/link";
+import ContratarProviders from "./contratarProviders";
+import DemitirProviders from "./demitirProviders";
+
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Contratado: "success",
@@ -48,9 +51,10 @@ const columns = [
   { name: "FUNÇÃO", uid: "functionProviders" },
   { name: "STATUS", uid: "status" },
   { name: "AÇÕES", uid: "actions" },
+  { name: "CONTRATAR", uid: "contratar" }
 ];
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "functionProviders", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "functionProviders", "status", "actions", "contratar"];
 
 type User = ProviderData;
 
@@ -115,15 +119,15 @@ export default function TableProviders() {
 
   const renderCell = useCallback((allProviders: User, columnKey: Key) => {
     const cellValue = allProviders[columnKey as keyof User];
-    
-  
+
+
     switch (columnKey) {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "lg", src: allProviders.urlImage}}
+            avatarProps={{ radius: "lg", src: allProviders.urlImage }}
             description={allProviders.cpf}
-            name={allProviders.name}
+            name={allProviders.name + " " + allProviders.surname}
           >
             {user.name}
           </User>
@@ -135,15 +139,19 @@ export default function TableProviders() {
           </div>
         );
       case "status":
+        const lastContratacaoDemissao = allProviders.contratacaoDemissao[allProviders.contratacaoDemissao.length - 1];
+        {
+          console.log(lastContratacaoDemissao);
+        }
         return (
-          <Chip className="capitalize" color={statusColorMap[allProviders.contratacaoDemissao.map((e)=>e.isContratado)]} size="sm" variant="flat">
-            {allProviders.contratacaoDemissao.map((e)=>e.isContratado)}
+          <Chip className="capitalize" color={statusColorMap[lastContratacaoDemissao.isContratado]} size="sm" variant="flat">
+            {lastContratacaoDemissao.isContratado}
           </Chip>
         );
       case "actions":
         return (
-          <div className="relative flex items-center gap-2">
-            <Link href={'http://localhost:3000/rh/profile/' + allProviders.cpf}>
+          <div className="relative flex items-center justify-center gap-2">
+            <Link href={'http://localhost:3000/system/rh/profile/' + allProviders.cpf}>
               <Tooltip content="Perfil">
                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                   <FaEye />
@@ -152,6 +160,29 @@ export default function TableProviders() {
             </Link>
           </div>
         );
+      case "contratar":
+        return (
+          <>
+            {allProviders.contratacaoDemissao[allProviders.contratacaoDemissao.length - 1].isContratado === 'contratado' ? (
+              <DemitirProviders
+                contratacaoDate={allProviders.contratacaoDemissao[allProviders.contratacaoDemissao.length - 1].contratacaoDate}
+                cpf={allProviders.cpf}
+                diary={allProviders.contratacaoDemissao[allProviders.contratacaoDemissao.length - 1].diary}
+                functionContratado={allProviders.contratacaoDemissao[allProviders.contratacaoDemissao.length - 1].functionContratado}
+                imagem={allProviders.urlImage}
+                nome={allProviders.name + " " + allProviders.surname}
+                key={allProviders.cpf}
+              />
+            ) : (
+              <ContratarProviders
+                nome={allProviders.name + " " + allProviders.surname}
+                cpf={allProviders.cpf}
+                imagem={allProviders.urlImage}
+                key={allProviders.cpf}
+              />
+            )}
+          </>
+        )
       default:
         return cellValue;
     }
@@ -202,48 +233,6 @@ export default function TableProviders() {
             onValueChange={onSearchChange}
           />
           <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button endContent={<FaAngleDown className="text-small" />} variant="flat">
-                  Status
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button endContent={<FaAngleDown className="text-small" />} variant="flat">
-                  Colunas
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
-              >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
             <ProvidersAddModal />
           </div>
         </div>

@@ -59,15 +59,15 @@ public class Providers {
 
     private Timestamp modifiedDate;
 
-    @JoinColumn(name="ID_ANDRESS)", referencedColumnName = "id")
+    @JoinColumn(name = "ID_ANDRESS)", referencedColumnName = "id")
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Andress andress;
 
-    @JoinColumn(name="ID_FUNCTIONS)", referencedColumnName = "id")
+    @JoinColumn(name = "ID_FUNCTIONS)", referencedColumnName = "id")
     @OneToOne
     private FunctionsProviders functionsProviders;
 
-    @JoinColumn(name="ID_CONTRATACAO", referencedColumnName = "id")
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "providers", cascade = CascadeType.ALL)
     private List<ContratacaoDemissao> contratacaoDemissao;
+
 }

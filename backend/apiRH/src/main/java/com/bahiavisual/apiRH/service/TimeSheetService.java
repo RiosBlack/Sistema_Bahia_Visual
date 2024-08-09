@@ -8,18 +8,14 @@ import com.bahiavisual.apiRH.entity.dto.*;
 import com.bahiavisual.apiRH.repository.ContratacaoDemissaoRepository;
 import com.bahiavisual.apiRH.repository.ProvidersRepository;
 import com.bahiavisual.apiRH.repository.TimeSheetRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;

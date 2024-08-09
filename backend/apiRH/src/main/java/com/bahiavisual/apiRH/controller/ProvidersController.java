@@ -2,7 +2,6 @@ package com.bahiavisual.apiRH.controller;
 
 import com.bahiavisual.apiRH.entity.Andress;
 import com.bahiavisual.apiRH.entity.Providers;
-import com.bahiavisual.apiRH.entity.dto.ProvidersDTO;
 import com.bahiavisual.apiRH.service.ProvidersService;
 import com.bahiavisual.apiRH.validator.AndressValidator;
 import com.bahiavisual.apiRH.validator.ProvidersValidator;
@@ -10,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,21 +24,17 @@ public class ProvidersController {
 
     AndressValidator validatorAndress = new AndressValidator();
 
-    ObjectMapper mapper = new ObjectMapper();
-
     @GetMapping()
-    public List<ProvidersDTO> getAllProviders(){ return providersService.getAll(); };
+    public List<Providers> getAllProviders(){ return providersService.getAll(); };
 
     @GetMapping("/{cpf}")
     public Providers getProvider(@PathVariable("cpf") String cpf) { return providersService.getProvider(cpf); };
 
     @GetMapping("/isContratado")
-    public List<ProvidersDTO> getAllProvidersIsContratado(){ return providersService.getProviderIsContratado(); };
+    public List<Providers> getAllProvidersIsContratado(){ return providersService.getProviderIsContratado(); };
 
     @PostMapping()
-    public ResponseEntity addProviders(@RequestBody @Valid ProvidersDTO providersDTO) {
-        Providers providers = mapper.convertValue(providersDTO, Providers.class);
-        //validando campos e datas
+    public ResponseEntity addProviders(@RequestBody @Valid Providers providers) {
         Providers provaidersSemSpaces = validator.spacesRemove(providers);
         Andress andress = provaidersSemSpaces.getAndress();
         Andress andressSemSpaces = validatorAndress.spacesRemove(andress);
@@ -54,8 +48,7 @@ public class ProvidersController {
     };
 
     @PutMapping()
-    public ResponseEntity editProvider(@RequestBody @Valid ProvidersDTO providersDTO){
-        Providers providers = mapper.convertValue(providersDTO, Providers.class);
+    public ResponseEntity editProvider(@RequestBody @Valid Providers providers){
         Providers ProveidersSemSpaces = validator.spacesRemove(providers);
         Boolean respInput = validator.validInputs(ProveidersSemSpaces);
         Boolean respDate = validator.validDate(ProveidersSemSpaces.getBirthday());
