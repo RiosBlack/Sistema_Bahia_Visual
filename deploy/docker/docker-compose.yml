@@ -1,9 +1,8 @@
-version: '3'
+version: '3.1'
 
 services:
-  services:
-  db:
-    image: mysql
+  db_bvRH:
+    image: mysql:latest
     restart: always
     environment:
       MYSQL_DATABASE: 'bvRH'
@@ -15,16 +14,24 @@ services:
     expose:
       - '3306'
     volumes:
-      - '*/docker/db/data:/var/lib/mysql'
+      - "C:/Users/User1/Documents/Douglas/Algoritimos/BancoDeDados/Docker/MySqlDbRhBv:/var/lib/mysql"
+    networks:
+      - docker-network
 
-  adminer:
-    container_name: adminer
-    image: adminer
+  db_comprasBV:
+    image: mysql:latest
     restart: always
+    environment:
+      MYSQL_DATABASE: 'comprasBV'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_ROOT_PASSWORD: 'admin123'
     ports:
-      - "16543:80"
-    depends_on:
-      - db
+      - '3307:3306'
+    expose:
+      - '3306'
+    volumes:
+      - "C:/Users/User1/Documents/Douglas/Algoritimos/BancoDeDados/Docker/MySqlDbComprasBv:/var/lib/mysql"
     networks:
       - docker-network
 

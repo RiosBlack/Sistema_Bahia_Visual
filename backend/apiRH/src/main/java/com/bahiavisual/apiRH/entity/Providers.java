@@ -2,8 +2,10 @@ package com.bahiavisual.apiRH.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.sql.Date;
@@ -22,7 +24,9 @@ public class Providers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String image;
+    private String urlImage;
+
+    private String nameImageCloud;
 
     @NotBlank
     private String name;
@@ -55,7 +59,15 @@ public class Providers {
 
     private Timestamp modifiedDate;
 
-    @JoinColumn(name="ID_PROVIDERS)", referencedColumnName = "id")
-    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ID_ANDRESS)", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Andress andress;
+
+    @JoinColumn(name = "ID_FUNCTIONS)", referencedColumnName = "id")
+    @OneToOne
+    private FunctionsProviders functionsProviders;
+
+    @OneToMany(mappedBy = "providers", cascade = CascadeType.ALL)
+    private List<ContratacaoDemissao> contratacaoDemissao;
+
 }

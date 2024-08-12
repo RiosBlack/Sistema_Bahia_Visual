@@ -1,14 +1,13 @@
 package com.bahiavisual.apiRH.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -21,24 +20,23 @@ public class ContratacaoDemissao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
-    private Timestamp contratacaoDate;
+    private LocalDate contratacaoDate;
 
-    private Timestamp demissaoDate;
+    private LocalDate demissaoDate;
 
     private String motivoDemissao;
 
-    @NotEmpty
-    private Boolean isContratado;
+    private String isContratado;
 
-    @NotBlank
-    @OneToOne
-    @JoinColumn(name = "PROVIDERS_ID")
+    private String cpf;
+
+    private Double diary;
+
+    private String functionContratado;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "provider_id", referencedColumnName = "id")
     private Providers providers;
 
-
-    @NotBlank
-    @OneToOne
-    @JoinColumn(name = "FUNCTIONS_ID")
-    private  FunctionsProviders functions;
 }

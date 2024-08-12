@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface FunctionsProvidersRepository extends JpaRepository <FunctionsProviders, Long> {
-    Optional<FunctionsProviders> findByFunctionProviders(String functionProviders);
+    FunctionsProviders findByFunctionProviders(String functionProviders);
 
 }

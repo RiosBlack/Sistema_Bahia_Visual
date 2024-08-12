@@ -1,8 +1,9 @@
 package com.bahiavisual.apiRH.controller;
 
+import com.bahiavisual.apiRH.entity.Andress;
 import com.bahiavisual.apiRH.entity.Providers;
-import com.bahiavisual.apiRH.entity.dto.ProvidersDTO;
 import com.bahiavisual.apiRH.service.ProvidersService;
+import com.bahiavisual.apiRH.validator.AndressValidator;
 import com.bahiavisual.apiRH.validator.ProvidersValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
@@ -21,29 +22,33 @@ public class ProvidersController {
 
     ProvidersValidator validator = new ProvidersValidator();
 
-    ObjectMapper mapper = new ObjectMapper();
+    AndressValidator validatorAndress = new AndressValidator();
 
     @GetMapping()
-    public List<ProvidersDTO> getAllProviders(){
-        return providersService.getAll();
-    };
+    public List<Providers> getAllProviders(){ return providersService.getAll(); };
+
+    @GetMapping("/{cpf}")
+    public Providers getProvider(@PathVariable("cpf") String cpf) { return providersService.getProvider(cpf); };
+
+    @GetMapping("/isContratado")
+    public List<Providers> getAllProvidersIsContratado(){ return providersService.getProviderIsContratado(); };
 
     @PostMapping()
-    public ResponseEntity addProviders(@RequestBody @Valid ProvidersDTO providersDTO) {
-        Providers providers = mapper.convertValue(providersDTO, Providers.class);
-        //validando campos e datas
-        Providers ProveidersSemSpaces = validator.spacesRemove(providers);
-        Boolean respInput = validator.validInputs(ProveidersSemSpaces);
-        Boolean respDate = validator.validDate(ProveidersSemSpaces.getBirthday());
+    public ResponseEntity addProviders(@RequestBody @Valid Providers providers) {
+        Providers provaidersSemSpaces = validator.spacesRemove(providers);
+        Andress andress = provaidersSemSpaces.getAndress();
+        Andress andressSemSpaces = validatorAndress.spacesRemove(andress);
+        provaidersSemSpaces.setAndress(andressSemSpaces);
+        Boolean respInput = validator.validInputs(provaidersSemSpaces);
+        Boolean respDate = validator.validDate(provaidersSemSpaces.getBirthday());
         if (respInput == true && respDate == true){
-            return providersService.saveProvider(ProveidersSemSpaces);
+            return providersService.saveProvider(provaidersSemSpaces);
         }
         return new ResponseEntity("Erro ao salvar o prestador", HttpStatus.BAD_REQUEST);
     };
 
     @PutMapping()
-    public ResponseEntity editProvider(@RequestBody @Valid ProvidersDTO providersDTO){
-        Providers providers = mapper.convertValue(providersDTO, Providers.class);
+    public ResponseEntity editProvider(@RequestBody @Valid Providers providers){
         Providers ProveidersSemSpaces = validator.spacesRemove(providers);
         Boolean respInput = validator.validInputs(ProveidersSemSpaces);
         Boolean respDate = validator.validDate(ProveidersSemSpaces.getBirthday());
