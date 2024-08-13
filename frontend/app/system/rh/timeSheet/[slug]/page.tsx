@@ -30,7 +30,7 @@ export default function Page({ params }: { params: { slug: string } }) {
       setIsLoading(true);
       const { data } = await axiosApi.post('/timeSheet/cpfDateBetween', {
         dateInitial: "17/03/2024",
-        dateFinal: "19/03/2024",
+        dateFinal: "13/08/2024",
         cpf: slug
       });
       timeSheetCpf(data);
@@ -127,6 +127,10 @@ export default function Page({ params }: { params: { slug: string } }) {
     const cellValue = rows[columnKey as keyof Rows];
 
     switch (columnKey) {
+      case "diaryDay":
+        return (
+          <>{cellValue + ",00"}</>
+        );
       case "isSigned":
         return (
           <Chip className="capitalize" color={statusColorMap[rows.isSigned]} size="sm" variant="flat">
@@ -187,7 +191,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 defaultValue='01/10/1992'
               />
               <div className='flex space-x-1'>
-                <ButtonLancarDiaria />
+                <ButtonLancarDiaria cpf={slug} />
                 <Button color="primary" variant='shadow'>
                   Atualizar
                 </Button>

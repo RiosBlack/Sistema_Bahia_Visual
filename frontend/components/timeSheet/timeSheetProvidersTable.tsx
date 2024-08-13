@@ -101,8 +101,8 @@ export default function TimeSheetProvidersTable() {
   });
 
   //context
-  const timeSheeetContext = useTimeSheetStore((state)=>state.setTimeSheet)
-  const timeSheet = useTimeSheetStore((state)=>state.timeSheet)
+  const timeSheeetContext = useTimeSheetStore((state) => state.setTimeSheet)
+  const timeSheet = useTimeSheetStore((state) => state.timeSheet)
 
   const [infoTimeSheet, setInfoTimeSheet] = useState('');
 
@@ -207,7 +207,7 @@ export default function TimeSheetProvidersTable() {
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
-            <Link href={'http://localhost:3000/rh/profile/' + timeSheet.cpf}>
+            <Link href={'http://localhost:3000/system/rh/profile/' + timeSheet.cpf}>
               <Tooltip content="Perfil">
                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                   <FaEye />

@@ -31,7 +31,7 @@ export default function Sidebar({ }: Props) {
         <Button
           variant="light"
         >
-          <Link href={'/dashboard'} className='flex hover:text-orange-500'>
+          <Link href={'/system/dashboard'} className='flex hover:text-orange-500'>
             <MdSpaceDashboard className='text-orange-500 text-2xl mr-2' />
             <p className='text-base text-center'>DashBoard</p>
           </Link>
