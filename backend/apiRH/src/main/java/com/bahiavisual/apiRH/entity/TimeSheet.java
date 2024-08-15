@@ -1,5 +1,6 @@
 package com.bahiavisual.apiRH.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,7 +32,8 @@ public class TimeSheet {
 
     private String functions;
 
-    private String date;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate date;
 
     private Time entradaTurnoDia;
 

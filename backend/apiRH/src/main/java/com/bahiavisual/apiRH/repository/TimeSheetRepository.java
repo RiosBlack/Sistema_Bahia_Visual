@@ -13,11 +13,11 @@ import java.util.Optional;
 
 @Repository
 public interface TimeSheetRepository extends JpaRepository<TimeSheet, Long> {
-    Optional<TimeSheet> findByDateAndCpf(String date, String cpf);
+    Optional<TimeSheet> findByDateAndCpf(LocalDate date, String cpf);
 
-    List<TimeSheet> findByDateBetweenAndCpf(String dataInicial, String dataFinal, String cpf);
+    List<TimeSheet> findByDateBetweenAndCpf(LocalDate dataInicial, LocalDate dataFinal, String cpf);
 
-    List<TimeSheet> findByDateBetween(String dataInicial, String dataFinal);
+    List<TimeSheet> findByDateBetween(LocalDate dataInicial, LocalDate dataFinal);
 
     List<TimeSheet> findByCpf(String cpf);
 }

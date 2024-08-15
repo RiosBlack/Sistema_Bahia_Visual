@@ -16,10 +16,10 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TimeSheetValueDateMonthDTO {
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private String dateInitial;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dateInitial;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private String dateFinal;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dateFinal;
 
 }

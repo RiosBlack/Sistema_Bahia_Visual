@@ -109,12 +109,7 @@ public class TimeSheetService {
         timeSheet.setProviders(providers.get());
 
         if (timeSheet.getDate() == null){
-            ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
-            Instant instant = Instant.now();
-            ZonedDateTime zonedDateTime = instant.atZone(zoneId);
-            LocalDate dataNow = LocalDate.now();
-            String dataFormatada1 = dataNow.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-            timeSheet.setDate(dataFormatada1);
+            return new ResponseEntity("Adicione a data e envie novamente", HttpStatus.BAD_REQUEST);
         }
 
         timeSheet.setFunctions(contratacaoPrestador.getFunctionContratado());
