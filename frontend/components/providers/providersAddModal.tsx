@@ -1,5 +1,5 @@
 "use Client"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { CgMathPlus } from "react-icons/cg";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/react";
@@ -8,7 +8,7 @@ import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import WebcamComp from "../webcamComp";
 import useWebcamStore from "@/context/webcamStore";
-
+import { PrestadoresContext } from "@/context/providersContext";
 
 export default function ProvidersAddModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -32,6 +32,7 @@ export default function ProvidersAddModal() {
   const [functions, setFunctions] = useState([])
   const [functionsPostValue, setFunctionsPostValue] = useState('');
   const { v4: uuidv4 } = require('uuid');
+  const { getAllProviders } = useContext(PrestadoresContext);
 
   //validations
   const [nameValid, setNameValid] = useState(false)
@@ -202,6 +203,7 @@ export default function ProvidersAddModal() {
           setState('')
           setFunctionsPostValue('');
           toast.success("Prestador cadastrado com sucesso!");
+          getAllProviders()
         }
       })
       .catch(function (e) {
