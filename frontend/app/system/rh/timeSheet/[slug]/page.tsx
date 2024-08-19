@@ -10,6 +10,7 @@ import axiosApi from '@/services/axiosConfig';
 import useTimeSheetCpfStore from '@/context/timeSheetCpfStore';
 import TitleTimeSheet from '@/components/timeSheet/slug/titleTimeSheet';
 import ButtonLancarDiaria from '@/components/timeSheet/buttonLancarDiaria';
+import { startOfMonth, endOfMonth, format } from 'date-fns';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Sim: "success",
@@ -21,16 +22,26 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const timeSheetCpf = useTimeSheetCpfStore((state) => state.setTimeSheetCpf)
   const timeSheetStateCpf = useTimeSheetCpfStore((state) => state.timeSheetCpf)
+  const providerBackup = useTimeSheetCpfStore((state) => state.providerBackup)
   const setIsLoading = useTimeSheetCpfStore((state) => state.setIsLoading)
   const isLoading = useTimeSheetCpfStore((state) => state.isLoading);
   const setProviderBackup = useTimeSheetCpfStore((state) => state.setProviderBackup);
+  const [firstDay, setFirstDay] = useState('')
+  const [lastDay, setLastDay] = useState('')
 
   async function getProvider() {
+    let date = new Date()
+    let firstDay = startOfMonth(date)
+    let lastDay = endOfMonth(date)
+    let formattedFirstDaty = format(firstDay, 'dd/MM/yyyy')
+    let formattedLastDay = format(lastDay, 'dd/MM/yyyy')
+    setFirstDay(formattedFirstDaty);
+    setLastDay(formattedLastDay)
     try {
       setIsLoading(true);
       const { data } = await axiosApi.post('/timeSheet/cpfDateBetween', {
-        dateInitial: "17/03/2024",
-        dateFinal: "13/08/2024",
+        dateInitial: formattedFirstDaty,
+        dateFinal: formattedLastDay,
         cpf: slug
       });
       timeSheetCpf(data);
@@ -174,7 +185,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         {isLoading ? <Spinner label="Carregando" color="primary" labelColor="primary" /> : (
           <div className='flex justify-between space-x-2'>
             <div className='flex w-full space-x-2'>
-              <Avatar src={timeSheetStateCpf[0]?.providers.urlImage} className="w-32 h-28 text-tiny" />
+              <Avatar src={providerBackup[0]?.nameImageCloud} className="w-32 h-28 text-tiny" />
               <TitleTimeSheet />
             </div>
             <div className='grid space-y-1'>

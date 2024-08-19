@@ -27,17 +27,17 @@ public class ContratacaoDemissaoController {
 
     @PostMapping()
     public ResponseEntity addContratacao(@RequestBody @Valid ContratacaoDemissao contratacaoDemissao){
-        return new ResponseEntity(service.saveContratacaoDemissao(contratacaoDemissao), HttpStatus.BAD_REQUEST);
+        return service.saveContratacaoDemissao(contratacaoDemissao);
     };
 
     @PutMapping()
     public ResponseEntity editContratacao(@RequestBody @Valid ContratacaoDemissao contratacaoDemissao){
         //ContratacaoDemissao contratacaoDemissao = mapper.convertValue(contratacaoDemissaoDTO, ContratacaoDemissao.class);
-        return new ResponseEntity(service.editContratacao(contratacaoDemissao), HttpStatus.BAD_REQUEST);
+        return service.editContratacao(contratacaoDemissao);
     }
 
     @PutMapping("/dismiss")
     public ResponseEntity demicao(@RequestBody @Valid ContratacaoDemissao contratacaoDemissao){
-        return new ResponseEntity(service.demissao(contratacaoDemissao), HttpStatus.BAD_REQUEST);
+        return service.demissao(contratacaoDemissao);
     }
 }

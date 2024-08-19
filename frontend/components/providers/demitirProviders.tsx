@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Link, User, Input, Textarea } from "@nextui-org/react";
 import { BsXOctagon } from "react-icons/bs";
 import axiosApi from "@/services/axiosConfig";
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { PrestadoresContext } from "@/context/providersContext";
 
 type Props = {
   nome: string,
@@ -20,7 +21,7 @@ export default function DemitirProviders({ nome, cpf, imagem, contratacaoDate, d
   const [stateDisableButtonContratar, setStateDisableButtonContratar] = useState(true)
   const [loadingSubmit, setLoadingSubmit] = useState(false)
 
-
+  const { getAllProviders } = useContext(PrestadoresContext);
 
   function validCampos() {
     if (motivo != '') {
@@ -31,7 +32,7 @@ export default function DemitirProviders({ nome, cpf, imagem, contratacaoDate, d
   }
 
   function demitir() {
-    axiosApi.post('addAndDismiss/dismiss', {
+    axiosApi.put('addAndDismiss/dismiss', {
       motivoDemissao: motivo,
       cpf: cpf
     })
@@ -39,8 +40,9 @@ export default function DemitirProviders({ nome, cpf, imagem, contratacaoDate, d
         setLoadingSubmit(true);
         if (response.status === 200) {
           setLoadingSubmit(false);
+          getAllProviders()
           setMotivo('')
-          toast.success("Prestador contratado com sucesso!");
+          toast.success("Prestador demitido com sucesso!");
         }
       })
       .catch(function (e) {
@@ -48,10 +50,6 @@ export default function DemitirProviders({ nome, cpf, imagem, contratacaoDate, d
         console.log(e.response.data);
       })
   }
-
-  useEffect(() => {
-    validCampos()
-  }, [])
 
   return (
     <>
@@ -122,9 +120,8 @@ export default function DemitirProviders({ nome, cpf, imagem, contratacaoDate, d
                   label="Motivo da demissão"
                   placeholder="Escreva o motivo que o prestador está sendo demitido"
                   className="max-w-xs"
-                  onChange={e => setMotivo(e.target.value)}
+                  onChange={e => (setMotivo(e.target.value), validCampos())}
                 />
-                <p>{motivo}</p>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" onPress={demitir} isDisabled={stateDisableButtonContratar} isLoading={loadingSubmit}>

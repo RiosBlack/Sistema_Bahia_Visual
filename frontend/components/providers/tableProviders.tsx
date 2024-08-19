@@ -59,7 +59,6 @@ const INITIAL_VISIBLE_COLUMNS = ["name", "functionProviders", "status", "actions
 type User = ProviderData;
 
 export default function TableProviders() {
-
   const [filterValue, setFilterValue] = useState("");
   const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
@@ -163,7 +162,7 @@ export default function TableProviders() {
       case "contratar":
         return (
           <>
-            {allProviders.contratacaoDemissao[allProviders.contratacaoDemissao.length - 1].isContratado === 'contratado' ? (
+            {allProviders.contratacaoDemissao[allProviders.contratacaoDemissao.length - 1].isContratado === 'Contratado' ? (
               <DemitirProviders
                 contratacaoDate={allProviders.contratacaoDemissao[allProviders.contratacaoDemissao.length - 1].contratacaoDate}
                 cpf={allProviders.cpf}

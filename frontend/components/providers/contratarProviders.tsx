@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Link, User, Select, SelectItem, Input } from "@nextui-org/react";
 import { CiCircleCheck } from "react-icons/ci";
 import axiosApi from "@/services/axiosConfig";
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { PrestadoresContext } from "@/context/providersContext";
 
 type Props = {
   nome: string,
@@ -18,6 +19,8 @@ export default function ContratarProviders({ nome, cpf, imagem }: Props) {
   const [diary, setDiary] = useState('');
   const [stateDisableButtonContratar, setStateDisableButtonContratar] = useState(true)
   const [loadingSubmit, setLoadingSubmit] = useState(false)
+
+  const { getAllProviders } = useContext(PrestadoresContext);
 
   function buscaFunctions() {
     getFunction()
@@ -51,6 +54,7 @@ export default function ContratarProviders({ nome, cpf, imagem }: Props) {
           setLoadingSubmit(false);
           setFunctionsPostValue('')
           setDiary('')
+          getAllProviders()
           toast.success("Prestador contratado com sucesso!");
         }
       })

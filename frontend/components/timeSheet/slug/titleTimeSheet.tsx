@@ -10,12 +10,12 @@ export default function TitleTimeSheet() {
   //timeSheetStateCpf[0]?.providers.name === undefined - ver qual a melhor maneira de fazer para quando não tiver dados aparecer as informações
   //dos prestadores
   // tem de colocar botão para lançar diária.
-//não está funcionando o nome do provider backup
+  //não está funcionando o nome do provider backup
   useEffect(() => {
     console.log(providerBackup);
-    
+
   }, [])
-  
+
   return (
     <div className='grid content-start space-y-1 w-full'>
       {timeSheetStateCpf[0]?.providers.name === undefined ? <></> : <></>}
@@ -60,7 +60,7 @@ export default function TitleTimeSheet() {
         ) : <Input
           type='text'
           isDisabled
-          defaultValue={`Cpf: ${providerBackup.cpf}`}
+          defaultValue={`Cpf: ${providerBackup[0]?.cpf}`}
         />
       }
     </div>
