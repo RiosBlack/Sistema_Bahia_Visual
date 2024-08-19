@@ -50,11 +50,12 @@ const columns = [
   { name: "NOME", uid: "name" },
   { name: "FUNÇÃO", uid: "functionProviders" },
   { name: "STATUS", uid: "status" },
+  { name: "DIÁRIA", uid: "diary" },
   { name: "AÇÕES", uid: "actions" },
   { name: "CONTRATAR", uid: "contratar" }
 ];
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "functionProviders", "status", "actions", "contratar"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "functionProviders", "status", "diary", "actions", "contratar"];
 
 type User = ProviderData;
 
@@ -138,14 +139,16 @@ export default function TableProviders() {
           </div>
         );
       case "status":
-        const lastContratacaoDemissao = allProviders.contratacaoDemissao[allProviders.contratacaoDemissao.length - 1];
-        {
-          console.log(lastContratacaoDemissao);
-        }
+        let lastContratacaoDemissao = allProviders.contratacaoDemissao[allProviders.contratacaoDemissao.length - 1];
         return (
           <Chip className="capitalize" color={statusColorMap[lastContratacaoDemissao.isContratado]} size="sm" variant="flat">
             {lastContratacaoDemissao.isContratado}
           </Chip>
+        );
+      case "diary":
+        let lastContratacaoDemissao2 = allProviders.contratacaoDemissao[allProviders.contratacaoDemissao.length - 1];
+        return (
+          <p>{"R$ " + lastContratacaoDemissao2.diary + " "}</p>
         );
       case "actions":
         return (
