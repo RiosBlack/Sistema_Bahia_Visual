@@ -1,7 +1,7 @@
 'use client'
 import Sidebar from '@/components/dashboard/sidebar'
 import React, { useEffect, useState } from 'react'
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Select, SelectItem, Chip, Tooltip, ChipProps, Button, Input, User, user, Avatar, Spinner } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, ChipProps, Button, Input, Avatar, Spinner, DatePicker } from "@nextui-org/react";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import SignatureModal from '@/components/timeSheet/signatureModal';
 import SignatureModalView from '@/components/timeSheet/signatureModalView';
@@ -11,6 +11,8 @@ import useTimeSheetCpfStore from '@/context/timeSheetCpfStore';
 import TitleTimeSheet from '@/components/timeSheet/slug/titleTimeSheet';
 import ButtonLancarDiaria from '@/components/timeSheet/buttonLancarDiaria';
 import { startOfMonth, endOfMonth, format } from 'date-fns';
+import { parseDate, DateValue } from "@internationalized/date";
+import { I18nProvider } from "@react-aria/i18n";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Sim: "success",
@@ -26,22 +28,31 @@ export default function Page({ params }: { params: { slug: string } }) {
   const setIsLoading = useTimeSheetCpfStore((state) => state.setIsLoading)
   const isLoading = useTimeSheetCpfStore((state) => state.isLoading);
   const setProviderBackup = useTimeSheetCpfStore((state) => state.setProviderBackup);
-  const [firstDay, setFirstDay] = useState('')
-  const [lastDay, setLastDay] = useState('')
+  const [firstComponetDay, setFirstComponentDay] = useState<DateValue>()
+  const [lastComponentDay, setLastComponentDay] = useState<DateValue>()
 
   async function getProvider() {
     let date = new Date()
     let firstDay = startOfMonth(date)
     let lastDay = endOfMonth(date)
-    let formattedFirstDaty = format(firstDay, 'dd/MM/yyyy')
-    let formattedLastDay = format(lastDay, 'dd/MM/yyyy')
-    setFirstDay(formattedFirstDaty);
-    setLastDay(formattedLastDay)
+    let formattedFirstDay = format(firstDay, "yyyy-MM-dd");
+    let formattedLastDay = format(lastDay, "yyyy-MM-dd");
+    setFirstComponentDay(parseDate(formattedFirstDay));
+    setLastComponentDay(parseDate(formattedLastDay));
+    //converter para o formato correto antes de enviar
+    let firstComponetDayString = firstComponetDay?.toString() || '';
+    let lastComponentDayString = lastComponentDay?.toString() || '';
+    let dateInitial
+    let dateEnd
+    if (firstComponetDayString && lastComponentDayString) {
+      dateInitial = format(firstComponetDayString, "dd/MM/yyyy")
+      dateEnd = format(lastComponentDayString, "dd/MM/yyyy")
+    }
     try {
       setIsLoading(true);
       const { data } = await axiosApi.post('/timeSheet/cpfDateBetween', {
-        dateInitial: formattedFirstDaty,
-        dateFinal: formattedLastDay,
+        dateInitial: dateInitial,
+        dateFinal: dateEnd,
         cpf: slug
       });
       timeSheetCpf(data);
@@ -64,6 +75,23 @@ export default function Page({ params }: { params: { slug: string } }) {
     } catch (error) {
       setIsLoading(false);
       console.log("Erro ao buscar prestador.", error);
+    }
+  }
+
+  async function newDate() {
+    try {
+      setIsLoading(true);
+      const { data } = await axiosApi.post('/timeSheet/cpfDateBetween', {
+        dateInitial: firstDay,
+        dateFinal: lastDay,
+        cpf: slug
+      });
+      timeSheetCpf(data);
+      setIsLoading(false);
+      console.log(data);
+    } catch (error) {
+      setIsLoading(false);
+      console.log("Erro ao buscar timesheet.", error);
     }
   }
 
@@ -129,9 +157,13 @@ export default function Page({ params }: { params: { slug: string } }) {
   type Rows = typeof timeSheetStateCpf[0];
 
   useEffect(() => {
-    getProvider()
-    getProviderBackup()
-  }, [])
+    const fetchData = async () => {
+      await getProviderBackup();
+      getProvider();
+    };
+
+    fetchData();
+  }, []);
 
 
   const renderCell = React.useCallback((rows: Rows, columnKey: React.Key) => {
@@ -185,25 +217,31 @@ export default function Page({ params }: { params: { slug: string } }) {
         {isLoading ? <Spinner label="Carregando" color="primary" labelColor="primary" /> : (
           <div className='flex justify-between space-x-2'>
             <div className='flex w-full space-x-2'>
-              <Avatar src={providerBackup[0]?.nameImageCloud} className="w-32 h-28 text-tiny" />
+              <Avatar src={providerBackup?.urlImage} className="w-32 h-28 text-tiny" />
               <TitleTimeSheet />
             </div>
             <div className='grid space-y-1'>
-              <Input
-                isClearable
-                type="date"
-                label="Data Inicial"
-                defaultValue='01/10/1992'
-              />
-              <Input
-                isClearable
-                type="date"
-                label="Data Final"
-                defaultValue='01/10/1992'
-              />
+              <I18nProvider locale="pt-BR">
+                <DatePicker
+                  className="max-w-md"
+                  granularity="day"
+                  label="Date Inicial"
+                  value={firstComponetDay}
+                  onChange={setFirstComponentDay}
+                />
+              </I18nProvider>
+              <I18nProvider locale="pt-BR">
+                <DatePicker
+                  className="max-w-md"
+                  granularity="day"
+                  label="Date Final"
+                  value={lastComponentDay}
+                  onChange={setLastComponentDay}
+                />
+              </I18nProvider>
               <div className='flex space-x-1'>
                 <ButtonLancarDiaria cpf={slug} />
-                <Button color="primary" variant='shadow'>
+                <Button color="primary" variant='shadow' onClick={newDate}>
                   Atualizar
                 </Button>
               </div>
